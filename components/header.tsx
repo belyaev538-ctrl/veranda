@@ -36,11 +36,11 @@ export function Header() {
     <>
       <header
         className={cn(
-          "fixed inset-x-0 top-0 z-50 transition-all duration-500",
+          "header-root fixed inset-x-0 top-0 z-50 transition-all duration-500",
           scrolled ? "header-scrolled shadow-soft" : "bg-transparent",
         )}
       >
-        <div className="container-luxury flex h-[74px] items-center justify-between">
+        <div className="container-luxury flex min-h-[74px] items-center justify-between py-3 tablet:py-0 tablet:h-[74px]">
           <Link href="/" className="group flex flex-col gap-1">
             <Logo light={lightOnHero} />
             <span
