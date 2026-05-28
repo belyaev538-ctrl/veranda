@@ -40,7 +40,7 @@ export function Header() {
           scrolled ? "header-scrolled shadow-soft" : "bg-transparent",
         )}
       >
-        <div className="container-luxury flex min-h-[74px] items-center justify-between py-3 tablet:py-0 tablet:h-[74px]">
+        <div className="container-luxury flex min-h-[74px] items-center justify-between py-3 tablet:h-[74px] tablet:py-0">
           <Link href="/" className="group flex flex-col gap-1">
             <Logo light={lightOnHero} />
             <span
@@ -90,7 +90,7 @@ export function Header() {
                 lightOnHero ? "btn-hero-secondary !px-6 !py-3" : "btn-primary !px-6 !py-3",
               )}
             >
-              Написать в мессенджер
+              Обсудить проект яхты
             </a>
           </div>
 
@@ -160,7 +160,7 @@ export function Header() {
                   href={CONTACTS.telegram}
                   className="btn-hero-primary w-full text-center"
                 >
-                  Написать в мессенджер
+                  Обсудить проект яхты
                 </a>
                 <a
                   href={CONTACTS.phoneHref}

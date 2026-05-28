@@ -93,10 +93,10 @@ export function Hero() {
 
       {/* Layer 6 — typography */}
       <motion.div
-        className="hero-content-layer relative z-10 flex h-full min-h-0 flex-col"
+        className="hero-content-layer relative z-10 flex h-full flex-col max-[767px]:min-h-0 tablet:justify-end"
         style={motionOn ? { y: contentY, opacity: contentOpacity } : undefined}
       >
-        <div className="container-luxury hero-content flex min-h-0 flex-1 flex-col justify-end pb-10 pt-0 tablet:pb-14 tablet:pt-24 desktop:pb-20">
+        <div className="container-luxury hero-content w-full max-[767px]:flex max-[767px]:min-h-0 max-[767px]:flex-1 max-[767px]:flex-col max-[767px]:justify-end pb-10 tablet:pb-14 tablet:pt-24 desktop:pb-20">
           <ClipReveal as="p" priority delay={0.2} duration={1.15}>
             <p className="mb-2 font-sans text-[10px] font-medium tracking-[0.22em] text-white/50">
               VERANDARU · мебель для яхт
@@ -118,11 +118,11 @@ export function Hero() {
             </ClipReveal>
           </h1>
 
-          <ClipReveal as="p" priority delay={0.88} duration={1.2} className="mt-8 max-w-xl">
+          <ClipReveal as="p" priority delay={0.88} duration={1.2} className="mt-8 max-w-2xl">
             <p className="font-sans text-base leading-relaxed text-white/75 tablet:text-lg">
-              Создаём премиальную мебель и кастомные outdoor-решения для палуб,
-              flybridge, кокпитов и зон отдыха на яхтах — с учётом солнца, влаги,
-              соли, габаритов и сценариев эксплуатации.
+              Проектируем и производим премиальную мебель для яхтенных пространств:
+              палуб, флайбриджей, кокпитов и лаунж-зон. Учитываем соль, влагу, солнце,
+              габариты и реальный сценарий эксплуатации на борту.
             </p>
           </ClipReveal>
 

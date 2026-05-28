@@ -185,14 +185,10 @@
     text-shadow: 0 2px 28px rgba(0, 0, 0, 0.45);
   }
 
-  /* Отступ под фиксированную шапку — текст hero не заезжает под логотип */
-  .hero-content-layer {
-    padding-top: calc(74px + env(safe-area-inset-top, 0px) + 2rem);
-  }
-
-  @media (min-width: 768px) {
+  /* Только мобилка — на tablet/desktop вёрстка hero как раньше */
+  @media (max-width: 767px) {
     .hero-content-layer {
-      padding-top: 0;
+      padding-top: calc(74px + env(safe-area-inset-top, 0px) + 2rem);
     }
   }
 
