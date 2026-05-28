@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { ClipReveal } from "@/components/motion/clip-reveal";
 import { SectionAtmosphere } from "@/components/motion/section-atmosphere";
 import { SERVICE_CARDS } from "@/lib/constants";
-import { clipReveal, staggerLuxury, viewportOnce } from "@/lib/motion";
+import { clipReveal, staggerLuxury, viewportOnceDeep } from "@/lib/motion";
 
 export function Service() {
   return (
@@ -24,7 +24,7 @@ export function Service() {
           variants={staggerLuxury}
           initial="hidden"
           whileInView="visible"
-          viewport={viewportOnce}
+          viewport={viewportOnceDeep}
         >
           {SERVICE_CARDS.map((card) => (
             <motion.article

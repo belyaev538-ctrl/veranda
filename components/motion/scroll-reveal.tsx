@@ -25,7 +25,7 @@ export function ScrollReveal({
   const isMobile = useIsMobile();
   const reducedMotion = useReducedMotion();
 
-  if (clip && !isMobile && !reducedMotion) {
+  if (clip && !reducedMotion) {
     return (
       <ClipReveal className={className} delay={delay}>
         {children}
@@ -33,7 +33,7 @@ export function ScrollReveal({
     );
   }
 
-  const offset = isMobile || reducedMotion ? Math.min(y, 12) : y;
+  const offset = isMobile || reducedMotion ? Math.min(y, 12) : Math.min(y, 28);
   const mobileDelay = isMobile ? delay * 0.4 : delay;
 
   return (

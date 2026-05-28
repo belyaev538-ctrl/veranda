@@ -5,14 +5,14 @@ import { CinematicLoopMedia } from "@/components/cinematic-loop-media";
 import { ClipReveal } from "@/components/motion/clip-reveal";
 import { SectionAtmosphere } from "@/components/motion/section-atmosphere";
 import { PRODUCTION_CARDS } from "@/lib/constants";
-import { clipReveal, staggerLuxury, viewportOnce } from "@/lib/motion";
+import { clipReveal, staggerLuxury, viewportOnceDeep } from "@/lib/motion";
 
 export function Production() {
   return (
     <SectionAtmosphere
       id="production"
       tone="dark"
-      className="production-bg section-pad relative overflow-hidden text-white"
+      className="production-bg section-pad relative text-white"
     >
       <div className="container-luxury relative">
         <p className="font-sans text-xs font-medium tracking-[0.2em] text-yacht-gold/90">
@@ -36,7 +36,7 @@ export function Production() {
           variants={staggerLuxury}
           initial="hidden"
           whileInView="visible"
-          viewport={viewportOnce}
+          viewport={viewportOnceDeep}
         >
           {PRODUCTION_CARDS.map((card) => (
             <motion.article

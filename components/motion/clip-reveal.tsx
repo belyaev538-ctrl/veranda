@@ -16,19 +16,12 @@ type ClipRevealProps = {
   as?: "div" | "article" | "h1" | "h2" | "h3" | "p" | "span" | "li";
 };
 
-const clipHidden = {
-  up: "inset(100% 0 0 0)",
-  down: "inset(0 0 100% 0)",
-  left: "inset(0 100% 0 0)",
-} as const;
-
 export function ClipReveal({
   children,
   className,
   delay = 0,
   duration = 1.15,
   priority = false,
-  direction = "up",
   as = "div",
 }: ClipRevealProps) {
   const Component = motion[as];
@@ -52,28 +45,20 @@ export function ClipReveal({
     );
   }
 
-  if (isMobile) {
-    const mobileDelay = delay * 0.35;
-    return (
-      <Component
-        className={cn(className)}
-        initial={{ opacity: 0, y: 12 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={viewportOnce}
-        transition={{ duration: 0.65, delay: mobileDelay, ease: luxuryEase }}
-      >
-        {children}
-      </Component>
-    );
-  }
+  const y = isMobile ? 12 : 22;
+  const viewDelay = isMobile ? delay * 0.35 : delay;
 
   return (
     <Component
-      className={cn("will-change-[clip-path]", className)}
-      initial={{ opacity: 0, clipPath: clipHidden[direction] }}
-      whileInView={{ opacity: 1, clipPath: "inset(0% 0 0 0)" }}
+      className={cn(className)}
+      initial={{ opacity: 0, y }}
+      whileInView={{ opacity: 1, y: 0 }}
       viewport={viewportOnce}
-      transition={{ duration, delay, ease: luxuryEase }}
+      transition={{
+        duration: isMobile ? 0.65 : Math.min(duration, 0.95),
+        delay: viewDelay,
+        ease: luxuryEase,
+      }}
     >
       {children}
     </Component>

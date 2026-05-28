@@ -21,12 +21,13 @@ export const fadeUpMobile: Variants = {
   },
 };
 
+/** Карточки в сетках — fade вместо clip-path (стабильно на desktop) */
 export const clipReveal: Variants = {
-  hidden: { opacity: 0, clipPath: "inset(100% 0 0 0)" },
+  hidden: { opacity: 0, y: 28 },
   visible: {
     opacity: 1,
-    clipPath: "inset(0% 0 0 0)",
-    transition: { duration: 1.15, ease: luxuryEase },
+    y: 0,
+    transition: { duration: 0.9, ease: luxuryEase },
   },
 };
 
@@ -65,10 +66,12 @@ export const staggerLuxury: Variants = {
 /** Reliable on mobile — negative margins often skip above-the-fold blocks */
 export const viewportOnce = {
   once: true,
-  amount: 0.15,
+  amount: 0.12,
+  margin: "0px 0px -8% 0px",
 } as const;
 
 export const viewportOnceDeep = {
   once: true,
-  amount: 0.22,
+  amount: 0.08,
+  margin: "0px 0px -5% 0px",
 } as const;
