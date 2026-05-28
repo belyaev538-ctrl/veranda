@@ -10,7 +10,8 @@ type ClipRevealProps = {
   className?: string;
   delay?: number;
   duration?: number;
-  /** inset direction: bottom-up cinematic emerge */
+  /** Above-the-fold: animate on mount (desktop) or show immediately (mobile) */
+  priority?: boolean;
   direction?: "up" | "down" | "left";
   as?: "div" | "article" | "h1" | "h2" | "h3" | "p" | "span" | "li";
 };
@@ -26,25 +27,40 @@ export function ClipReveal({
   className,
   delay = 0,
   duration = 1.15,
+  priority = false,
   direction = "up",
   as = "div",
 }: ClipRevealProps) {
   const Component = motion[as];
   const { isMobile, reducedMotion } = useScrollMotion();
 
-  if (reducedMotion) {
+  if (reducedMotion || (isMobile && priority)) {
     const Tag = as;
     return <Tag className={className}>{children}</Tag>;
   }
 
-  if (isMobile) {
+  if (priority) {
     return (
       <Component
         className={cn(className)}
-        initial={{ opacity: 0, y: 16 }}
+        initial={{ opacity: 0, y: 14 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: Math.min(duration, 0.9), delay, ease: luxuryEase }}
+      >
+        {children}
+      </Component>
+    );
+  }
+
+  if (isMobile) {
+    const mobileDelay = delay * 0.35;
+    return (
+      <Component
+        className={cn(className)}
+        initial={{ opacity: 0, y: 12 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={viewportOnce}
-        transition={{ duration: 0.85, delay, ease: luxuryEase }}
+        transition={{ duration: 0.65, delay: mobileDelay, ease: luxuryEase }}
       >
         {children}
       </Component>

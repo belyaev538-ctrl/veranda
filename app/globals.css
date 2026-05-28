@@ -160,12 +160,24 @@
   }
 
   .hero-overlay-gradient-mobile {
-    background: linear-gradient(
-      90deg,
-      rgba(5, 10, 18, 0.58) 0%,
-      rgba(5, 10, 18, 0.35) 45%,
-      rgba(5, 10, 18, 0.08) 100%
-    );
+    background:
+      linear-gradient(
+        180deg,
+        rgba(5, 10, 18, 0.35) 0%,
+        rgba(5, 10, 18, 0.12) 38%,
+        rgba(5, 10, 18, 0.55) 72%,
+        rgba(5, 10, 18, 0.88) 100%
+      ),
+      linear-gradient(
+        90deg,
+        rgba(5, 10, 18, 0.62) 0%,
+        rgba(5, 10, 18, 0.38) 50%,
+        rgba(5, 10, 18, 0.15) 100%
+      );
+  }
+
+  .hero-content {
+    text-shadow: 0 2px 28px rgba(0, 0, 0, 0.45);
   }
 
   .hero-warm-haze {
@@ -189,8 +201,21 @@
 
   @media (max-width: 767px) {
     .hero-title {
-      font-size: clamp(2.25rem, 12vw, 4.625rem);
+      font-size: clamp(2rem, 10.5vw, 3.5rem);
       font-weight: 600;
+      line-height: 1.02;
+    }
+
+    .hero-cinematic .text-white\/50,
+    .hero-cinematic .text-white\/65,
+    .hero-cinematic .text-white\/75 {
+      text-shadow: 0 1px 18px rgba(0, 0, 0, 0.55);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
     }
   }
 

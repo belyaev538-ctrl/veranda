@@ -33,17 +33,18 @@ export function ScrollReveal({
     );
   }
 
-  const offset = isMobile || reducedMotion ? Math.min(y, 16) : y;
+  const offset = isMobile || reducedMotion ? Math.min(y, 12) : y;
+  const mobileDelay = isMobile ? delay * 0.4 : delay;
 
   return (
     <motion.div
       className={cn(className)}
-      initial={{ opacity: 0, y: offset }}
+      initial={reducedMotion ? false : { opacity: 0, y: offset }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={viewportOnce}
       transition={{
-        duration: isMobile ? 0.8 : 1,
-        delay,
+        duration: isMobile ? 0.55 : 1,
+        delay: mobileDelay,
         ease: luxuryEase,
       }}
     >

@@ -62,7 +62,13 @@ export const staggerLuxury: Variants = {
   },
 };
 
+/** Reliable on mobile — negative margins often skip above-the-fold blocks */
 export const viewportOnce = {
   once: true,
-  margin: "-10%" as const,
-};
+  amount: 0.15,
+} as const;
+
+export const viewportOnceDeep = {
+  once: true,
+  amount: 0.22,
+} as const;

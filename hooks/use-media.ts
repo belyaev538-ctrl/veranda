@@ -1,31 +1,35 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useSyncExternalStore } from "react";
+
+function getMobileQuery(breakpoint: number) {
+  return `(max-width: ${breakpoint}px)`;
+}
 
 export function useIsMobile(breakpoint = 767) {
-  const [isMobile, setIsMobile] = useState(false);
+  const query = getMobileQuery(breakpoint);
 
-  useEffect(() => {
-    const mq = window.matchMedia(`(max-width: ${breakpoint}px)`);
-    const update = () => setIsMobile(mq.matches);
-    update();
-    mq.addEventListener("change", update);
-    return () => mq.removeEventListener("change", update);
-  }, [breakpoint]);
-
-  return isMobile;
+  return useSyncExternalStore(
+    (onStoreChange) => {
+      const mq = window.matchMedia(query);
+      mq.addEventListener("change", onStoreChange);
+      return () => mq.removeEventListener("change", onStoreChange);
+    },
+    () => window.matchMedia(query).matches,
+    () => false,
+  );
 }
 
 export function useIsDesktop(breakpoint = 1199) {
-  const [isDesktop, setIsDesktop] = useState(false);
+  const query = `(min-width: ${breakpoint + 1}px)`;
 
-  useEffect(() => {
-    const mq = window.matchMedia(`(min-width: ${breakpoint + 1}px)`);
-    const update = () => setIsDesktop(mq.matches);
-    update();
-    mq.addEventListener("change", update);
-    return () => mq.removeEventListener("change", update);
-  }, [breakpoint]);
-
-  return isDesktop;
+  return useSyncExternalStore(
+    (onStoreChange) => {
+      const mq = window.matchMedia(query);
+      mq.addEventListener("change", onStoreChange);
+      return () => mq.removeEventListener("change", onStoreChange);
+    },
+    () => window.matchMedia(query).matches,
+    () => false,
+  );
 }

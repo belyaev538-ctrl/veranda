@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { cn } from "@/lib/cn";
+import { IMAGE_BLUR_DATA_URL } from "@/lib/image-placeholder";
 import { getImageAlt, getImageSrc } from "@/lib/images";
 import { luxuryEase } from "@/lib/motion";
 
@@ -52,6 +53,8 @@ export function PlaceholderImage({
           alt={getImageAlt(photo)}
           fill
           priority={priority}
+          placeholder="blur"
+          blurDataURL={IMAGE_BLUR_DATA_URL}
           sizes={sizes}
           quality={quality}
           className={cn(

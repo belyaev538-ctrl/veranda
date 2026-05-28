@@ -31,7 +31,7 @@ export function Hero() {
   return (
     <section
       ref={sectionRef}
-      className="hero-cinematic relative h-[100svh] min-h-[640px] overflow-hidden"
+      className="hero-cinematic relative h-[100dvh] min-h-[520px] max-h-[900px] overflow-hidden tablet:min-h-[640px] tablet:max-h-none"
     >
       {/* Layer 1 — background */}
       <motion.div
@@ -96,8 +96,8 @@ export function Hero() {
         className="relative z-10 flex h-full flex-col justify-end"
         style={motionOn ? { y: contentY, opacity: contentOpacity } : undefined}
       >
-        <div className="container-luxury pb-10 pt-24 tablet:pb-14 desktop:pb-20">
-          <ClipReveal as="p" delay={0.2} duration={1.15}>
+        <div className="container-luxury hero-content pb-24 pt-20 tablet:pb-14 tablet:pt-24 desktop:pb-20">
+          <ClipReveal as="p" priority delay={0.2} duration={1.15}>
             <p className="mb-2 font-sans text-[10px] font-medium tracking-[0.22em] text-white/50">
               VERANDARU · мебель для яхт
             </p>
@@ -107,18 +107,18 @@ export function Hero() {
           </ClipReveal>
 
           <h1 className="hero-title">
-            <ClipReveal as="span" className="block" delay={0.38} duration={1.35}>
+            <ClipReveal as="span" className="block" priority delay={0.38} duration={1.35}>
               Палуба,
             </ClipReveal>
-            <ClipReveal as="span" className="block" delay={0.54} duration={1.35}>
+            <ClipReveal as="span" className="block" priority delay={0.54} duration={1.35}>
               на которой хочется
             </ClipReveal>
-            <ClipReveal as="span" className="hero-accent block" delay={0.7} duration={1.35}>
+            <ClipReveal as="span" className="hero-accent block" priority delay={0.7} duration={1.35}>
               остаться дольше
             </ClipReveal>
           </h1>
 
-          <ClipReveal as="p" delay={0.88} duration={1.2} className="mt-8 max-w-xl">
+          <ClipReveal as="p" priority delay={0.88} duration={1.2} className="mt-8 max-w-xl">
             <p className="font-sans text-base leading-relaxed text-white/75 tablet:text-lg">
               Создаём премиальную мебель и кастомные outdoor-решения для палуб,
               flybridge, кокпитов и зон отдыха на яхтах — с учётом солнца, влаги,
@@ -128,6 +128,7 @@ export function Hero() {
 
           <ClipReveal
             as="div"
+            priority
             delay={1.05}
             duration={1.2}
             className="mt-10 flex flex-col gap-3 tablet:flex-row tablet:items-center"

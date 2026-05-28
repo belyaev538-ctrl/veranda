@@ -47,11 +47,14 @@ export function MotionProvider({ children }: { children: ReactNode }) {
     offset: ["start start", "end end"],
   });
 
-  const smoothProgress = useSpring(scrollYProgress, {
+  const springProgress = useSpring(scrollYProgress, {
     stiffness: reducedMotion || isMobile ? 400 : 88,
     damping: reducedMotion || isMobile ? 42 : 30,
     restDelta: 0.001,
   });
+
+  const smoothProgress =
+    reducedMotion || isMobile ? scrollYProgress : springProgress;
 
   const value = useMemo(
     () => ({
@@ -62,12 +65,22 @@ export function MotionProvider({ children }: { children: ReactNode }) {
       cinematic,
       deviceTier,
     }),
-    [scrollYProgress, smoothProgress, isMobile, reducedMotion, cinematic, deviceTier],
+    [
+      scrollYProgress,
+      smoothProgress,
+      isMobile,
+      reducedMotion,
+      cinematic,
+      deviceTier,
+    ],
   );
 
   return (
     <MotionContext.Provider value={value}>
-      <motion.main ref={ref} className="overflow-x-hidden">
+      <motion.main
+        ref={ref}
+        className="overflow-x-hidden pb-20 desktop:pb-0"
+      >
         {children}
       </motion.main>
     </MotionContext.Provider>
