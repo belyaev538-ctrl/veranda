@@ -93,10 +93,14 @@ export function Hero() {
 
       {/* Layer 6 — typography */}
       <motion.div
-        className="relative z-10 flex h-full flex-col justify-end"
+        className="relative z-10 flex h-full min-h-0 flex-col"
         style={motionOn ? { y: contentY, opacity: contentOpacity } : undefined}
       >
-        <div className="container-luxury hero-content pb-24 pt-20 tablet:pb-14 tablet:pt-24 desktop:pb-20">
+        <div
+          className="hero-header-spacer shrink-0 desktop:hidden"
+          aria-hidden
+        />
+        <div className="container-luxury hero-content flex min-h-0 flex-1 flex-col justify-end pb-10 pt-2 tablet:pb-14 tablet:pt-24 desktop:pb-20">
           <ClipReveal as="p" priority delay={0.2} duration={1.15}>
             <p className="mb-2 font-sans text-[10px] font-medium tracking-[0.22em] text-white/50">
               VERANDARU · мебель для яхт

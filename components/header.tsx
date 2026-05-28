@@ -45,7 +45,7 @@ export function Header() {
             <Logo light={lightOnHero} />
             <span
               className={cn(
-                "font-sans text-[11px] font-medium transition-colors desktop:text-xs",
+                "hidden font-sans text-[11px] font-medium transition-colors tablet:block desktop:text-xs",
                 lightOnHero ? "text-white/65" : "text-muted",
               )}
             >

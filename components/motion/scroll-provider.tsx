@@ -79,7 +79,7 @@ export function MotionProvider({ children }: { children: ReactNode }) {
     <MotionContext.Provider value={value}>
       <motion.main
         ref={ref}
-        className="overflow-x-hidden pb-20 desktop:pb-0"
+        className="overflow-x-hidden desktop:pb-0"
       >
         {children}
       </motion.main>
