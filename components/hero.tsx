@@ -137,7 +137,7 @@ export function Hero() {
               Обсудить проект яхты
             </Link>
             <Link href="#collections" className="btn-hero-secondary">
-              Смотреть коллекции
+              Посмотреть возможности
             </Link>
           </ClipReveal>
         </div>

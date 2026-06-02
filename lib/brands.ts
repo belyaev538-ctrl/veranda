@@ -1,11 +1,12 @@
 export type SocialProofBrand = {
   name: string;
+  /** /public/brands — сейчас SVG, позже можно заменить на .png с прозрачным фоном */
   logo: string;
   width: number;
   height: number;
 };
 
-/** Логотипы в /public/brands — SVG, монохром для luxury-marquee */
+/** Логотипы клиентов для плиточной marquee-ленты */
 export const SOCIAL_PROOF_BRANDS: SocialProofBrand[] = [
   {
     name: "Marriott",

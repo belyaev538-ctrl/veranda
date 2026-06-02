@@ -5,6 +5,7 @@ import { CinematicLoopMedia } from "@/components/cinematic-loop-media";
 import { ClipReveal } from "@/components/motion/clip-reveal";
 import { SectionAtmosphere } from "@/components/motion/section-atmosphere";
 import { PRODUCTION_CARDS } from "@/lib/constants";
+import { cn } from "@/lib/cn";
 import { clipReveal, staggerLuxury, viewportOnceDeep } from "@/lib/motion";
 
 export function Production() {
@@ -42,12 +43,15 @@ export function Production() {
             <motion.article
               key={card.title}
               variants={clipReveal}
-              className="production-card-luxury group"
+              className={cn(
+                "production-card-luxury group",
+                "span" in card && card.span === "full" && "tablet:col-span-2",
+              )}
             >
               <div className="production-card-media">
                 <CinematicLoopMedia
                   photo={card.photo}
-                  videoSrc={card.video}
+                  videoSrc={"video" in card ? card.video : undefined}
                   macro
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#05070B] via-[#05070B]/40 to-transparent" />

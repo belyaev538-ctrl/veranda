@@ -18,6 +18,47 @@ export const CONTACTS = {
   phoneHref: "tel:+74951513064",
 } as const;
 
+export const LEGAL = {
+  privacyPolicyUrl: "https://top.veranda.ru/policy",
+} as const;
+
+export type ContactChannelId = "telegram" | "whatsapp" | "max";
+
+export const CONTACT_CHANNELS: ReadonlyArray<{
+  id: ContactChannelId;
+  label: string;
+  phoneHint?: string;
+}> = [
+  { id: "telegram", label: "Telegram" },
+  {
+    id: "whatsapp",
+    label: "WhatsApp",
+    phoneHint: "Свяжемся по указанному номеру телефона.",
+  },
+  {
+    id: "max",
+    label: "MAX",
+    phoneHint: "Свяжемся по указанному номеру телефона.",
+  },
+];
+
+/** Блок «Основатель» — контент с top.veranda.ru */
+export const FOUNDER = {
+  eyebrow: "Основатель компании и вдохновитель",
+  name: "Юлия Баранова",
+  quote:
+    "Мебель должна не просто стоять на палубе, а «жить» в морской среде: дышать ветром, стареть с достоинством и рассказывать свою историю.",
+  quoteSecondary:
+    "Мы создаём мебель, которая наполняет пространство на борту эстетикой и комфортом — атмосферой для самых счастливых моментов жизни.",
+  telegram: "@Julia_verandaru",
+  telegramHref: "https://t.me/Julia_verandaru",
+  email: "Julia_verandaru@mail.ru",
+  photoAlt: "Юлия Баранова — основатель VERANDARU",
+  videoUrl: "https://veranda.ru/files/about-company-julia.mp4",
+  videoPoster: "/images/founder-julia.png",
+  videoCta: "О компании",
+} as const;
+
 export const TRUST_BAR_ITEMS = [
   "Собственное производство в Москве",
   "16 коллекций outdoor-мебели",
@@ -33,7 +74,48 @@ export const PHILOSOPHY_FEATURES = [
   "Сопровождение проекта до установки",
 ] as const;
 
+/** Этапы работы с проектом — схема «Как мы работаем» */
+export const WORKFLOW_STEPS = [
+  {
+    title: "Обсуждение проекта",
+    description:
+      "Знакомимся с яхтой, зонами и сценариями отдыха — фиксируем задачу и ожидания.",
+  },
+  {
+    title: "Проектная документация",
+    description:
+      "Готовим комплект чертежей, спецификаций и решений под габариты палубы.",
+  },
+  {
+    title: "Визуализация",
+    description:
+      "Показываем 3D-концепцию: посадку, материалы и атмосферу зоны до производства.",
+  },
+  {
+    title: "Согласование сроков и стоимости",
+    description:
+      "Утверждаем бюджет, этапы и календарь — без сюрпризов на этапе реализации.",
+  },
+  {
+    title: "Реализация проекта",
+    description:
+      "Производство, доставка, монтаж и сдача зоны «под ключ» на борту.",
+  },
+  {
+    title: "Обслуживание мебели",
+    description:
+      "Гарантийная поддержка и сервис: уход, реставрация и обновление покрытий.",
+  },
+] as const;
+
 export const PRODUCTION_CARDS = [
+  {
+    title: "Дизайн-проект и визуализация",
+    description:
+      "Разрабатываем концепцию зон на палубе, подбираем мебель под габариты и сценарии отдыха. Показываем 3D-визуализацию до запуска в производство.",
+    photo: 3,
+    span: "full",
+  },
   {
     title: "Деревообработка",
     description:

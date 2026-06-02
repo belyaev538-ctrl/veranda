@@ -1,7 +1,9 @@
+import { ContactFormProvider } from "@/components/contact-form-provider";
 import { Cta } from "@/components/cta";
 import { EditorialGrid } from "@/components/editorial-grid";
 import { FilmGrain } from "@/components/film-grain";
 import { Footer } from "@/components/footer";
+import { Founder } from "@/components/founder";
 import { Gallery } from "@/components/gallery";
 import { Header } from "@/components/header";
 import { Hero } from "@/components/hero";
@@ -10,13 +12,14 @@ import { MobileStickyCta } from "@/components/mobile-sticky-cta";
 import { ScrollMotionProvider } from "@/components/motion/scroll-provider";
 import { Philosophy } from "@/components/philosophy";
 import { Production } from "@/components/production";
+import { Workflow } from "@/components/workflow";
 import { Service } from "@/components/service";
 import { SocialProof } from "@/components/social-proof";
 import { TrustBar } from "@/components/trust-bar";
 
 export default function Home() {
   return (
-    <>
+    <ContactFormProvider>
       <Header />
       <ScrollMotionProvider>
         <FilmGrain />
@@ -24,15 +27,17 @@ export default function Home() {
         <TrustBar />
         <Philosophy />
         <Production />
+        <Workflow />
         <EditorialGrid />
         <Materials />
         <Service />
         <SocialProof />
         <Gallery />
         <Cta />
+        <Founder />
       </ScrollMotionProvider>
       <Footer />
       <MobileStickyCta />
-    </>
+    </ContactFormProvider>
   );
 }

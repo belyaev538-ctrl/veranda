@@ -1,7 +1,7 @@
 "use client";
 
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import Link from "next/link";
+import { useContactForm } from "@/components/contact-form-provider";
 import { useEffect, useState } from "react";
 import { luxuryEase } from "@/lib/motion";
 
@@ -27,6 +27,7 @@ function useStickyCtaVisible() {
 }
 
 export function MobileStickyCta() {
+  const { open: openContactForm } = useContactForm();
   const visible = useStickyCtaVisible();
   const reducedMotion = useReducedMotion();
 
@@ -40,9 +41,13 @@ export function MobileStickyCta() {
           exit={reducedMotion ? undefined : { opacity: 0, y: 20 }}
           transition={{ duration: 0.45, ease: luxuryEase }}
         >
-          <Link href="#contacts" className="btn-primary w-full">
+          <button
+            type="button"
+            onClick={openContactForm}
+            className="btn-primary w-full"
+          >
             Обсудить проект яхты
-          </Link>
+          </button>
         </motion.div>
       )}
     </AnimatePresence>

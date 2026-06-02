@@ -6,8 +6,6 @@ import { ClipReveal } from "@/components/motion/clip-reveal";
 import { ParallaxMedia } from "@/components/motion/parallax-media";
 import { SectionAtmosphere } from "@/components/motion/section-atmosphere";
 import { useScrollMotion } from "@/components/motion/scroll-provider";
-import { CONTACTS } from "@/lib/constants";
-import { luxuryEase, viewportOnce } from "@/lib/motion";
 
 export function Cta() {
   const [submitted, setSubmitted] = useState(false);
@@ -41,23 +39,6 @@ export function Cta() {
                 концепцию и предложим outdoor-решения под ваш сценарий.
               </p>
             </ClipReveal>
-            <motion.div
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={viewportOnce}
-              transition={{ delay: 0.55, duration: 1.1, ease: luxuryEase }}
-              className="mt-10 flex flex-wrap gap-6 border-t border-border pt-8"
-            >
-              <a href={CONTACTS.telegram} className="contact-link text-sm">
-                Telegram
-              </a>
-              <a href={CONTACTS.whatsapp} className="contact-link text-sm">
-                WhatsApp
-              </a>
-              <a href={CONTACTS.phoneHref} className="contact-link text-sm">
-                {CONTACTS.phone}
-              </a>
-            </motion.div>
           </div>
 
           <ClipReveal

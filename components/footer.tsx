@@ -1,8 +1,9 @@
 "use client";
 
 import Link from "next/link";
+import { ContactLinks } from "@/components/contact-links";
 import { Logo } from "@/components/logo";
-import { BRAND_TAGLINE, CONTACTS, FOOTER_DESCRIPTION, NAV_LINKS } from "@/lib/constants";
+import { BRAND_TAGLINE, FOOTER_DESCRIPTION, NAV_LINKS } from "@/lib/constants";
 
 export function Footer() {
   return (
@@ -34,30 +35,10 @@ export function Footer() {
             <p className="font-sans text-xs uppercase tracking-[0.14em] text-muted/70">
               Контакты
             </p>
-            <div className="mt-4 flex flex-col gap-2 desktop:items-end">
-              <a
-                href={CONTACTS.telegram}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="font-sans text-sm text-ink/70 transition-colors hover:text-green"
-              >
-                Telegram
-              </a>
-              <a
-                href={CONTACTS.whatsapp}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="font-sans text-sm text-ink/70 transition-colors hover:text-green"
-              >
-                WhatsApp
-              </a>
-              <a
-                href={CONTACTS.phoneHref}
-                className="font-sans text-sm text-ink/70 transition-colors hover:text-green"
-              >
-                {CONTACTS.phone}
-              </a>
-            </div>
+            <ContactLinks
+              layout="column"
+              className="mt-4 items-start desktop:items-end"
+            />
           </div>
         </div>
 

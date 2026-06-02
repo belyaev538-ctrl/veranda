@@ -3,11 +3,14 @@
 import { AnimatePresence, motion } from "framer-motion";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { useContactForm } from "@/components/contact-form-provider";
+import { TelegramIcon } from "@/components/icons/telegram-icon";
 import { Logo } from "@/components/logo";
 import { BRAND_TAGLINE, CONTACTS, NAV_LINKS } from "@/lib/constants";
 import { cn } from "@/lib/cn";
 
 export function Header() {
+  const { open: openContactForm } = useContactForm();
   const [scrolled, setScrolled] = useState(false);
   const [overHero, setOverHero] = useState(true);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -37,10 +40,10 @@ export function Header() {
       <header
         className={cn(
           "header-root fixed inset-x-0 top-0 z-50 transition-all duration-500",
-          scrolled ? "header-scrolled shadow-soft" : "bg-transparent",
+          scrolled ? "header-scrolled shadow-soft" : "header-on-hero",
         )}
       >
-        <div className="container-luxury flex min-h-[74px] items-center justify-between py-3 tablet:h-[74px] tablet:py-0">
+        <div className="container-luxury flex min-h-[74px] items-center justify-between border-b border-white/70 py-3 tablet:h-[74px] tablet:py-0">
           <Link href="/" className="group flex flex-col gap-1">
             <Logo light={lightOnHero} />
             <span
@@ -53,7 +56,7 @@ export function Header() {
             </span>
           </Link>
 
-          <nav className="hidden items-center gap-10 desktop:flex">
+          <nav className="hidden items-center gap-5 desktop:flex">
             {NAV_LINKS.map((link) => (
               <Link
                 key={link.href}
@@ -86,12 +89,25 @@ export function Header() {
               href={CONTACTS.telegram}
               target="_blank"
               rel="noopener noreferrer"
+              aria-label="Telegram"
+              className={cn(
+                "inline-flex h-11 w-11 items-center justify-center rounded-full border transition-colors",
+                lightOnHero
+                  ? "border-white/30 bg-white/10 text-white hover:bg-white/20"
+                  : "border-ink/15 bg-white text-ink hover:border-ink/25 hover:text-green",
+              )}
+            >
+              <TelegramIcon className="h-[20px] w-[20px]" />
+            </a>
+            <button
+              type="button"
+              onClick={openContactForm}
               className={cn(
                 lightOnHero ? "btn-hero-secondary !px-6 !py-3" : "btn-primary !px-6 !py-3",
               )}
             >
               Обсудить проект яхты
-            </a>
+            </button>
           </div>
 
           <button
@@ -156,12 +172,16 @@ export function Header() {
                 transition={{ delay: 0.5 }}
                 className="mt-16 flex flex-col gap-4 border-t border-white/10 pt-10"
               >
-                <a
-                  href={CONTACTS.telegram}
+                <button
+                  type="button"
+                  onClick={() => {
+                    setMenuOpen(false);
+                    openContactForm();
+                  }}
                   className="btn-hero-primary w-full text-center"
                 >
                   Обсудить проект яхты
-                </a>
+                </button>
                 <a
                   href={CONTACTS.phoneHref}
                   className="text-center font-sans text-sm text-white/60"
