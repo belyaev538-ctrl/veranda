@@ -75,3 +75,37 @@ export const viewportOnceDeep = {
   amount: 0.08,
   margin: "0px 0px -5% 0px",
 } as const;
+
+/** V4 — выразительный вход блоков */
+export const v4Reveal: Variants = {
+  hidden: {
+    opacity: 0,
+    y: 52,
+    scale: 0.98,
+    filter: "blur(10px)",
+  },
+  visible: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    filter: "blur(0px)",
+    transition: { duration: 1.15, ease: luxuryEase },
+  },
+};
+
+export const v4Stagger: Variants = {
+  hidden: {},
+  visible: {
+    transition: { staggerChildren: 0.14, delayChildren: 0.08 },
+  },
+};
+
+export const v4LineReveal: Variants = {
+  hidden: { opacity: 0, y: 36, filter: "blur(6px)" },
+  visible: {
+    opacity: 1,
+    y: 0,
+    filter: "blur(0px)",
+    transition: { duration: 1, ease: luxuryEase },
+  },
+};

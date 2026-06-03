@@ -45,17 +45,27 @@ export function ClipReveal({
     );
   }
 
-  const y = isMobile ? 12 : 22;
+  const y = isMobile ? 14 : 36;
   const viewDelay = isMobile ? delay * 0.35 : delay;
 
   return (
     <Component
       className={cn(className)}
-      initial={{ opacity: 0, y }}
-      whileInView={{ opacity: 1, y: 0 }}
+      initial={{
+        opacity: 0,
+        y,
+        scale: isMobile ? 1 : 0.98,
+        filter: isMobile ? "blur(0px)" : "blur(8px)",
+      }}
+      whileInView={{
+        opacity: 1,
+        y: 0,
+        scale: 1,
+        filter: "blur(0px)",
+      }}
       viewport={viewportOnce}
       transition={{
-        duration: isMobile ? 0.65 : Math.min(duration, 0.95),
+        duration: isMobile ? 0.7 : Math.min(duration, 1.1),
         delay: viewDelay,
         ease: luxuryEase,
       }}

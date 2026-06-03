@@ -15,6 +15,8 @@ import { Production } from "@/components/production";
 import { Service } from "@/components/service";
 import { SocialProof } from "@/components/social-proof";
 import { Workflow } from "@/components/workflow";
+import { ScrollProgress } from "@/components/shared/scroll-progress";
+import { VersionSwitcherDock } from "@/components/shared/version-switcher";
 import type { SiteVariant } from "@/lib/site-variant";
 
 type LandingPageProps = {
@@ -41,6 +43,8 @@ export function LandingPage({ variant = "1" }: LandingPageProps) {
       </ScrollMotionProvider>
       <Footer />
       <MobileStickyCta />
+      <ScrollProgress tone="light" />
+      <VersionSwitcherDock current={variant} />
     </ContactFormProvider>
   );
 }

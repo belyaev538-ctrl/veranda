@@ -1,0 +1,213 @@
+"use client";
+
+import Image from "next/image";
+import { motion, useScroll, useTransform } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
+import { LightSweep } from "@/components/motion/light-sweep";
+import { V5Button, V5Label, V5Reveal } from "@/components/v5/v5-ui";
+
+export type V5PinCard = {
+  title: string;
+  text: string;
+  image: string;
+  cta?: string;
+  /** Крупный номер этапа (блок production) */
+  num?: string;
+};
+
+type V5PinnedRailProps = {
+  id: string;
+  label?: string;
+  headerTitle?: string;
+  headerSubtitle?: string;
+  cards: readonly V5PinCard[];
+  variant?: "spaces" | "gallery" | "production";
+  onCta?: () => void;
+  ctaLabel?: string;
+};
+
+export function V5PinnedRail({
+  id,
+  label,
+  headerTitle,
+  headerSubtitle,
+  cards,
+  variant = "spaces",
+  onCta,
+  ctaLabel,
+}: V5PinnedRailProps) {
+  const containerRef = useRef<HTMLElement>(null);
+  const trackRef = useRef<HTMLDivElement>(null);
+  const [maxX, setMaxX] = useState(0);
+  const [usePin, setUsePin] = useState(true);
+
+  useEffect(() => {
+    const mq = window.matchMedia("(min-width: 1024px)");
+    const measure = () => {
+      setUsePin(mq.matches);
+      if (!trackRef.current) return;
+      const overflow = trackRef.current.scrollWidth - window.innerWidth;
+      setMaxX(Math.max(0, overflow));
+    };
+    measure();
+    mq.addEventListener("change", measure);
+    window.addEventListener("resize", measure);
+    return () => {
+      mq.removeEventListener("change", measure);
+      window.removeEventListener("resize", measure);
+    };
+  }, [cards]);
+
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start start", "end end"],
+  });
+  const x = useTransform(scrollYProgress, [0, 1], [0, -maxX]);
+
+  const scrollHeight = usePin
+    ? `${Math.max(cards.length * 85, 220)}vh`
+    : "auto";
+
+  const headerBlock =
+    headerTitle || headerSubtitle ? (
+      <>
+        {headerTitle && (
+          <h2 className="font-serif text-[clamp(2rem,5vw,3.5rem)] font-light tracking-tight text-white">
+            {headerTitle}
+          </h2>
+        )}
+        {headerSubtitle && (
+          <p className="v4-body-light mx-auto mt-4 max-w-md">{headerSubtitle}</p>
+        )}
+      </>
+    ) : null;
+
+  const labelBlock = label ? (
+    <V5Reveal>
+      <V5Label>{label}</V5Label>
+    </V5Reveal>
+  ) : null;
+
+  if (!usePin) {
+    return (
+      <section id={id} className="v4-panel v4-panel--dark section-pad">
+        {headerBlock && (
+          <div className="container-luxury mb-8 text-center">{headerBlock}</div>
+        )}
+        {labelBlock && (
+          <div className="container-luxury mb-8">{labelBlock}</div>
+        )}
+        <div className="v4-rail flex gap-4 overflow-x-auto px-6 pb-4 scrollbar-none snap-x snap-mandatory">
+          {cards.map((card) => (
+            <V5PinCardView
+              key={card.title}
+              card={card}
+              variant={variant}
+              onCta={onCta}
+            />
+          ))}
+        </div>
+        {ctaLabel && onCta && (
+          <div className="container-luxury mt-10 text-center">
+            <V5Button onClick={onCta}>{ctaLabel}</V5Button>
+          </div>
+        )}
+      </section>
+    );
+  }
+
+  return (
+    <section
+      ref={containerRef}
+      id={id}
+      className="v4-pin-section v4-panel--dark"
+      style={{ height: scrollHeight }}
+    >
+      <div className="sticky top-0 flex h-svh flex-col overflow-hidden">
+        {headerBlock && (
+          <div className="container-luxury shrink-0 pt-10 pb-4 text-center">
+            {headerBlock}
+          </div>
+        )}
+        {labelBlock && !headerTitle && (
+          <div className="container-luxury shrink-0 pt-10 pb-6">{labelBlock}</div>
+        )}
+        <motion.div
+          ref={trackRef}
+          className={
+            variant === "production"
+              ? "v4-pin-track v4-pin-track--production flex h-full min-h-0 flex-1 items-end gap-5 px-[max(1.25rem,calc((100vw-1280px)/2+1.25rem))] pb-6"
+              : "v4-pin-track flex h-full min-h-0 flex-1 items-center gap-5 px-[max(1.25rem,calc((100vw-1280px)/2+1.25rem))] pb-6"
+          }
+          style={{ x }}
+        >
+          {cards.map((card) => (
+            <V5PinCardView
+              key={card.title}
+              card={card}
+              variant={variant}
+              onCta={onCta}
+            />
+          ))}
+        </motion.div>
+        {ctaLabel && onCta && (
+          <div className="container-luxury shrink-0 pb-8 text-center">
+            <V5Button onClick={onCta}>{ctaLabel}</V5Button>
+          </div>
+        )}
+      </div>
+    </section>
+  );
+}
+
+function V5PinCardView({
+  card,
+  variant,
+  onCta,
+}: {
+  card: V5PinCard;
+  variant: "spaces" | "gallery" | "production";
+  onCta?: () => void;
+}) {
+  const cardClass =
+    variant === "gallery"
+      ? "v4-gallery-card group relative shrink-0 overflow-hidden"
+      : variant === "production"
+        ? "v4-space-card v4-space-card--production group relative shrink-0 overflow-hidden"
+        : "v4-space-card group relative shrink-0 overflow-hidden";
+
+  return (
+    <article className={cardClass}>
+      <Image
+        src={card.image}
+        alt={card.title}
+        fill
+        sizes="(max-width:1024px) 78vw, 32vw"
+        className="object-cover transition-transform duration-[1.4s] ease-out group-hover:scale-[1.03]"
+      />
+      <div className="v4-pin-card-overlay absolute inset-0" />
+      <LightSweep className="v4-pin-card-sweep" playOnView />
+      <div className="absolute bottom-0 left-0 right-0 p-6 tablet:p-8">
+        {variant === "production" && card.num ? (
+          <>
+            <p className="v4-production-card__num" aria-hidden>
+              {card.num}
+            </p>
+            <p className="v4-mono mt-3 text-white">{card.title}</p>
+            <p className="v4-production-card__text mt-3">{card.text}</p>
+          </>
+        ) : (
+          <>
+            <p className="v4-mono v4-pin-card-title">{card.title}</p>
+            <p className="mt-2 font-sans text-sm text-white/75">{card.text}</p>
+          </>
+        )}
+        {card.cta && onCta && (
+          <V5Button className="v4-btn--sm mt-5" onClick={onCta}>
+            {card.cta}
+          </V5Button>
+        )}
+      </div>
+    </article>
+  );
+}

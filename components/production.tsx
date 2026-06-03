@@ -2,6 +2,8 @@
 
 import { motion } from "framer-motion";
 import { CinematicLoopMedia } from "@/components/cinematic-loop-media";
+import { LightSweep } from "@/components/motion/light-sweep";
+import { TextShimmer } from "@/components/motion/text-shimmer";
 import { ClipReveal } from "@/components/motion/clip-reveal";
 import { SectionAtmosphere } from "@/components/motion/section-atmosphere";
 import { PRODUCTION_CARDS } from "@/lib/constants";
@@ -20,9 +22,11 @@ export function Production() {
           02 — Производство
         </p>
         <ClipReveal as="h2" className="text-mega-light mt-4 max-w-3xl" delay={0.1}>
-          Собственное производство
-          <br />
-          под задачи яхтенных проектов
+          <TextShimmer tone="light" className="inline-block">
+            Собственное производство
+            <br />
+            под задачи яхтенных проектов
+          </TextShimmer>
         </ClipReveal>
         <ClipReveal as="p" className="mt-8 max-w-2xl" delay={0.2}>
           <p className="font-sans text-base leading-relaxed text-white/55 tablet:text-lg">
@@ -55,7 +59,7 @@ export function Production() {
                   macro
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#05070B] via-[#05070B]/40 to-transparent" />
-                <div className="production-light-sweep" aria-hidden />
+                <LightSweep className="production-light-sweep" playOnView />
               </div>
               <div className="production-card-body">
                 <h3 className="font-display text-xl font-semibold">{card.title}</h3>

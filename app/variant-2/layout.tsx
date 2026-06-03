@@ -11,5 +11,7 @@ export default function Variant2Layout({
 }: {
   children: React.ReactNode;
 }) {
-  return children;
+  return (
+    <div className="min-h-screen bg-[#0d1322] text-white antialiased">{children}</div>
+  );
 }

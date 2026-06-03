@@ -1,6 +1,6 @@
-import { LandingPage } from "@/components/landing-page";
+import { redirect } from "next/navigation";
 
-/** Вариант 2 — отдельный URL: /variant-2 */
-export default function Variant2Page() {
-  return <LandingPage variant="2" />;
+/** Старый URL → /v2 */
+export default function Variant2Redirect() {
+  redirect("/v2");
 }

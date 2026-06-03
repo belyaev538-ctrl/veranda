@@ -1,59 +1,46 @@
+import { V1_HERO_IMAGE, YACHT_POOL, yachtImg } from "@/lib/yacht-assets";
+
 /** Ассеты в /public/images (исходники: /image) */
-export const IMAGE_FILES = [
-  "/images/image1.png",
-  "/images/image2.png",
-  "/images/image4.png",
-  "/images/image5.png",
-  "/images/image6.png",
-  "/images/image7.png",
-  "/images/image8.png",
-  "/images/image9.png",
-  "/images/image10.png",
-  "/images/image11.png",
-  "/images/image12.png",
-  "/images/image13.png",
-  "/images/image14.png",
-] as const;
+export const IMAGE_FILES = [...YACHT_POOL] as const;
 
 export const IMAGE_COUNT = IMAGE_FILES.length;
 
-/** Смысловые ключи — удобно переставлять без дублей image1≈image3 */
 const IMG = {
-  loungeClassic: "/images/image1.png",
-  craftDetail: "/images/image2.png",
-  sunbedBow: "/images/image4.png",
-  cockpitLounge: "/images/image5.png",
-  diningAft: "/images/image6.png",
-  softClose: "/images/image7.png",
-  loungeWide: "/images/image8.png",
-  resortLounge: "/images/image9.png",
-  curvedSunset: "/images/image10.png",
-  editorialSplit: "/images/image11.png",
-  flybridgeSet: "/images/image12.png",
-  heroPanorama: "/images/image13.png",
-  textileDetail: "/images/image14.png",
+  loungeClassic: yachtImg(6),
+  craftDetail: yachtImg(7),
+  sunbedBow: yachtImg(8),
+  cockpitLounge: yachtImg(9),
+  diningAft: yachtImg(10),
+  softClose: yachtImg(11),
+  loungeWide: yachtImg(12),
+  resortLounge: yachtImg(13),
+  curvedSunset: yachtImg(14),
+  editorialSplit: yachtImg(15),
+  flybridgeSet: yachtImg(1),
+  heroPanorama: V1_HERO_IMAGE,
+  textileDetail: yachtImg(4),
 } as const;
 
-/** Слоты 1–18 по секциям лендинга */
+/** Слоты 1–18 по секциям лендинга (v1: hero ≠ yacht-hero) */
 const PHOTO_TO_IMAGE: Record<number, (typeof IMAGE_FILES)[number]> = {
-  1: IMG.heroPanorama,
-  2: IMG.loungeWide,
-  3: IMG.flybridgeSet,
-  4: IMG.diningAft,
-  5: IMG.sunbedBow,
-  6: IMG.cockpitLounge,
-  7: IMG.curvedSunset,
-  8: IMG.craftDetail,
-  9: IMG.editorialSplit,
-  10: IMG.softClose,
-  11: IMG.resortLounge,
-  12: IMG.textileDetail,
-  13: IMG.loungeClassic,
-  14: IMG.sunbedBow,
-  15: IMG.resortLounge,
-  16: IMG.editorialSplit,
-  17: IMG.cockpitLounge,
-  18: IMG.heroPanorama,
+  1: V1_HERO_IMAGE,
+  2: yachtImg(2),
+  3: yachtImg(3),
+  4: yachtImg(4),
+  5: yachtImg(5),
+  6: yachtImg(6),
+  7: yachtImg(7),
+  8: yachtImg(8),
+  9: yachtImg(9),
+  10: yachtImg(10),
+  11: yachtImg(11),
+  12: yachtImg(12),
+  13: yachtImg(13),
+  14: yachtImg(14),
+  15: yachtImg(15),
+  16: yachtImg(0),
+  17: yachtImg(1),
+  18: yachtImg(2),
 };
 
 const PHOTO_ALT: Record<number, string> = {
