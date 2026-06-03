@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRef } from "react";
 import { ClipReveal } from "@/components/motion/clip-reveal";
 import { PlaceholderImage } from "@/components/placeholder-image";
+import { TrustBar } from "@/components/trust-bar";
 import { useScrollMotion } from "@/components/motion/scroll-provider";
 import { cn } from "@/lib/cn";
 
@@ -98,9 +99,6 @@ export function Hero() {
       >
         <div className="container-luxury hero-content w-full max-[767px]:flex max-[767px]:min-h-0 max-[767px]:flex-1 max-[767px]:flex-col max-[767px]:justify-end pb-10 tablet:pb-14 tablet:pt-24 desktop:pb-20">
           <ClipReveal as="p" priority delay={0.2} duration={1.15}>
-            <p className="mb-2 font-sans text-[10px] font-medium tracking-[0.22em] text-white/50">
-              VERANDARU · мебель для яхт
-            </p>
             <p className="mb-6 font-sans text-xs font-medium tracking-[0.16em] text-white/65">
               Собственное производство · кастом под проект яхты
             </p>
@@ -140,6 +138,8 @@ export function Hero() {
               Посмотреть возможности
             </Link>
           </ClipReveal>
+
+          <TrustBar variant="hero" />
         </div>
       </motion.div>
 

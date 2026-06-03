@@ -16,6 +16,10 @@
 
 # misc
 .DS_Store
+Feadship_files/
+/image.png
+/lodka.png
+
 *.pem
 
 # debug

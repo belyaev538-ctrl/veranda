@@ -75,7 +75,7 @@
   }
 
   .philosophy-copy {
-    @apply max-w-[520px] font-sans text-lg leading-[1.55] text-muted tablet:text-xl;
+    @apply max-w-[520px] font-sans text-lg leading-[1.55] text-ink/80 tablet:text-xl;
   }
 
   .btn-hero-primary {

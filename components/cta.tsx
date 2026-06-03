@@ -6,14 +6,52 @@ import { ClipReveal } from "@/components/motion/clip-reveal";
 import { ParallaxMedia } from "@/components/motion/parallax-media";
 import { SectionAtmosphere } from "@/components/motion/section-atmosphere";
 import { useScrollMotion } from "@/components/motion/scroll-provider";
+import { useSiteVariant } from "@/components/contact-form-provider";
+import { PhoneInput } from "@/components/phone-input";
+import { submitLead } from "@/lib/submit-lead";
+import { validateRuPhone } from "@/lib/phone";
 
 export function Cta() {
   const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [phone, setPhone] = useState("");
   const { cinematic } = useScrollMotion();
+  const siteVariant = useSiteVariant();
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    const form = e.currentTarget;
+    const data = new FormData(form);
+
+    const phoneCheck = validateRuPhone(phone);
+    if (!phoneCheck.valid) {
+      setError(phoneCheck.error ?? "Некорректный номер телефона.");
+      return;
+    }
+
+    setError(null);
+    setSubmitting(true);
+
+    const result = await submitLead({
+      name: String(data.get("name") ?? "").trim(),
+      phone: phoneCheck.formatted ?? phone.trim(),
+      source: "cta",
+      variant: siteVariant,
+      yacht: String(data.get("yacht") ?? "").trim() || undefined,
+      comment: String(data.get("comment") ?? "").trim() || undefined,
+    });
+
+    setSubmitting(false);
+
+    if (!result.ok) {
+      setError(result.error);
+      return;
+    }
+
     setSubmitted(true);
+    setPhone("");
+    form.reset();
   };
 
   return (
@@ -75,12 +113,11 @@ export function Cta() {
                 placeholder="Имя"
                 className="input-light"
               />
-              <input
+              <PhoneInput
                 id="phone"
                 name="phone"
-                type="tel"
-                required
-                placeholder="Телефон"
+                value={phone}
+                onChange={setPhone}
                 className="input-light"
               />
               <input
@@ -97,8 +134,21 @@ export function Cta() {
                 placeholder="Комментарий"
                 className="input-light resize-none"
               />
-              <button type="submit" className="btn-primary w-full">
-                {submitted ? "Заявка отправлена" : "Обсудить проект яхты"}
+              {error && (
+                <p className="rounded-brand bg-red-50 px-3 py-2 font-sans text-xs text-red-800">
+                  {error}
+                </p>
+              )}
+              <button
+                type="submit"
+                className="btn-primary w-full disabled:cursor-not-allowed disabled:opacity-60"
+                disabled={submitting || submitted}
+              >
+                {submitting
+                  ? "Отправляем…"
+                  : submitted
+                    ? "Заявка отправлена"
+                    : "Обсудить проект яхты"}
               </button>
             </form>
           </ClipReveal>

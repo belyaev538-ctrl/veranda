@@ -17,6 +17,10 @@ import {
   type ContactChannelId,
 } from "@/lib/constants";
 import { luxuryEase } from "@/lib/motion";
+import { PhoneInput } from "@/components/phone-input";
+import { submitLead } from "@/lib/submit-lead";
+import { validateRuPhone } from "@/lib/phone";
+import type { SiteVariant } from "@/lib/site-variant";
 import { cn } from "@/lib/cn";
 
 type ContactFormContextValue = {
@@ -26,6 +30,11 @@ type ContactFormContextValue = {
 };
 
 const ContactFormContext = createContext<ContactFormContextValue | null>(null);
+const SiteVariantContext = createContext<SiteVariant>("1");
+
+export function useSiteVariant() {
+  return useContext(SiteVariantContext);
+}
 
 export function useContactForm() {
   const ctx = useContext(ContactFormContext);
@@ -58,9 +67,11 @@ function CloseIcon({ className }: { className?: string }) {
 function ContactFormModal({
   open,
   onClose,
+  siteVariant,
 }: {
   open: boolean;
   onClose: () => void;
+  siteVariant: SiteVariant;
 }) {
   const formId = useId();
   const [name, setName] = useState("");
@@ -70,6 +81,7 @@ function ContactFormModal({
   const [comment, setComment] = useState("");
   const [privacyAccepted, setPrivacyAccepted] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const telegramSelected = channels.includes("telegram");
@@ -111,7 +123,7 @@ function ContactFormModal({
     }, 400);
   };
 
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     if (!privacyAccepted) {
       setError("Подтвердите согласие с политикой конфиденциальности.");
@@ -125,7 +137,33 @@ function ContactFormModal({
       setError("Укажите никнейм или ссылку в Telegram.");
       return;
     }
+
+    const phoneCheck = validateRuPhone(phone);
+    if (!phoneCheck.valid) {
+      setError(phoneCheck.error ?? "Некорректный номер телефона.");
+      return;
+    }
+
     setError(null);
+    setSubmitting(true);
+
+    const result = await submitLead({
+      name: name.trim(),
+      phone: phoneCheck.formatted ?? phone.trim(),
+      source: "modal",
+      variant: siteVariant,
+      channels,
+      telegramHandle: telegramSelected ? telegramHandle.trim() : undefined,
+      comment: comment.trim() || undefined,
+    });
+
+    setSubmitting(false);
+
+    if (!result.ok) {
+      setError(result.error);
+      return;
+    }
+
     setSubmitted(true);
   };
 
@@ -217,14 +255,10 @@ function ContactFormModal({
                     </label>
                     <label className="contact-field">
                       <span className="contact-field-label">Телефон</span>
-                      <input
-                        type="tel"
+                      <PhoneInput
                         name="phone"
-                        required
-                        autoComplete="tel"
                         value={phone}
-                        onChange={(e) => setPhone(e.target.value)}
-                        placeholder="+7 (___) ___-__-__"
+                        onChange={setPhone}
                         className="contact-field-input"
                       />
                     </label>
@@ -338,8 +372,12 @@ function ContactFormModal({
                     </span>
                   </label>
 
-                  <button type="submit" className="btn-primary w-full">
-                    Отправить заявку
+                  <button
+                    type="submit"
+                    className="btn-primary w-full disabled:cursor-not-allowed disabled:opacity-60"
+                    disabled={submitting}
+                  >
+                    {submitting ? "Отправляем…" : "Отправить заявку"}
                   </button>
                 </form>
               )}
@@ -351,16 +389,28 @@ function ContactFormModal({
   );
 }
 
-export function ContactFormProvider({ children }: { children: ReactNode }) {
+export function ContactFormProvider({
+  children,
+  siteVariant = "1",
+}: {
+  children: ReactNode;
+  siteVariant?: SiteVariant;
+}) {
   const [isOpen, setIsOpen] = useState(false);
 
   const open = useCallback(() => setIsOpen(true), []);
   const close = useCallback(() => setIsOpen(false), []);
 
   return (
-    <ContactFormContext.Provider value={{ open, close, isOpen }}>
-      {children}
-      <ContactFormModal open={isOpen} onClose={close} />
-    </ContactFormContext.Provider>
+    <SiteVariantContext.Provider value={siteVariant}>
+      <ContactFormContext.Provider value={{ open, close, isOpen }}>
+        {children}
+        <ContactFormModal
+          open={isOpen}
+          onClose={close}
+          siteVariant={siteVariant}
+        />
+      </ContactFormContext.Provider>
+    </SiteVariantContext.Provider>
   );
 }
