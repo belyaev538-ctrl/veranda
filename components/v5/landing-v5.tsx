@@ -26,7 +26,7 @@ export function LandingV5() {
   return (
     <ContactFormProvider siteVariant="5">
       <IntroGate heroImage={V5_IMAGES.hero} introVariant="v5">
-        <div className="v4-theme">
+        <div className="v4-theme v5-site">
           <V5Header />
           <main>
             <V5Hero />
@@ -35,14 +35,14 @@ export function LandingV5() {
             <V5Production />
             <V5YachtTourSection />
             <V5Custom />
-            <V5Visualization />
             <V5Collections />
+            <V5Visualization />
             <V5Materials />
             <V5Nda />
-            <V5Why />
-            <V5Faq />
             <V5Gallery />
+            <V5Faq />
             <V5Contact />
+            <V5Why />
           </main>
           <V5Footer />
         </div>

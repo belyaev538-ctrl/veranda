@@ -77,7 +77,39 @@ export function V5Label({
   children: ReactNode;
   className?: string;
 }) {
-  return <p className={cn("v4-label", className)}>{children}</p>;
+  return <p className={cn("v4-label v5-type-caption", className)}>{children}</p>;
+}
+
+/** Заголовок секции — Display Medium (44px) */
+export function V5SectionTitle({
+  children,
+  className,
+}: {
+  children: ReactNode;
+  className?: string;
+}) {
+  return (
+    <h2 className={cn("v5-type-display-md font-sans", className)}>{children}</h2>
+  );
+}
+
+/** Fullscreen: Content 1280 → Text 720, визуально по центру экрана */
+export function V5FullscreenText({
+  children,
+  className,
+  innerClassName,
+}: {
+  children: ReactNode;
+  className?: string;
+  innerClassName?: string;
+}) {
+  return (
+    <div className={cn("v5-fullscreen-text", className)}>
+      <div className={cn("v5-fullscreen-text__inner", innerClassName)}>
+        {children}
+      </div>
+    </div>
+  );
 }
 
 export function V5DisplayTitle({

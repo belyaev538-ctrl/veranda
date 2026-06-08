@@ -57,7 +57,7 @@ export function V5InlineLeadForm({ className }: { className?: string }) {
 
   if (submitted) {
     return (
-      <p className={cn("v4-inline-lead__success font-sans text-sm text-white/80", className)}>
+      <p className={cn("v4-inline-lead__success text-white/80", className)}>
         Спасибо. Мы свяжемся с вами в ближайшее время.
       </p>
     );

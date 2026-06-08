@@ -20,7 +20,7 @@ export function V5HorizontalRail({
   onCta?: () => void;
 }) {
   return (
-    <div className="v4-rail flex gap-4 overflow-x-auto px-[max(1rem,calc((100vw-1280px)/2+1rem))] pb-6 scrollbar-none snap-x snap-mandatory">
+    <div className="v4-rail v5-content-edge flex gap-4 overflow-x-auto pb-6 pr-5 scrollbar-none snap-x snap-mandatory">
       {cards.map((card) => (
         <article key={card.title} className="v4-rail-card group relative shrink-0 snap-start overflow-hidden">
           <Image src={card.image} alt={card.titleRu ?? card.title} fill sizes="(max-width:768px) 78vw, 32vw" className="object-cover transition-transform duration-[1.4s] ease-out group-hover:scale-[1.04]" />
@@ -30,8 +30,10 @@ export function V5HorizontalRail({
           )}
           <div className="absolute bottom-0 left-0 right-0 p-5 tablet:p-6">
             <p className="v4-mono text-white/55">{card.title}</p>
-            {card.titleRu && <p className="mt-1 font-sans text-sm text-white/70">{card.titleRu}</p>}
-            <p className="mt-3 max-w-sm font-sans text-sm leading-relaxed text-white/85 opacity-90 transition-opacity group-hover:opacity-100">
+            {card.titleRu && (
+              <p className="v5-type-caption-bold mt-1 text-white/70">{card.titleRu}</p>
+            )}
+            <p className="v5-type-body mt-3 max-w-sm text-white/85 opacity-90 transition-opacity group-hover:opacity-100">
               {card.text}
             </p>
             {card.cta && onCta && (

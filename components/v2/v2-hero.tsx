@@ -19,7 +19,7 @@ import {
 } from "@/lib/v2-content";
 import { luxuryEase } from "@/lib/motion";
 
-type HeroScrollLine = (typeof V2_HERO_LINES)[number];
+type HeroScrollLine = string | (typeof V2_HERO_LINES)[number];
 
 function heroLineParts(line: HeroScrollLine): readonly string[] {
   return typeof line === "string" ? [line] : line;
@@ -156,7 +156,7 @@ export function V2Hero({
               pulsating={false}
               fadeDistance={1.1}
               saturation={1}
-              intensity={1.5}
+              intensity={1.28}
             />
           </div>
         )}
@@ -218,7 +218,10 @@ export function V2Hero({
               style={{ opacity: scrollHintOpacity }}
               aria-hidden
             >
-              <span className="block h-10 w-px bg-white/30 tablet:h-12" />
+              <span className="v2-scroll-indicator">
+                <span className="v2-scroll-indicator__line" />
+                <span className="v2-scroll-indicator__arrow" />
+              </span>
             </motion.div>
           </div>
         </motion.div>

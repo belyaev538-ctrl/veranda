@@ -866,10 +866,45 @@
   transform: translateY(-80px);
 }
 
+/* v5 hero — подсказка скролла белым */
+.v4-theme.v5-site #v5-hero .v2-scroll-hint {
+  color: #fff;
+}
+
+.v4-theme.v5-site #v5-hero .v2-scroll-indicator__line {
+  background: #fff;
+}
+
+.v4-theme.v5-site #v5-hero .v2-scroll-indicator__arrow {
+  border-right-color: #fff;
+  border-bottom-color: #fff;
+}
+
 /* v5 hero — лучи поверх overlay (слегка приглушённые, голубоватые) */
 .v4-theme #v5-hero .v2-hero-light-rays {
   mix-blend-mode: screen;
-  opacity: 0.88;
+  opacity: 0.8;
+}
+
+.v4-theme.v5-site .v5-chapter-title {
+  overflow: visible;
+  text-wrap: normal;
+}
+
+.v4-theme.v5-site .v5-chapter-title .luxury-text-shimmer {
+  overflow: visible;
+}
+
+/* Statement — фиксированные 3 строки, без balance-переносов */
+.v4-theme.v5-site #v5-statement .v5-statement-title {
+  font-size: clamp(1.75rem, 4.5vw, 3.5rem);
+  line-height: 1.08;
+  text-wrap: wrap;
+}
+
+.v4-theme.v5-site #v5-statement .v4-label,
+.v4-theme.v5-site #v5-areas .v4-label {
+  color: #fff;
 }
 
 /* v5 hero — мерцание в конце скролла (как production-card) */
@@ -892,6 +927,36 @@
   letter-spacing: 0.28em;
   text-transform: uppercase;
   color: rgba(255, 255, 255, 0.45);
+}
+
+.v2-scroll-indicator {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  height: 2.5rem;
+}
+
+@media (min-width: 768px) {
+  .v2-scroll-indicator {
+    height: 3rem;
+  }
+}
+
+.v2-scroll-indicator__line {
+  flex: 1;
+  width: 1px;
+  min-height: 0;
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.v2-scroll-indicator__arrow {
+  flex-shrink: 0;
+  width: 7px;
+  height: 7px;
+  margin-top: 5px;
+  border-right: 1px solid rgba(255, 255, 255, 0.3);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+  transform: rotate(45deg) translateY(-1px);
 }
 
 .v2-menu-trigger {
@@ -1686,6 +1751,486 @@
   font-family: var(--font-v4-sans), system-ui, sans-serif;
 }
 
+/* —— Variant 5: Montserrat на всём лендинге (/v5) —— */
+.v4-theme.v5-site {
+  font-family: var(--font-montserrat), system-ui, sans-serif;
+}
+
+.v4-theme.v5-site .v2-hero-line,
+.v4-theme.v5-site .v2-scroll-hint,
+.v4-theme.v5-site .v3-nav-link,
+.v4-theme.v5-site .v3-menu-trigger,
+.v4-theme.v5-site .v4-display-title,
+.v4-theme.v5-site .v4-hero-title,
+.v4-theme.v5-site .v4-editorial,
+.v4-theme.v5-site .v4-chapter-sub,
+.v4-theme.v5-site .v4-body-light,
+.v4-theme.v5-site .v4-body-muted,
+.v4-theme.v5-site .v4-label,
+.v4-theme.v5-site .v4-mono,
+.v4-theme.v5-site .v4-btn,
+.v4-theme.v5-site .v4-why-item__title,
+.v4-theme.v5-site .v4-production-step__num,
+.v4-theme.v5-site .v4-production-step__text,
+.v4-theme.v5-site .v4-production-card__num,
+.v4-theme.v5-site .v4-production-card__text,
+.v4-theme.v5-site .v4-inline-lead__label,
+.v4-theme.v5-site .v4-inline-lead__input,
+.v4-theme.v5-site .v4-inline-lead__attach-btn,
+.v4-theme.v5-site .v4-inline-lead__file-name,
+.v4-theme.v5-site .v4-inline-lead__error,
+.v4-theme.v5-site .v4-inline-lead__success,
+.v4-theme.v5-site .v4-faq-trigger,
+.v4-theme.v5-site .v4-faq-answer,
+.v4-theme.v5-site .v4-faq-icon,
+.v4-theme.v5-site .v4-footer-link,
+.v4-theme.v5-site .v4-header-tag,
+.v4-theme.v5-site .v4-contact-stat__value,
+.v4-theme.v5-site .v4-contact-stat__label,
+.v4-theme.v5-site .v5-statement-title,
+.v4-theme.v5-site .v5-chapter-title,
+.v4-theme.v5-site .v5-production-header,
+.v4-theme.v5-site .v4-production-card__title,
+.v4-theme.v5-site .v5-yacht-tour__title,
+.v4-theme.v5-site .v5-yacht-tour__subtitle,
+.v4-theme.v5-site .v5-yacht-tour__desc,
+.v4-theme.v5-site .v5-yacht-tour__solutions-label,
+.v4-theme.v5-site .v5-yacht-tour__solutions li,
+.v4-theme.v5-site .luxury-text-shimmer,
+.v4-theme.v5-site .font-serif,
+.v4-theme.v5-site .font-sans {
+  font-family: var(--font-montserrat), system-ui, sans-serif;
+}
+
+/* —— Variant 5: типографическая система —— */
+.v4-theme.v5-site {
+  --v5-type-display-xl: 4.5rem;
+  --v5-type-display-lg: 3.25rem;
+  --v5-type-display-md: 2.75rem;
+  --v5-type-yacht-title: 4rem;
+  --v5-type-subtitle: 1.125rem;
+  --v5-type-body: 1rem;
+  --v5-type-caption: 0.6875rem;
+  --v5-type-eyebrow: 1.25rem;
+  --v5-type-display-num: 5rem;
+}
+
+.v4-theme.v5-site .v5-type-display-xl,
+.v4-theme.v5-site #v5-hero .v2-hero-line,
+.v4-theme.v5-site .v5-statement-title,
+.v4-theme.v5-site .v5-chapter-title {
+  font-size: clamp(2.25rem, 8vw, var(--v5-type-display-xl));
+  font-weight: 300;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+}
+
+.v4-theme.v5-site .v5-type-display-lg,
+.v4-theme.v5-site .v5-production-header,
+.v4-theme.v5-site .v4-display-title {
+  font-size: clamp(2rem, 6vw, var(--v5-type-display-lg));
+  font-weight: 300;
+  line-height: 1.06;
+  letter-spacing: -0.02em;
+}
+
+.v4-theme.v5-site .v5-type-display-md,
+.v4-theme.v5-site #v5-custom .v5-type-display-md {
+  font-size: clamp(1.75rem, 5vw, var(--v5-type-display-md));
+  font-weight: 300;
+  line-height: 1.08;
+  letter-spacing: -0.01em;
+}
+
+.v4-theme.v5-site #v5-materials .v5-type-display-md,
+.v4-theme.v5-site #v5-why .v5-type-display-md,
+.v4-theme.v5-site #v5-gallery .v5-type-display-md,
+.v4-theme.v5-site #v5-collections .v5-type-display-md {
+  font-size: clamp(1.75rem, 5vw, var(--v5-type-display-md));
+  font-weight: 300;
+  line-height: 1.08;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  color: #fff;
+}
+
+.v4-theme.v5-site #v5-materials .v5-type-display-md {
+  color: #1e1e1e;
+}
+
+.v4-theme.v5-site .v5-type-yacht-title,
+.v4-theme.v5-site .v5-yacht-tour__title {
+  font-size: clamp(2.25rem, 7vw, var(--v5-type-yacht-title));
+  font-weight: 300;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+}
+
+.v4-theme.v5-site .v5-type-subtitle,
+.v4-theme.v5-site .v4-chapter-sub,
+.v4-theme.v5-site .v4-body-light,
+.v4-theme.v5-site .v5-yacht-tour__desc,
+.v4-theme.v5-site .v5-yacht-tour__subtitle {
+  font-size: var(--v5-type-subtitle);
+  font-weight: 300;
+  line-height: 1.55;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.v4-theme.v5-site .v5-yacht-tour__subtitle {
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.v4-theme.v5-site .v5-type-body,
+.v4-theme.v5-site .v4-faq-trigger,
+.v4-theme.v5-site .v4-faq-answer,
+.v4-theme.v5-site .v4-production-card__text,
+.v4-theme.v5-site .v4-why-item__title,
+.v4-theme.v5-site .v5-why-tile__title,
+.v4-theme.v5-site .v4-body-muted,
+.v4-theme.v5-site .v4-inline-lead__input,
+.v4-theme.v5-site .v4-inline-lead__success,
+.v4-theme.v5-site .v4-inline-lead__error,
+.v4-theme.v5-site .v5-yacht-tour__solutions li,
+.v4-theme.v5-site .v4-pin-card-desc,
+.v4-theme.v5-site #v5-materials .v5-type-body {
+  font-size: var(--v5-type-body);
+  font-weight: 400;
+  line-height: 1.6;
+  letter-spacing: 0;
+}
+
+.v4-theme.v5-site .v5-type-caption,
+.v4-theme.v5-site .v4-label,
+.v4-theme.v5-site .v4-header-tag,
+.v4-theme.v5-site .v3-nav-link,
+.v4-theme.v5-site .v3-menu-trigger,
+.v4-theme.v5-site .v3-menu-label,
+.v4-theme.v5-site .v3-menu-close,
+.v4-theme.v5-site .v3-menu-numeral,
+.v4-theme.v5-site .v2-scroll-hint,
+.v4-theme.v5-site .v4-inline-lead__label,
+.v4-theme.v5-site .v4-contact-link,
+.v4-theme.v5-site .v5-yacht-tour__solutions-label,
+.v4-theme.v5-site .luxury-scroll-progress__label,
+.v4-theme.v5-site .luxury-scroll-progress__percent,
+.v4-theme.v5-site .intro-coords,
+.v4-theme.v5-site .v5-footer-copy {
+  font-size: var(--v5-type-caption);
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  line-height: 1.4;
+}
+
+.v4-theme.v5-site .v5-type-caption-bold,
+.v4-theme.v5-site .v4-production-card__title,
+.v4-theme.v5-site .v4-pin-card-title,
+.v4-theme.v5-site #v5-materials .v5-type-caption-bold {
+  font-size: var(--v5-type-caption);
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  line-height: 1.35;
+}
+
+/* Заголовки карточек collections + крупные лейблы (×2 caption) */
+.v4-theme.v5-site .v5-type-card-title,
+.v4-theme.v5-site #v5-collections .v4-pin-card-title {
+  font-size: calc(var(--v5-type-caption) * 2);
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  line-height: 1.25;
+  text-transform: uppercase;
+}
+
+.v4-theme.v5-site .v4-btn,
+.v4-theme.v5-site .v4-inline-lead__attach-btn,
+.v4-theme.v5-site .v2-btn-outline,
+.v4-theme.v5-site .v2-btn-primary {
+  font-size: var(--v5-type-caption);
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.v4-theme.v5-site .v4-btn--sm {
+  font-size: var(--v5-type-caption);
+}
+
+.v4-theme.v5-site .v5-type-display-num,
+.v4-theme.v5-site #v5-production .v4-production-card__num {
+  font-size: clamp(3rem, 10vw, var(--v5-type-display-num));
+  font-weight: 200;
+  line-height: 0.95;
+  letter-spacing: -0.02em;
+}
+
+.v4-theme.v5-site #v5-why .v5-why-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 80px;
+}
+
+.v4-theme.v5-site .v5-why-grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+}
+
+@media (min-width: 640px) {
+  .v4-theme.v5-site .v5-why-grid {
+    gap: 1.25rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .v4-theme.v5-site .v5-why-grid {
+    gap: 1.5rem;
+  }
+}
+
+.v4-theme.v5-site .v5-why-tile {
+  display: flex;
+  min-height: 9.5rem;
+  flex-direction: column;
+  justify-content: space-between;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.02);
+  padding: 1.25rem;
+  transition:
+    border-color 0.35s ease,
+    background-color 0.35s ease;
+}
+
+@media (min-width: 640px) {
+  .v4-theme.v5-site .v5-why-tile {
+    min-height: 11.5rem;
+    padding: 2rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .v4-theme.v5-site .v5-why-tile {
+    min-height: 13.5rem;
+    padding: 2.5rem;
+  }
+
+  .v4-theme.v5-site .v5-why-tile__title {
+    padding-top: 2rem;
+  }
+}
+
+.v4-theme.v5-site .v5-why-tile:hover {
+  border-color: rgba(255, 255, 255, 0.22);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.v4-theme.v5-site .v5-why-tile__num {
+  font-size: clamp(2rem, 4vw, 2.75rem);
+  font-weight: 200;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: #fff;
+}
+
+.v4-theme.v5-site .v5-why-tile__title {
+  margin: 0;
+  padding-top: 1.25rem;
+  font-size: clamp(0.9375rem, 2vw, 1.25rem);
+  font-weight: 400;
+  line-height: 1.45;
+  color: #fff;
+}
+
+.v4-theme.v5-site .v5-why-tile__subtitle {
+  margin: 0;
+  padding-top: 0.75rem;
+  font-size: clamp(0.8125rem, 1.6vw, 0.9375rem);
+  font-weight: 300;
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.62);
+}
+
+.v4-theme.v5-site .v5-footer-brand,
+.v4-theme.v5-site .v4-footer-link {
+  font-size: var(--v5-type-body);
+  font-weight: 400;
+  line-height: 1.6;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.v4-theme.v5-site .v4-inline-lead__file-name {
+  font-size: var(--v5-type-caption);
+  font-weight: 400;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.v4-theme.v5-site #v5-production .v5-production-header {
+  text-transform: none;
+  text-wrap: balance;
+}
+
+/* Карточки production не выходят за трек и не наезжают на заголовок */
+.v4-theme.v5-site #v5-production .v4-pin-track--production {
+  min-height: 240px;
+}
+
+.v4-theme.v5-site #v5-production .v4-pin-track--production .v4-space-card--production {
+  height: 100%;
+  max-height: min(68vh, 620px);
+}
+
+@media (max-height: 820px) and (min-width: 1024px) {
+  .v4-theme.v5-site #v5-production .v5-production-intro {
+    padding-top: 4.5rem;
+    padding-bottom: 2rem;
+  }
+
+  .v4-theme.v5-site #v5-production .v5-production-intro .v5-production-header {
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
+  }
+}
+
+.v4-theme.v5-site .v5-production-header > .block + .block {
+  margin-top: 0.12em;
+}
+
+/* Scroll-cover: sticky фон, следующая секция наезжает сверху */
+.v4-theme.v5-site .v5-scroll-cover-pin {
+  position: relative;
+  background-color: var(--v4-dark);
+}
+
+.v4-theme.v5-site #v5-statement .v5-fullscreen-text__inner {
+  max-width: calc(var(--v5-grid-text) + 100px);
+}
+
+.v4-theme.v5-site main > section:not(#v5-hero):not(.v5-scroll-cover-pin),
+.v4-theme.v5-site main > div {
+  position: relative;
+  z-index: 2;
+}
+
+/* После scroll-cover глав — production и ниже поверх pin-слоёв */
+.v4-theme.v5-site #v5-production,
+.v4-theme.v5-site #v5-areas,
+.v4-theme.v5-site #v5-custom,
+.v4-theme.v5-site #v5-visualization,
+.v4-theme.v5-site #v5-collections,
+.v4-theme.v5-site #v5-materials,
+.v4-theme.v5-site #v5-nda,
+.v4-theme.v5-site #v5-why,
+.v4-theme.v5-site #v5-faq,
+.v4-theme.v5-site #v5-gallery,
+.v4-theme.v5-site #v5-contact {
+  z-index: 15;
+}
+
+/* —— Variant 5: сетка —— */
+.v4-theme.v5-site {
+  --v5-grid-main: 1440px;
+  --v5-grid-content: 1280px;
+  --v5-grid-text: 720px;
+  --v5-grid-narrow: 480px;
+  --v5-content-inset: max(
+    1.25rem,
+    calc((min(100vw, var(--v5-grid-main)) - var(--v5-grid-content)) / 2)
+  );
+  --v5-content-offset: calc(
+    (100vw - min(100vw, var(--v5-grid-main))) / 2 + var(--v5-content-inset)
+  );
+}
+
+.v4-theme.v5-site .container-luxury {
+  max-width: var(--v5-grid-main);
+  padding-left: var(--v5-content-inset);
+  padding-right: var(--v5-content-inset);
+}
+
+.v4-theme.v5-site .v5-content-edge {
+  padding-left: var(--v5-content-offset);
+}
+
+.v4-theme.v5-site .v5-content-edge-right {
+  padding-right: var(--v5-content-offset);
+}
+
+.v4-theme.v5-site .v5-fullscreen-text {
+  width: 100%;
+  max-width: var(--v5-grid-main);
+  margin-inline: auto;
+  padding-inline: var(--v5-content-inset);
+}
+
+.v4-theme.v5-site .v5-fullscreen-text__inner {
+  width: 100%;
+  max-width: var(--v5-grid-text);
+  margin-inline: auto;
+  text-align: center;
+}
+
+.v4-theme.v5-site .v5-fullscreen-text:has(.v5-chapter-title),
+.v4-theme.v5-site .v5-fullscreen-text__inner:has(.v5-chapter-title) {
+  overflow: visible;
+}
+
+.v4-theme.v5-site .v5-fullscreen-text__inner:has(.v5-chapter-title) {
+  max-width: min(100%, 62.5rem);
+}
+
+.v4-theme.v5-site .v5-chapter-title__lines {
+  display: inline-block;
+  max-width: 100%;
+  text-wrap: balance;
+}
+
+.v4-theme.v5-site .v5-narrow-text {
+  width: 100%;
+  max-width: var(--v5-grid-narrow);
+  margin-inline: auto;
+}
+
+.v4-theme.v5-site .v4-faq-answer {
+  max-width: var(--v5-grid-text);
+}
+
+.v4-theme.v5-site #v5-custom .v4-custom__visual {
+  width: 100%;
+}
+
+.v4-theme.v5-site #v5-custom .v4-custom__shade {
+  background: linear-gradient(
+    to bottom,
+    rgba(2, 11, 31, 0.35) 0%,
+    rgba(2, 11, 31, 0.2) 40%,
+    rgba(2, 11, 31, 0.82) 100%
+  );
+}
+
+@media (min-width: 1024px) {
+  .v4-theme.v5-site .v5-yacht-tour__copy {
+    padding-top: 4rem;
+    padding-bottom: 4rem;
+  }
+
+  .v4-theme.v5-site .v5-yacht-tour__split--img-right .v5-yacht-tour__copy {
+    padding-left: var(--v5-content-offset);
+    padding-right: 3rem;
+  }
+
+  .v4-theme.v5-site .v5-yacht-tour__split--img-left .v5-yacht-tour__copy {
+    padding-left: 2.5rem;
+    padding-right: var(--v5-content-offset);
+  }
+}
+
 /* —— Variant 4 Yacht Edition —— */
 .v4-theme {
   --v4-dark: #020b1f;
@@ -2000,6 +2545,13 @@
   max-width: 22rem;
 }
 
+/* v5 production cards — типографика через .v4-theme.v5-site */
+.v4-theme.v5-site #v5-production .v4-production-card__num,
+.v4-theme.v5-site #v5-production .v4-production-card__title,
+.v4-theme.v5-site #v5-production .v4-production-card__text {
+  font-family: var(--font-montserrat), system-ui, sans-serif;
+}
+
 .v4-btn--dark {
   border-color: var(--v4-accent);
   color: var(--v4-accent);
@@ -2054,6 +2606,33 @@
 
 .v4-pin-card-title {
   color: var(--v4-accent);
+}
+
+/* v5 collections — заголовки карточек */
+.v4-theme.v5-site #v5-collections .v4-pin-card-title {
+  font-family: var(--font-montserrat), system-ui, sans-serif;
+  color: #fff;
+}
+
+/* v5 — eyebrow-лейблы: 20px, Light, белый на тёмном фоне */
+.v4-theme.v5-site .v5-type-eyebrow {
+  font-size: var(--v5-type-eyebrow);
+  font-weight: 300;
+  letter-spacing: 0.18em;
+  line-height: 1.25;
+  text-transform: uppercase;
+  color: #fff;
+}
+
+.v4-theme.v5-site #v5-materials .v5-type-eyebrow {
+  color: #1e1e1e;
+}
+
+/* v5 custom — описание: шире narrow (720px), ~3–4 строки */
+.v4-theme.v5-site #v5-custom .v5-custom-body {
+  width: 100%;
+  max-width: var(--v5-grid-text);
+  margin-inline: auto;
 }
 
 /* Custom projects — 70%+ visual */
@@ -2166,6 +2745,46 @@
   color: #fff;
 }
 
+/* v5 FAQ — тёмная панель, ширина как gallery */
+.v4-theme.v5-site #v5-faq .v4-label {
+  color: #fff;
+}
+
+.v4-theme.v5-site #v5-faq .v4-faq-list {
+  border-top-color: rgba(255, 255, 255, 0.12);
+}
+
+.v4-theme.v5-site #v5-faq .v5-faq-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 80px;
+}
+
+.v4-theme.v5-site #v5-faq .v4-faq-item {
+  border-bottom-color: rgba(255, 255, 255, 0.1);
+}
+
+.v4-theme.v5-site #v5-faq .v4-faq-trigger {
+  align-items: center;
+  color: #fff;
+}
+
+.v4-theme.v5-site #v5-faq .v4-faq-answer {
+  color: rgba(255, 255, 255, 0.65);
+}
+
+.v4-theme.v5-site #v5-faq .v4-faq-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  font-size: 1.75rem;
+  font-weight: 300;
+  line-height: 1;
+  color: var(--v4-accent);
+}
+
 /* FAQ minimal */
 .v4-faq-list {
   list-style: none;
@@ -2213,6 +2832,12 @@
 
 /* Visual stories editorial */
 .v4-gallery-editorial {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.v4-theme.v5-site .v5-gallery-flow {
   display: flex;
   flex-direction: column;
   gap: 1rem;
@@ -2320,6 +2945,28 @@
 
 .v4-contact-link:hover {
   color: var(--v4-cyan);
+}
+
+/* v5 contact — форма белым текстом */
+.v4-theme.v5-site #v5-contact .v4-inline-lead__label {
+  color: #fff;
+}
+
+.v4-theme.v5-site #v5-contact .v4-inline-lead__input {
+  color: #fff;
+  border-bottom-color: rgba(255, 255, 255, 0.35);
+}
+
+.v4-theme.v5-site #v5-contact .v4-inline-lead__input::placeholder {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.v4-theme.v5-site #v5-contact .v4-inline-lead__input:focus {
+  border-bottom-color: var(--v4-accent);
+}
+
+.v4-theme.v5-site #v5-contact .v4-inline-lead__file-name {
+  color: rgba(255, 255, 255, 0.65);
 }
 
 .v4-inline-lead {
@@ -2492,41 +3139,31 @@
 
 @media (min-width: 1024px) {
   .v5-yacht-tour__copy {
-    padding: 4rem 3rem 4rem max(2rem, calc((100vw - 1280px) / 2 + 2rem));
-  }
-
-  .v5-yacht-tour__split--img-left .v5-yacht-tour__copy {
-    padding-left: 2.5rem;
-    padding-right: max(2rem, calc((100vw - 1280px) / 2 + 2rem));
+    padding: 4rem 2.5rem;
   }
 }
 
 .v5-yacht-tour__title {
-  font-family: var(--font-v5-serif), var(--font-v4-serif), Georgia, serif;
-  font-size: clamp(3rem, 8vw, 7.5rem);
-  font-weight: 300;
-  line-height: 1.02;
-  letter-spacing: -0.02em;
+  font-family: var(--font-montserrat), system-ui, sans-serif;
   color: #fff;
+}
+
+@media (min-width: 1024px) {
+  .v4-theme.v5-site .v5-yacht-tour__title,
+  .v4-theme.v5-site .v5-yacht-tour__title .luxury-text-shimmer {
+    white-space: nowrap;
+  }
 }
 
 .v5-yacht-tour__subtitle {
   margin-top: 1rem;
-  font-family: var(--font-v5-sans), var(--font-v4-sans), sans-serif;
-  font-size: clamp(0.8125rem, 1.2vw, 1rem);
-  font-weight: 500;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: #8fbfd0;
+  font-family: var(--font-montserrat), system-ui, sans-serif;
 }
 
 .v5-yacht-tour__desc {
   margin-top: 1.25rem;
   max-width: 28rem;
-  font-family: var(--font-v5-sans), var(--font-v4-sans), sans-serif;
-  font-size: clamp(1rem, 1.5vw, 1.25rem);
-  font-weight: 300;
-  line-height: 1.55;
+  font-family: var(--font-montserrat), system-ui, sans-serif;
   color: rgba(255, 255, 255, 0.8);
 }
 
@@ -2535,11 +3172,7 @@
 }
 
 .v5-yacht-tour__solutions-label {
-  font-family: var(--font-v5-sans), var(--font-v4-sans), sans-serif;
-  font-size: 10px;
-  font-weight: 500;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
+  font-family: var(--font-montserrat), system-ui, sans-serif;
   color: rgba(255, 255, 255, 0.45);
 }
 
@@ -2553,8 +3186,7 @@
   position: relative;
   padding-left: 1rem;
   margin-top: 0.5rem;
-  font-family: var(--font-v5-sans), var(--font-v4-sans), sans-serif;
-  font-size: 0.9375rem;
+  font-family: var(--font-montserrat), system-ui, sans-serif;
   color: rgba(255, 255, 255, 0.72);
 }
 
@@ -2563,6 +3195,18 @@
   position: absolute;
   left: 0;
   color: var(--v4-accent);
+}
+
+.v5-yacht-tour__solutions--centered {
+  width: 100%;
+  max-width: var(--v5-grid-narrow, 480px);
+  margin-inline: auto;
+  text-align: center;
+}
+
+.v5-yacht-tour__solutions--centered ul {
+  display: inline-block;
+  text-align: left;
 }
 
 .v5-yacht-tour-screen + .v5-yacht-tour-screen {

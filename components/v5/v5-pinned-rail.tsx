@@ -4,7 +4,7 @@ import Image from "next/image";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import { LightSweep } from "@/components/motion/light-sweep";
-import { V5Button, V5Label, V5Reveal } from "@/components/v5/v5-ui";
+import { V5Button, V5Label, V5Reveal, V5SectionTitle } from "@/components/v5/v5-ui";
 
 export type V5PinCard = {
   title: string;
@@ -17,9 +17,12 @@ export type V5PinCard = {
 
 type V5PinnedRailProps = {
   id: string;
+  /** Лейбл над заголовком секции (как CUSTOM PROJECTS) */
+  eyebrow?: string;
   label?: string;
-  headerTitle?: string;
-  headerSubtitle?: string;
+  labelSubtitle?: string;
+  headerTitle?: string | readonly string[];
+  headerSubtitle?: string | readonly string[];
   cards: readonly V5PinCard[];
   variant?: "spaces" | "gallery" | "production";
   onCta?: () => void;
@@ -28,7 +31,9 @@ type V5PinnedRailProps = {
 
 export function V5PinnedRail({
   id,
+  eyebrow,
   label,
+  labelSubtitle,
   headerTitle,
   headerSubtitle,
   cards,
@@ -68,23 +73,56 @@ export function V5PinnedRail({
     ? `${Math.max(cards.length * 85, 220)}vh`
     : "auto";
 
+  const headerTitleLines =
+    typeof headerTitle === "string"
+      ? [headerTitle]
+      : headerTitle
+        ? [...headerTitle]
+        : [];
+
   const headerBlock =
-    headerTitle || headerSubtitle ? (
+    headerTitleLines.length > 0 || headerSubtitle ? (
       <>
-        {headerTitle && (
-          <h2 className="font-serif text-[clamp(2rem,5vw,3.5rem)] font-light tracking-tight text-white">
-            {headerTitle}
+        {headerTitleLines.length > 0 && (
+          <h2 className="v5-production-header v5-type-display-lg font-sans text-white">
+            {headerTitleLines.length === 1
+              ? headerTitleLines[0]
+              : headerTitleLines.map((line) => (
+                  <span key={line} className="block">
+                    {line}
+                  </span>
+                ))}
           </h2>
         )}
         {headerSubtitle && (
-          <p className="v4-body-light mx-auto mt-4 max-w-md">{headerSubtitle}</p>
+          <p className="v4-body-light mx-auto mt-4 max-w-md">
+            {typeof headerSubtitle === "string" ? (
+              headerSubtitle
+            ) : (
+              headerSubtitle.map((line) => (
+                <span key={line} className="block">
+                  {line}
+                </span>
+              ))
+            )}
+          </p>
         )}
       </>
     ) : null;
 
   const labelBlock = label ? (
     <V5Reveal>
-      <V5Label>{label}</V5Label>
+      <div className="flex flex-col items-center text-center">
+        {eyebrow && (
+          <V5Label className="v5-type-eyebrow text-white">{eyebrow}</V5Label>
+        )}
+        <V5SectionTitle className={eyebrow ? "mt-4 text-center" : "text-center"}>
+          {label}
+        </V5SectionTitle>
+        {labelSubtitle && (
+          <p className="v4-body-light mx-auto mt-4 max-w-lg">{labelSubtitle}</p>
+        )}
+      </div>
     </V5Reveal>
   ) : null;
 
@@ -92,12 +130,14 @@ export function V5PinnedRail({
     return (
       <section id={id} className="v4-panel v4-panel--dark section-pad">
         {headerBlock && (
-          <div className="container-luxury mb-8 text-center">{headerBlock}</div>
+          <div className="container-luxury mb-8 pt-[80px] pb-[80px] text-center">
+            {headerBlock}
+          </div>
         )}
         {labelBlock && (
           <div className="container-luxury mb-8">{labelBlock}</div>
         )}
-        <div className="v4-rail flex gap-4 overflow-x-auto px-6 pb-4 scrollbar-none snap-x snap-mandatory">
+        <div className="v4-rail v5-content-edge flex gap-4 overflow-x-auto pb-4 pr-5 scrollbar-none snap-x snap-mandatory">
           {cards.map((card) => (
             <V5PinCardView
               key={card.title}
@@ -108,7 +148,7 @@ export function V5PinnedRail({
           ))}
         </div>
         {ctaLabel && onCta && (
-          <div className="container-luxury mt-10 text-center">
+          <div className="container-luxury mt-10 pt-[25px] pb-[25px] text-center">
             <V5Button onClick={onCta}>{ctaLabel}</V5Button>
           </div>
         )}
@@ -125,19 +165,19 @@ export function V5PinnedRail({
     >
       <div className="sticky top-0 flex h-svh flex-col overflow-hidden">
         {headerBlock && (
-          <div className="container-luxury shrink-0 pt-10 pb-4 text-center">
+          <div className="v5-production-intro container-luxury shrink-0 pt-16 pb-10 text-center desktop:pt-[120px] desktop:pb-[96px]">
             {headerBlock}
           </div>
         )}
-        {labelBlock && !headerTitle && (
+        {labelBlock && headerTitleLines.length === 0 && (
           <div className="container-luxury shrink-0 pt-10 pb-6">{labelBlock}</div>
         )}
         <motion.div
           ref={trackRef}
           className={
             variant === "production"
-              ? "v4-pin-track v4-pin-track--production flex h-full min-h-0 flex-1 items-end gap-5 px-[max(1.25rem,calc((100vw-1280px)/2+1.25rem))] pb-6"
-              : "v4-pin-track flex h-full min-h-0 flex-1 items-center gap-5 px-[max(1.25rem,calc((100vw-1280px)/2+1.25rem))] pb-6"
+              ? "v4-pin-track v4-pin-track--production v5-content-edge flex h-full min-h-0 flex-1 items-end gap-5 pb-6 pr-5"
+              : "v4-pin-track v5-content-edge flex h-full min-h-0 flex-1 items-center gap-5 pb-6 pr-5"
           }
           style={{ x }}
         >
@@ -151,7 +191,7 @@ export function V5PinnedRail({
           ))}
         </motion.div>
         {ctaLabel && onCta && (
-          <div className="container-luxury shrink-0 pb-8 text-center">
+          <div className="container-luxury shrink-0 pt-[25px] pb-[57px] text-center">
             <V5Button onClick={onCta}>{ctaLabel}</V5Button>
           </div>
         )}
@@ -193,13 +233,15 @@ function V5PinCardView({
             <p className="v4-production-card__num" aria-hidden>
               {card.num}
             </p>
-            <p className="v4-mono mt-3 text-white">{card.title}</p>
+            <p className="v4-production-card__title mt-3 text-white">
+              {card.title}
+            </p>
             <p className="v4-production-card__text mt-3">{card.text}</p>
           </>
         ) : (
           <>
-            <p className="v4-mono v4-pin-card-title">{card.title}</p>
-            <p className="mt-2 font-sans text-sm text-white/75">{card.text}</p>
+            <p className="v4-pin-card-title text-white">{card.title}</p>
+            <p className="v4-pin-card-desc mt-2 text-white/75">{card.text}</p>
           </>
         )}
         {card.cta && onCta && (
