@@ -8,7 +8,6 @@ import { V2Journey } from "@/components/v2/v2-journey";
 import { V2Pillars } from "@/components/v2/v2-pillars";
 import { V2ScrollProgress } from "@/components/v2/v2-scroll-progress";
 import { V2Contact, V2Footer } from "@/components/v2/v2-sections";
-import { VersionSwitcherDock } from "@/components/shared/version-switcher";
 import { V2_IMAGES } from "@/lib/v2-content";
 
 export function LandingV2() {
@@ -29,7 +28,6 @@ export function LandingV2() {
           <V2Footer />
         </div>
       </IntroGate>
-      <VersionSwitcherDock current="2" />
     </ContactFormProvider>
   );
 }

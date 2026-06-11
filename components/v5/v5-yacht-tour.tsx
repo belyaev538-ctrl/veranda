@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+import { DeferredImage } from "@/components/shared/deferred-image";
 import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
 import { LightSweep } from "@/components/motion/light-sweep";
@@ -28,10 +28,14 @@ function YachtTourScreen({ zone, index }: { zone: V5YachtTourZone; index: number
   const zoneContent = (
     <>
       {zone.subtitleRu ? (
-        <V5Label className="v5-type-eyebrow text-white">{zone.subtitleRu}</V5Label>
+        <V5Label className="v5-yacht-tour__zone-label v5-type-eyebrow text-white">
+          {zone.subtitleRu}
+        </V5Label>
       ) : (
         index === 0 && (
-          <V5Label className="v5-type-eyebrow text-white">{V5_YACHT_TOUR.label}</V5Label>
+          <V5Label className="v5-yacht-tour__zone-label v5-type-eyebrow text-white">
+            {V5_YACHT_TOUR.label}
+          </V5Label>
         )
       )}
       <h2
@@ -93,13 +97,12 @@ function YachtTourScreen({ zone, index }: { zone: V5YachtTourZone; index: number
       transition={{ duration: 1.35, ease: luxuryEase }}
       style={reduced ? undefined : { y: imageY, scale: isCover ? imageScale : undefined }}
     >
-      <Image
+      <DeferredImage
         src={zone.image}
         alt=""
         fill
         sizes={isCover ? "100vw" : "(max-width: 1024px) 100vw, 65vw"}
         className="object-cover"
-        priority={index < 2}
       />
       {!isCover && <div className="v5-yacht-tour__visual-shade" aria-hidden />}
       <LightSweep className="v5-yacht-tour__sweep" playOnView />
@@ -144,6 +147,10 @@ function YachtTourScreen({ zone, index }: { zone: V5YachtTourZone; index: number
           imageRight ? "v5-yacht-tour__split--img-right" : "v5-yacht-tour__split--img-left",
         )}
       >
+        <div
+          className="v5-text-backdrop-blur v5-text-backdrop-blur--accent pointer-events-none absolute left-1/2 top-1/2 z-[1] -translate-x-1/2 -translate-y-1/2"
+          aria-hidden
+        />
         {imageRight ? (
           <>
             {textBlock}

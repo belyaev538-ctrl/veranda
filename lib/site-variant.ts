@@ -1,4 +1,4 @@
-export type SiteVariant = "1" | "2" | "3" | "4" | "5";
+export type SiteVariant = "1" | "2" | "3" | "4" | "5" | "6";
 
 export const SITE_VARIANTS: Record<
   SiteVariant,
@@ -28,6 +28,11 @@ export const SITE_VARIANTS: Record<
     label: "Вариант 5",
     path: "/v5",
     branch: "variant-5",
+  },
+  "6": {
+    label: "Вариант 6",
+    path: "/v6",
+    branch: "variant-6",
   },
 };
 

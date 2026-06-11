@@ -19,7 +19,6 @@ import {
   V4YachtAreas,
 } from "@/components/v4/v4-sections";
 import { ScrollProgress } from "@/components/shared/scroll-progress";
-import { VersionSwitcherDock } from "@/components/shared/version-switcher";
 import { V4_IMAGES } from "@/lib/v4-content";
 
 export function LandingV4() {
@@ -48,7 +47,6 @@ export function LandingV4() {
         </div>
       </IntroGate>
       <ScrollProgress />
-      <VersionSwitcherDock current="4" />
     </ContactFormProvider>
   );
 }

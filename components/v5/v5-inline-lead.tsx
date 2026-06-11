@@ -112,13 +112,27 @@ export function V5InlineLeadForm({ className }: { className?: string }) {
             setFileLabel(f ? f.name : null);
           }}
         />
-        <span className="v4-inline-lead__attach-btn">Прикрепить проект</span>
+        <span className="v4-inline-lead__attach-btn">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className="v4-inline-lead__attach-icon"
+            aria-hidden
+          >
+            <path d="M21.44 11.05 12.25 20.24a5.5 5.5 0 0 1-7.78-7.78l9.19-9.19a3.5 3.5 0 0 1 4.95 4.95l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48" />
+          </svg>
+          Прикрепить проект
+        </span>
         {fileLabel && (
           <span className="v4-inline-lead__file-name">{fileLabel}</span>
         )}
       </label>
       {error && <p className="v4-inline-lead__error">{error}</p>}
-      <button type="submit" className="v4-btn w-full max-w-xs" disabled={submitting}>
+      <button type="submit" className="v4-btn mx-auto block w-full max-w-xs" disabled={submitting}>
         {submitting ? "Отправка…" : "Отправить"}
       </button>
     </form>

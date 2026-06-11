@@ -10,6 +10,8 @@ import {
 import dynamic from "next/dynamic";
 import { useEffect, useRef, useState } from "react";
 import { useReducedMotion } from "framer-motion";
+import { HeroCompassCoords } from "@/components/hero/hero-compass-coords";
+import { CompassLoaderOverlay } from "@/components/intro/compass-loader-overlay";
 import { LightSweep } from "@/components/motion/light-sweep";
 import { useIntro } from "@/components/intro/intro-context";
 import {
@@ -17,7 +19,10 @@ import {
   V2_HERO_LINES,
   V2_IMAGES,
 } from "@/lib/v2-content";
+import { isHeroImageLoaded, markHeroImageLoaded } from "@/lib/hero-image-cache";
 import { luxuryEase } from "@/lib/motion";
+
+const HERO_COMPASS_MIN_MS = 2400;
 
 type HeroScrollLine = string | (typeof V2_HERO_LINES)[number];
 
@@ -41,6 +46,17 @@ type V2HeroProps = {
   heroEndFlicker?: boolean;
   /** WebGL-лучи сверху (v5 hero) */
   lightRays?: boolean;
+  /** Цвет лучей (v5 — голубой акцент) */
+  lightRaysColor?: string;
+  /** Компас-лоадер пока грузится hero-фото (v5) */
+  heroImageLoader?: boolean;
+  /** Сразу scroll-строки без intro-анимации; смена только по скроллу (v5) */
+  scrollLinesFromStart?: boolean;
+  /** Высота scroll-runway секции (v5 — длиннее, чтобы успели все строки) */
+  heroScrollHeight?: string;
+  /** Компас по центру hero (v5) */
+  heroCompassCenter?: boolean;
+  onHeroLoaderDismissed?: () => void;
 };
 
 const LightRays = dynamic(() => import("@/components/motion/light-rays"), {
@@ -56,12 +72,22 @@ export function V2Hero({
   scrollZoomMultiplier = 1,
   heroEndFlicker = false,
   lightRays = false,
+  lightRaysColor = "#d4ebff",
+  heroImageLoader = false,
+  scrollLinesFromStart = false,
+  heroScrollHeight = "300vh",
+  heroCompassCenter = false,
+  onHeroLoaderDismissed,
 }: V2HeroProps) {
   const reducedMotion = useReducedMotion();
-  const { heroEnter } = useIntro();
+  const { heroEnter, introWasPlayed, signalHeroEnter } = useIntro();
   const ref = useRef<HTMLElement>(null);
+  const imgRef = useRef<HTMLImageElement>(null);
   const [showScrollLines, setShowScrollLines] = useState(false);
   const [kenBurns, setKenBurns] = useState(false);
+  const [heroImageLoaded, setHeroImageLoaded] = useState(!heroImageLoader);
+  const [heroLoaderDismissed, setHeroLoaderDismissed] = useState(!heroImageLoader);
+  const [compassMinReady, setCompassMinReady] = useState(!heroImageLoader);
 
   const { scrollYProgress } = useScroll({
     target: ref,
@@ -76,21 +102,70 @@ export function V2Hero({
     [0.78, 0.92, 1],
     [0, 1, 1],
   );
-  const line0 = useTransform(scrollYProgress, [0, 0.28, 0.32], [1, 1, 0]);
-  const line1 = useTransform(scrollYProgress, [0.22, 0.32, 0.58, 0.62], [0, 1, 1, 0]);
-  const line2 = useTransform(scrollYProgress, [0.52, 0.62, 1], [0, 1, 1]);
-  const scrollHintOpacity = useTransform(scrollYProgress, [0, 0.15], [1, 0]);
+  const line0 = useTransform(
+    scrollYProgress,
+    scrollLinesFromStart ? [0, 0.14, 0.18] : [0, 0.28, 0.32],
+    [1, 1, 0],
+  );
+  const line1 = useTransform(
+    scrollYProgress,
+    scrollLinesFromStart ? [0.1, 0.18, 0.34, 0.4] : [0.22, 0.32, 0.58, 0.62],
+    [0, 1, 1, 0],
+  );
+  const line2 = useTransform(
+    scrollYProgress,
+    scrollLinesFromStart ? [0.3, 0.4, 0.82, 0.92] : [0.52, 0.62, 1],
+    scrollLinesFromStart ? [0, 1, 1, 0] : [0, 1, 1],
+  );
+  /** Подсказка и стрелка — видны всё время смены строк, гаснут ближе к концу hero */
+  const scrollHintOpacity = useTransform(
+    scrollYProgress,
+    scrollLinesFromStart ? [0.72, 0.9] : [0.62, 0.82],
+    [1, 0],
+  );
   const opacities = [line0, line1, line2];
 
   useEffect(() => {
-    if (!heroEnter) return;
+    if (!heroImageLoader) return;
+
+    if (introWasPlayed && isHeroImageLoaded(heroImage)) {
+      setHeroImageLoaded(true);
+      setHeroLoaderDismissed(true);
+      setCompassMinReady(true);
+      return;
+    }
+
+    const img = imgRef.current;
+    if (img?.complete && img.naturalHeight > 0) {
+      setHeroImageLoaded(true);
+      markHeroImageLoaded(heroImage);
+    }
+  }, [heroImage, heroImageLoader, introWasPlayed]);
+
+  useEffect(() => {
+    if (!heroImageLoader || heroLoaderDismissed) return;
+    const t = window.setTimeout(() => setCompassMinReady(true), HERO_COMPASS_MIN_MS);
+    return () => window.clearTimeout(t);
+  }, [heroImageLoader, heroLoaderDismissed]);
+
+  useEffect(() => {
+    if (!heroImageLoader || !heroImageLoaded || heroLoaderDismissed) return;
+    if (reducedMotion) setHeroLoaderDismissed(true);
+  }, [heroImageLoader, heroImageLoaded, heroLoaderDismissed, reducedMotion]);
+
+  useEffect(() => {
+    if (!heroEnter || !heroLoaderDismissed) return;
     setKenBurns(true);
+    if (scrollLinesFromStart) {
+      setShowScrollLines(true);
+      return;
+    }
     const t = window.setTimeout(() => setShowScrollLines(true), 2200);
     return () => window.clearTimeout(t);
-  }, [heroEnter]);
+  }, [heroEnter, heroLoaderDismissed, scrollLinesFromStart]);
 
   useMotionValueEvent(scrollYProgress, "change", (v) => {
-    if (heroEnter && v > 0.04) setShowScrollLines(true);
+    if (heroEnter && heroLoaderDismissed && v > 0.04) setShowScrollLines(true);
   });
 
   return (
@@ -98,7 +173,7 @@ export function V2Hero({
       id={sectionId}
       ref={ref}
       className="relative"
-      style={{ height: "300vh" }}
+      style={{ height: heroScrollHeight }}
     >
       <div className="sticky top-0 h-svh min-h-[520px] overflow-hidden">
         <motion.div
@@ -121,13 +196,18 @@ export function V2Hero({
             }
           >
             <Image
+              ref={imgRef}
               src={heroImage}
               alt="Яхта в Средиземном море"
               fill
               priority
               sizes="100vw"
-              quality={90}
+              quality={82}
               className="object-cover object-center"
+              onLoadingComplete={() => {
+                markHeroImageLoaded(heroImage);
+                setHeroImageLoaded(true);
+              }}
             />
             {heroEndFlicker && (
               <motion.div
@@ -140,12 +220,17 @@ export function V2Hero({
             )}
           </motion.div>
         </motion.div>
-        {lightRays && !reducedMotion && (
-          <div className="pointer-events-none absolute inset-0 z-[4]">
+        {lightRays && heroLoaderDismissed && !reducedMotion && (
+          <motion.div
+            className="pointer-events-none absolute inset-0 z-[4]"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 3, ease: luxuryEase }}
+          >
             <LightRays
               className="v2-hero-light-rays"
               raysOrigin="top-center"
-              raysColor="#d4ebff"
+              raysColor={lightRaysColor}
               raysSpeed={1}
               lightSpread={0.34}
               rayLength={3.6}
@@ -158,19 +243,48 @@ export function V2Hero({
               saturation={1}
               intensity={1.28}
             />
-          </div>
+          </motion.div>
         )}
         <div className="v2-hero-overlay absolute inset-0 z-[3]" aria-hidden />
+
+        {heroCompassCenter && (
+          <HeroCompassCoords className="v2-hero-coords--below-compass" />
+        )}
+
+        {heroImageLoader && heroCompassCenter && (
+          <CompassLoaderOverlay
+            variant="absolute"
+            className={heroCompassCenter ? "v5-hero-compass-loader" : undefined}
+            backgroundColor="transparent"
+            revealHeroOnExit={!heroCompassCenter}
+            persistOnComplete={heroCompassCenter}
+            showProgress={false}
+            complete={heroImageLoaded && compassMinReady}
+            onReady={() => {
+              setHeroLoaderDismissed(true);
+              signalHeroEnter();
+              onHeroLoaderDismissed?.();
+            }}
+            onDismissed={() => {
+              setHeroLoaderDismissed(true);
+              signalHeroEnter();
+              onHeroLoaderDismissed?.();
+            }}
+          />
+        )}
 
         <motion.div
           className="relative z-10 flex h-full flex-col justify-end pb-8 tablet:pb-10"
           initial={{ opacity: 0 }}
-          animate={{ opacity: heroEnter ? 1 : 0 }}
+          animate={{ opacity: heroEnter && heroLoaderDismissed ? 1 : 0 }}
           transition={{ duration: 1.2, ease: luxuryEase }}
         >
           <div className="container-luxury v2-hero-bottom w-full text-center">
             <div className="relative min-h-[clamp(5rem,18vw,11rem)] w-full">
-              {heroEnter && !showScrollLines && (
+              {heroEnter &&
+                heroLoaderDismissed &&
+                !scrollLinesFromStart &&
+                !showScrollLines && (
                 <div className="absolute inset-x-0 bottom-0 flex flex-col items-center gap-1">
                   {V2_HERO_ENTRANCE.map((word, i) => (
                     <motion.h1
@@ -218,10 +332,21 @@ export function V2Hero({
               style={{ opacity: scrollHintOpacity }}
               aria-hidden
             >
-              <span className="v2-scroll-indicator">
-                <span className="v2-scroll-indicator__line" />
-                <span className="v2-scroll-indicator__arrow" />
-              </span>
+              <svg
+                className="v2-scroll-indicator"
+                viewBox="0 0 10 40"
+                fill="none"
+                aria-hidden
+              >
+                <path
+                  className="v2-scroll-indicator__path"
+                  d="M5 1v27M1.5 32L5 36.5L8.5 32"
+                  stroke="currentColor"
+                  strokeWidth="1"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
             </motion.div>
           </div>
         </motion.div>

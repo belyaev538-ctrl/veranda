@@ -3,19 +3,44 @@
 import {
   YACHT_HERO,
   YACHT_HERO_V5,
-  YACHT_LAGOON_DETAIL,
+  YACHT_PHILOSOPHY_V5,
+  YACHT_MADE_SEA_V5,
+  YACHT_OUTDOOR_LIVING_V5,
+  YACHT_DETAIL_V5,
   YACHT_LAGOON_AFT_DECK,
   YACHT_LAGOON_DINING,
+  YACHT_COLLECTION_BREEZE,
+  YACHT_COLLECTION_DUNE,
+  YACHT_COLLECTION_GRID,
+  YACHT_COLLECTION_JARDIN,
   YACHT_LAGOON_COLLECTION,
   YACHT_LAGOON_FLYBRIDGE,
   YACHT_LAGOON_FOREDECK,
   YACHT_LAGOON_LOUNGE,
-  YACHT_LAGOON_OUTDOOR_LIVING,
+  YACHT_MATERIAL_AGORA,
+  YACHT_MATERIAL_AISI304,
+  YACHT_MATERIAL_FOAM,
+  YACHT_MATERIAL_IROKO,
   YACHT_MATERIAL_SUNBRELLA,
+  YACHT_MATERIAL_TEAK,
+  YACHT_NDA_V5,
+  YACHT_CONTACT_V5,
+  YACHT_GALLERY_BRIZ_01,
+  YACHT_GALLERY_BRIZ_03,
+  YACHT_GALLERY_BRIZ_06,
+  YACHT_GALLERY_GRID_01,
+  YACHT_GALLERY_GRID_10,
+  YACHT_GALLERY_JARDIN_01,
+  YACHT_GALLERY_JARDIN_09,
+  YACHT_GALLERY_JARDIN_10,
+  YACHT_GALLERY_MISC_11,
   YACHT_PRODUCTION_STEP_01,
   YACHT_PRODUCTION_STEP_02,
   YACHT_PRODUCTION_STEP_03,
+  YACHT_PRODUCTION_STEP_04,
   YACHT_STATEMENT_V5,
+  YACHT_VIZ_V5,
+  YACHT_ZONE_BEACH,
   YACHT_ZONE_SUNDECK,
   yachtImg,
 } from "@/lib/yacht-assets";
@@ -39,10 +64,20 @@ export const V5_HERO = {
 
 /** Кадры hero при скролле (v5) */
 export const V5_HERO_LINES = [
-  "Beyond Outdoor Furniture",
+  "За пределами outdoor-мебели",
   "Пространства для яхт, созданные для жизни на воде",
   "Мебель, которая становится частью вашей яхты",
 ] as const;
+
+/** Панель «Философия» — сразу после hero */
+export const V5_PHILOSOPHY = {
+  image: YACHT_PHILOSOPHY_V5,
+  label: "VERANDARU YACHT EDITION",
+  title:
+    "Мы создаём не отдельные предметы мебели, а цельные пространства отдыха для жизни на воде",
+  subtitle:
+    "От идеи и визуализации до производства, комплектации и установки на объекте",
+} as const;
 
 export const V5_STATEMENT = {
   image: YACHT_STATEMENT_V5,
@@ -64,38 +99,43 @@ export const V5_VISUAL_CHAPTERS = [
     subtitle:
       "От готовых коллекций до индивидуальных проектов. Полный цикл производства и сопровождения в Москве.",
     image: V5_IMAGES.somnium,
+    textBackdrop: true,
   },
   {
     id: "v5-premium-materials",
     label: "PREMIUM MATERIALS",
-    lines: ["Материалы морского класса"],
+    lines: ["Используем материалы", "морского класса"],
     subtitle:
-      "Тик, ироко, нержавеющая сталь и премиальные outdoor-ткани для эксплуатации на воде и открытом воздухе.",
+      "Тик, ироко, сталь и outdoor-ткани — в мебели, которая держит вид на воде и солнце.",
     image: V5_IMAGES.craft,
+    textBackdrop: true,
   },
   {
     id: "v5-outdoor-living",
     label: "DESIGNED FOR OUTDOOR LIVING",
-    lines: ["Создано для жизни", "на открытом воздухе"],
+    lines: ["Создаём мебель", "для outdoor-жизни"],
     subtitle:
-      "Комфорт, долговечность и эстетика для яхтенных пространств в любой точке мира.",
-    image: YACHT_LAGOON_OUTDOOR_LIVING,
+      "Проектируем и производим решения для зон отдыха на палубе — в любой точке мира.",
+    image: YACHT_OUTDOOR_LIVING_V5,
+    textBackdrop: true,
   },
   {
     id: "v5-detail",
     label: "ATTENTION TO DETAIL",
-    lines: ["Внимание к каждой", "детали"],
+    lines: ["Уделяем внимание", "каждой детали"],
     subtitle:
-      "Каждый элемент продуман для комфорта, надёжности и визуального совершенства.",
-    image: YACHT_LAGOON_DETAIL,
+      "Каждый элемент мебели — под комфорт, надёжность и цельный образ зоны.",
+    image: YACHT_DETAIL_V5,
+    textBackdrop: true,
   },
   {
     id: "v5-made-sea",
     label: "MADE FOR THE SEA",
-    lines: ["Создано для моря"],
+    lines: ["Мебель, созданная", "для моря"],
     subtitle:
-      "Материалы и решения, которые сохраняют актуальность и внешний вид на протяжении многих лет.",
-    image: V5_IMAGES.hero,
+      "Решения, которые сохраняют вид, комфорт и атмосферу зоны годами на воде.",
+    image: YACHT_MADE_SEA_V5,
+    textBackdrop: true,
   },
 ] as const;
 
@@ -107,11 +147,9 @@ export type V5ProductionStep = {
 };
 
 export const V5_PRODUCTION = {
-  title: "Собственное производство",
-  subtitle: [
-    "От коллекции до индивидуального проекта —",
-    "полный цикл производства и сопровождения в Москве.",
-  ],
+  title: "У нас своё производство",
+  subtitle:
+    "Создаём мебель от коллекции до индивидуального проекта — полный цикл в Москве.",
   steps: [
     {
       num: "01",
@@ -135,7 +173,7 @@ export const V5_PRODUCTION = {
       num: "04",
       title: "Финальная сборка",
       text: "Сборка модулей в московском цехе под ваш проект.\nСтыковка материалов, фурнитуры и декоративных деталей.\nПредмонтажная проверка перед отправкой на объект.",
-      image: yachtImg(9),
+      image: YACHT_PRODUCTION_STEP_04,
     },
     {
       num: "05",
@@ -168,10 +206,10 @@ export const V5_YACHT_TOUR = {
   zones: [
     {
       id: "v5-zone-foredeck",
-      title: "FOREDECK",
+      title: "Foredeck",
       subtitleRu: "Носовая палуба",
       description:
-        "Пространство у носа яхты — первая зона отдыха у воды и открытого горизонта.",
+        "Проектируем мебель для носа — из коллекции или под вашу палубу.",
       solutions: [
         "Шезлонги",
         "Кресла",
@@ -184,10 +222,10 @@ export const V5_YACHT_TOUR = {
     },
     {
       id: "v5-zone-aft",
-      title: "AFT DECK",
+      title: "Aft Deck",
       subtitleRu: "Кормовая палуба",
       description:
-        "Основное пространство для отдыха, встреч и общения на борту.",
+        "Создаём мебель для кормы — от лаунж-групп из коллекций до заказа.",
       solutions: [
         "Диванные группы",
         "Кофейные столы",
@@ -200,10 +238,10 @@ export const V5_YACHT_TOUR = {
     },
     {
       id: "v5-zone-flybridge",
-      title: "FLYBRIDGE",
+      title: "Flybridge",
       subtitleRu: "Верхняя палуба",
       description:
-        "Открытая панорамная зона для отдыха с лучшими видами на море.",
+        "Мебель для flybridge — готовые решения или проект под вашу палубу.",
       solutions: [
         "Барные группы",
         "Диваны",
@@ -216,9 +254,10 @@ export const V5_YACHT_TOUR = {
     },
     {
       id: "v5-zone-sundeck",
-      title: "SUNDECK",
+      title: "Sundeck",
       subtitleRu: "Солнечная палуба",
-      description: "Зона расслабленного отдыха и принятия солнечных ванн.",
+      description:
+        "Мебель для sun deck — шезлонги и модули из коллекции или на заказ.",
       solutions: [
         "Шезлонги",
         "Daybed",
@@ -231,10 +270,10 @@ export const V5_YACHT_TOUR = {
     },
     {
       id: "v5-zone-beach",
-      title: "BEACH CLUB",
+      title: "Beach Club",
       subtitleRu: "Зона у воды",
       description:
-        "Пространство на уровне моря для отдыха после купания и общения рядом с водой.",
+        "Beach club у воды — мебель из коллекции VERANDARU или индивидуально.",
       solutions: [
         "Шезлонги",
         "Лаунж-модули",
@@ -242,15 +281,15 @@ export const V5_YACHT_TOUR = {
         "Столики",
         "Пляжные композиции",
       ],
-      image: V5_IMAGES.yard,
+      image: YACHT_ZONE_BEACH,
       layout: "image-left",
     },
     {
       id: "v5-zone-dining",
-      title: "DINING AREA",
+      title: "Dining Area",
       subtitleRu: "Обеденная зона",
       description:
-        "Пространство для завтраков, ужинов и приёма гостей на открытом воздухе.",
+        "Обеденные зоны на палубе — столы и кресла из коллекций или на заказ.",
       solutions: [
         "Обеденные столы",
         "Кресла",
@@ -262,10 +301,10 @@ export const V5_YACHT_TOUR = {
     },
     {
       id: "v5-zone-lounge",
-      title: "PRIVATE LOUNGE",
+      title: "Private Lounge",
       subtitleRu: "Приватная лаунж-зона",
       description:
-        "Уединённое пространство для владельца яхты и ближайших гостей.",
+        "Приватная лаунж-зона — мебель из коллекции или индивидуальный проект.",
       solutions: [
         "Лаунж-диваны",
         "Кресла",
@@ -283,6 +322,7 @@ export const V5_CUSTOM = {
   title: "Готовая коллекция или индивидуальный проект",
   body: "Выберите готовую коллекцию VERANDARU или закажите индивидуальное решение, разработанное специально под вашу яхту.",
   cta: "Обсудить проект",
+  catalogCta: "Запросить каталог",
   image: V5_IMAGES.refit,
 } as const;
 
@@ -292,43 +332,38 @@ export const V5_VIZ = {
   subtitle:
     "Покажем будущий результат ещё до запуска работ независимо от того, выбрали вы коллекцию или индивидуальный проект.",
   cta: "Получить концепцию",
-  image: V5_IMAGES.somnium,
+  image: YACHT_VIZ_V5,
 } as const;
 
 export const V5_COLLECTIONS = {
-  title: "COLLECTIONS",
+  title: "Collections",
   subtitle:
     "Готовые решения для различных зон отдыха на борту яхты.",
   items: [
     {
-      name: "LAGOON",
-      desc: "Глубокие модульные композиции для просторных палуб и зон отдыха.",
+      name: "Лагун",
+      desc: "Спокойные линии прибрежной воды — глубокие модульные композиции для просторных палуб яхты.",
       image: YACHT_LAGOON_COLLECTION,
     },
     {
-      name: "DECKER",
-      desc: "Широкая посадка и мягкие модули для расслабленного отдыха на борту.",
-      image: V5_IMAGES.somnium,
+      name: "Дюна",
+      desc: "Тёплые оттенки берега и песка — мягкие модули для открытых палуб у моря.",
+      image: YACHT_COLLECTION_DUNE,
     },
     {
-      name: "KELLY",
-      desc: "Спокойная элегантность для яхтенных и частных проектов.",
-      image: V5_IMAGES.yard,
+      name: "Бриз",
+      desc: "Лёгкие решения с воздушной посадкой — как морской бриз на открытых палубах и флайбриджах.",
+      image: YACHT_COLLECTION_BREEZE,
     },
     {
-      name: "MARIE",
-      desc: "Плавные линии, мягкая посадка и атмосфера премиального отдыха.",
-      image: V5_IMAGES.hero,
+      name: "Грид",
+      desc: "Чёткая модульная сетка для яхтенных палуб с гибкой конфигурацией под морскую среду.",
+      image: YACHT_COLLECTION_GRID,
     },
     {
-      name: "CRUISE",
-      desc: "Лёгкие решения для палубы, пляжных зон и отдыха у воды.",
-      image: V5_IMAGES.refit,
-    },
-    {
-      name: "SCREEN",
-      desc: "Воздушные кресла для обеденных зон на открытом воздухе.",
-      image: V5_IMAGES.craft,
+      name: "Жардин Кутюр",
+      desc: "Зелень и мягкие формы — lounge-зоны на палубе с панорамным видом на море.",
+      image: YACHT_COLLECTION_JARDIN,
     },
   ],
 } as const;
@@ -340,14 +375,14 @@ export const V5_MATERIALS = {
     "Подобраны для эксплуатации в условиях солнца, влаги и морской среды.",
   items: [
     {
-      name: "TEAK",
+      name: "Тик",
       text: "Премиальная древесина с природной устойчивостью к влаге и времени.",
-      image: V5_IMAGES.craft,
+      image: YACHT_MATERIAL_TEAK,
     },
     {
-      name: "IROKO",
+      name: "Ироко",
       text: "Надёжная древесина для круглогодичной outdoor-эксплуатации.",
-      image: V5_IMAGES.yard,
+      image: YACHT_MATERIAL_IROKO,
     },
     {
       name: "SUNBRELLA",
@@ -357,17 +392,17 @@ export const V5_MATERIALS = {
     {
       name: "AGORA",
       text: "Премиальная ткань для яхтенных и outdoor-проектов.",
-      image: V5_IMAGES.refit,
+      image: YACHT_MATERIAL_AGORA,
     },
     {
       name: "AISI 304",
       text: "Нержавеющая сталь архитектурного класса для морской среды.",
-      image: V5_IMAGES.somnium,
+      image: YACHT_MATERIAL_AISI304,
     },
     {
       name: "QUICK DRY FOAM",
       text: "Наполнение, созданное для быстрого отвода влаги и максимального комфорта.",
-      image: V5_IMAGES.hero,
+      image: YACHT_MATERIAL_FOAM,
     },
   ],
 } as const;
@@ -377,7 +412,14 @@ export const V5_NDA = {
   title: "Частные яхтенные проекты",
   body: "Многие проекты остаются конфиденциальными. По запросу мы можем показать дополнительные примеры реализованных работ.",
   cta: "Обсудить частный проект",
-  image: V5_IMAGES.hero,
+  image: YACHT_NDA_V5,
+} as const;
+
+export const V5_EXPERIENCE = {
+  label: "CLIENT EXPERIENCE",
+  title: "Наши клиенты",
+  body:
+    "VERANDARU — для частных яхт, террас у воды и премиальных outdoor-проектов, где важны эстетика, долговечность и точная посадка решения в пространство.",
 } as const;
 
 export const V5_WHY = {
@@ -452,10 +494,15 @@ export const V5_FAQ = [
 ] as const;
 
 export const V5_GALLERY_LAYOUT = {
-  hero: V5_IMAGES.somnium,
-  row3: [V5_IMAGES.interior, V5_IMAGES.craft, V5_IMAGES.refit] as const,
-  wide: V5_IMAGES.hero,
-  pair: [V5_IMAGES.yard, V5_IMAGES.interior] as const,
+  hero: YACHT_GALLERY_BRIZ_06,
+  row3: [
+    YACHT_GALLERY_BRIZ_03,
+    YACHT_GALLERY_BRIZ_01,
+    YACHT_GALLERY_GRID_01,
+  ] as const,
+  wide: YACHT_GALLERY_GRID_10,
+  pair: [YACHT_GALLERY_JARDIN_01, YACHT_GALLERY_JARDIN_09] as const,
+  pair2: [YACHT_GALLERY_JARDIN_10, YACHT_GALLERY_MISC_11] as const,
 } as const;
 
 export const V5_FOOTER_TAGLINE = "Yacht Outdoor Living" as const;
@@ -466,9 +513,10 @@ export const V5_CTA = {
   subtitle:
     "Отправьте фотографии, план палубы или проект. Мы предложим решение под вашу яхту и подготовим концепцию размещения мебели.",
   cta: "Обсудить проект",
+  channelsLabel: "Или напишите нам в мессенджеры",
   phone: "+7 (495) 151-30-64",
   email: "sales@veranda.ru",
-  image: V5_IMAGES.somnium,
+  image: YACHT_CONTACT_V5,
 } as const;
 
 export const V5_NAV_MENU = [

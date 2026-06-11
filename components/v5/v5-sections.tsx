@@ -2,7 +2,9 @@
 
 import { motion, useReducedMotion } from "framer-motion";
 import Image from "next/image";
+import { DeferredImage } from "@/components/shared/deferred-image";
 import { useState, type ReactNode } from "react";
+import { cn } from "@/lib/cn";
 import { useContactForm } from "@/components/contact-form-provider";
 import { Logo } from "@/components/logo";
 import {
@@ -12,7 +14,6 @@ import {
 import { V5InlineLeadForm } from "@/components/v5/v5-inline-lead";
 import { V5PinnedRail, type V5PinCard } from "@/components/v5/v5-pinned-rail";
 import { V5YachtTour } from "@/components/v5/v5-yacht-tour";
-import { DotField } from "@/components/motion/dot-field";
 import { TextShimmer } from "@/components/motion/text-shimmer";
 import { V5SectionEnter } from "@/components/v5/v5-section-enter";
 import {
@@ -23,18 +24,22 @@ import {
   V5Reveal,
   V5SectionTitle,
 } from "@/components/v5/v5-ui";
+import { SOCIAL_PROOF_BRANDS } from "@/lib/brands";
 import { CONTACTS } from "@/lib/constants";
 import {
   clipReveal,
+  fadeIn,
   scaleIn,
   staggerLuxury,
   v4Stagger,
+  viewportOnce,
   viewportOnceDeep,
 } from "@/lib/motion";
 import {
   V5_COLLECTIONS,
   V5_CTA,
   V5_CUSTOM,
+  V5_EXPERIENCE,
   V5_FAQ,
   V5_FAQ_TITLE,
   V5_FOOTER_NAV,
@@ -42,6 +47,7 @@ import {
   V5_GALLERY_LAYOUT,
   V5_MATERIALS,
   V5_NDA,
+  V5_PHILOSOPHY,
   V5_PRODUCTION,
   V5_STATEMENT,
   V5_VISUAL_CHAPTERS,
@@ -49,14 +55,56 @@ import {
   V5_WHY,
 } from "@/lib/v5-content";
 
-export function V5Statement() {
+export function V5Philosophy() {
+  return (
+    <section
+      id="v5-statement"
+      className="v5-philosophy-pin relative min-h-svh bg-[#020B1F] lg:-mt-[100svh] lg:h-[200vh] lg:min-h-[1040px]"
+    >
+      <div className="sticky top-0 h-svh min-h-[520px] overflow-hidden">
+        <DeferredImage
+          src={V5_PHILOSOPHY.image}
+          alt=""
+          fill
+          sizes="100vw"
+          className="object-cover"
+        />
+        <div className="v4-fullscreen-overlay absolute inset-0" />
+        <div className="relative z-10 flex min-h-svh items-center section-pad text-center">
+          <div
+            className="v5-text-backdrop-blur pointer-events-none absolute left-1/2 top-1/2 z-0 -translate-x-1/2 -translate-y-1/2"
+            aria-hidden
+          />
+          <div className="container-luxury relative z-[1] mx-auto max-w-3xl">
+            <V5Reveal>
+              <V5Label className="v5-type-eyebrow text-white">
+                {V5_PHILOSOPHY.label}
+              </V5Label>
+              <p className="v5-type-display-md mt-8 text-white">
+                <TextShimmer tone="light">{V5_PHILOSOPHY.title}</TextShimmer>
+              </p>
+              <p className="v4-chapter-sub v5-narrow-text mx-auto mt-8">
+                <TextShimmer tone="light" className="inline">
+                  {V5_PHILOSOPHY.subtitle}
+                </TextShimmer>
+              </p>
+            </V5Reveal>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+export function V5StatementVisual() {
   return (
     <V5FullscreenStatement
-      id="v5-statement"
+      id="v5-statement-visual"
       image={V5_STATEMENT.image}
       label={V5_STATEMENT.label}
       titleLines={V5_STATEMENT.titleLines}
       subtitle={V5_STATEMENT.subtitle}
+      textBackdrop
     />
   );
 }
@@ -73,8 +121,9 @@ export function V5VisualChapters() {
           lines={ch.lines}
           subtitle={ch.subtitle}
           stackIndex={index}
-          overlap={index === 0}
-          runway={index === 0}
+          overlap
+          runway={index < V5_VISUAL_CHAPTERS.length - 1}
+          textBackdrop={"textBackdrop" in ch && ch.textBackdrop === true}
         />
       ))}
     </>
@@ -114,13 +163,12 @@ export function V5Custom() {
   return (
     <section id="v5-custom" className="v4-custom relative min-h-svh overflow-hidden">
       <div className="v4-custom__visual absolute inset-0">
-        <Image
+        <DeferredImage
           src={V5_CUSTOM.image}
           alt=""
           fill
           sizes="100vw"
           className="object-cover"
-          priority={false}
         />
         <div className="v4-custom__shade absolute inset-0" />
       </div>
@@ -132,9 +180,10 @@ export function V5Custom() {
               <TextShimmer tone="light">{V5_CUSTOM.title}</TextShimmer>
             </h2>
             <p className="v4-body-light v5-custom-body mt-5">{V5_CUSTOM.body}</p>
-            <V5Button className="mt-8" onClick={open}>
-              {V5_CUSTOM.cta}
-            </V5Button>
+            <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
+              <V5Button onClick={open}>{V5_CUSTOM.cta}</V5Button>
+              <V5Button onClick={open}>{V5_CUSTOM.catalogCta}</V5Button>
+            </div>
           </V5FullscreenText>
         </V5Reveal>
       </div>
@@ -146,10 +195,14 @@ export function V5Visualization() {
   const { open } = useContactForm();
   return (
     <section id="v5-viz" className="relative h-svh min-h-[520px] overflow-hidden">
-      <Image src={V5_VIZ.image} alt="" fill sizes="100vw" className="object-cover" />
+      <DeferredImage src={V5_VIZ.image} alt="" fill sizes="100vw" className="object-cover" />
       <div className="v4-fullscreen-overlay absolute inset-0" />
       <div className="relative z-10 flex h-full items-center justify-center section-pad text-center">
-        <V5Reveal className="w-full">
+        <div
+          className="v5-text-backdrop-blur pointer-events-none absolute left-1/2 top-1/2 z-0 -translate-x-1/2 -translate-y-1/2"
+          aria-hidden
+        />
+        <V5Reveal className="relative z-[1] w-full">
           <V5FullscreenText innerClassName="flex flex-col items-center">
             <V5Label className="v5-type-eyebrow text-white">{V5_VIZ.label}</V5Label>
             <V5DisplayTitle
@@ -207,12 +260,13 @@ export function V5Materials() {
           {V5_MATERIALS.items.map((m, i) => (
             <V5Reveal key={m.name} delay={i * 0.04} className="v4-material-tile group">
               <div className="v4-material-tile__img relative overflow-hidden">
-                <Image
+                <DeferredImage
                   src={m.image}
                   alt={m.name}
                   fill
                   sizes="(max-width:768px) 100vw, 33vw"
                   className="object-cover transition-transform duration-[1.2s] group-hover:scale-[1.03]"
+                  skeletonTone="light"
                 />
               </div>
               <p className="v5-type-eyebrow mt-4 text-[#1E1E1E]">{m.name}</p>
@@ -229,41 +283,75 @@ export function V5Nda() {
   const { open } = useContactForm();
   return (
     <section id="v5-nda" className="relative h-svh min-h-[520px] overflow-hidden">
-      <Image src={V5_NDA.image} alt="" fill sizes="100vw" className="object-cover" />
+      <DeferredImage src={V5_NDA.image} alt="" fill sizes="100vw" className="object-cover" />
       <div className="v4-nda-overlay absolute inset-0 z-[1]" />
-      <div className="absolute inset-0 z-[2] opacity-[0.88]">
-        <DotField
-          dotRadius={1.5}
-          dotSpacing={14}
-          bulgeStrength={67}
-          glowRadius={160}
-          sparkle={false}
-          waveAmplitude={0}
-          cursorRadius={500}
-          cursorForce={0.1}
-          bulgeOnly
-          gradientFrom="rgba(0, 144, 255, 0.32)"
-          gradientTo="rgba(0, 144, 255, 0.14)"
-          glowColor="rgba(0, 144, 255, 0.65)"
-        />
-      </div>
       <div className="relative z-10 flex h-full items-center justify-center section-pad text-center">
-        <V5Reveal className="w-full">
+        <div className="w-full">
           <V5FullscreenText innerClassName="flex flex-col items-center">
             <V5Label className="v5-type-eyebrow text-white">{V5_NDA.label}</V5Label>
-            <V5DisplayTitle
-              lines={[V5_NDA.title]}
-              className="mt-4 text-white"
-              shimmer
-              shimmerTone="light"
-            />
+            <V5DisplayTitle lines={[V5_NDA.title]} className="mt-4 text-white" />
             <p className="v4-chapter-sub v5-narrow-text mt-6">{V5_NDA.body}</p>
             <V5Button className="mt-10" onClick={open}>
               {V5_NDA.cta}
             </V5Button>
           </V5FullscreenText>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+const V5_EXPERIENCE_MARQUEE = [
+  ...SOCIAL_PROOF_BRANDS,
+  ...SOCIAL_PROOF_BRANDS,
+] as const;
+
+export function V5Experience() {
+  return (
+    <section
+      id="v5-experience"
+      className="v5-experience v4-panel--dark flex min-h-svh flex-col justify-center overflow-hidden section-pad"
+    >
+      <div className="container-luxury text-center">
+        <V5Reveal>
+          <V5Label className="v5-type-eyebrow text-white">
+            {V5_EXPERIENCE.label}
+          </V5Label>
+          <V5SectionTitle className="mt-4 text-white">
+            {V5_EXPERIENCE.title}
+          </V5SectionTitle>
+          <p className="v5-type-body mx-auto mt-6 max-w-2xl text-white/65">
+            {V5_EXPERIENCE.body}
+          </p>
         </V5Reveal>
       </div>
+
+      <motion.div
+        className="marquee-mask relative mt-12 shrink-0 tablet:mt-14"
+        initial="hidden"
+        whileInView="visible"
+        viewport={viewportOnce}
+        variants={fadeIn}
+        aria-label="Логотипы клиентов"
+      >
+        <div className="v5-experience-marquee flex w-max animate-marquee-slow items-stretch gap-4 px-4 tablet:gap-5 tablet:px-8">
+          {V5_EXPERIENCE_MARQUEE.map((brand, i) => (
+            <div
+              key={`${brand.name}-${i}`}
+              className="v5-experience-brand brand-logo-tile"
+              title={brand.name}
+            >
+              <Image
+                src={brand.logo}
+                alt={brand.name}
+                width={brand.width}
+                height={brand.height}
+                className="brand-logo-tile__img"
+              />
+            </div>
+          ))}
+        </div>
+      </motion.div>
     </section>
   );
 }
@@ -339,8 +427,11 @@ export function V5Faq() {
   );
 }
 
+const GALLERY_IMAGE_QUALITY = 82;
+const GALLERY_LAZY_MARGIN = "320px 0px";
+
 export function V5Gallery() {
-  const { hero, row3, wide, pair } = V5_GALLERY_LAYOUT;
+  const { hero, row3, wide, pair, pair2 } = V5_GALLERY_LAYOUT;
   const [lightbox, setLightbox] = useState<string | null>(null);
   const reduced = useReducedMotion();
 
@@ -352,11 +443,13 @@ export function V5Gallery() {
           className="v4-gallery-block v4-gallery-block--hero group"
           onClick={() => setLightbox(hero)}
         >
-          <Image
+          <DeferredImage
             src={hero}
             alt=""
             fill
-            sizes="100vw"
+            quality={GALLERY_IMAGE_QUALITY}
+            sizes="(max-width: 768px) 100vw, 1280px"
+            rootMargin={GALLERY_LAZY_MARGIN}
             className="object-cover transition-transform duration-700 group-hover:scale-[1.02]"
           />
         </button>
@@ -364,7 +457,11 @@ export function V5Gallery() {
       <V5GalleryBlock className="v4-gallery-block v4-gallery-block--triple" variants={v4Stagger}>
         {row3.map((src) => (
           <V5GalleryBlock key={src} className="min-h-0 w-full" variants={clipReveal}>
-            <GalleryTile src={src} onOpen={setLightbox} />
+            <GalleryTile
+              src={src}
+              sizes="(max-width: 768px) 100vw, 33vw"
+              onOpen={setLightbox}
+            />
           </V5GalleryBlock>
         ))}
       </V5GalleryBlock>
@@ -374,11 +471,13 @@ export function V5Gallery() {
           className="v4-gallery-block v4-gallery-block--wide group"
           onClick={() => setLightbox(wide)}
         >
-          <Image
+          <DeferredImage
             src={wide}
             alt=""
             fill
-            sizes="100vw"
+            quality={GALLERY_IMAGE_QUALITY}
+            sizes="(max-width: 768px) 100vw, 1280px"
+            rootMargin={GALLERY_LAZY_MARGIN}
             className="object-cover transition-transform duration-700 group-hover:scale-[1.02]"
           />
         </button>
@@ -386,7 +485,22 @@ export function V5Gallery() {
       <V5GalleryBlock className="v4-gallery-block v4-gallery-block--pair" variants={v4Stagger}>
         {pair.map((src) => (
           <V5GalleryBlock key={src} className="min-h-0 w-full" variants={clipReveal}>
-            <GalleryTile src={src} onOpen={setLightbox} />
+            <GalleryTile
+              src={src}
+              sizes="(max-width: 768px) 100vw, 50vw"
+              onOpen={setLightbox}
+            />
+          </V5GalleryBlock>
+        ))}
+      </V5GalleryBlock>
+      <V5GalleryBlock className="v4-gallery-block v4-gallery-block--pair" variants={v4Stagger}>
+        {pair2.map((src) => (
+          <V5GalleryBlock key={src} className="min-h-0 w-full" variants={clipReveal}>
+            <GalleryTile
+              src={src}
+              sizes="(max-width: 768px) 100vw, 50vw"
+              onOpen={setLightbox}
+            />
           </V5GalleryBlock>
         ))}
       </V5GalleryBlock>
@@ -397,7 +511,7 @@ export function V5Gallery() {
     <section id="v5-gallery" className="v4-panel v4-panel--dark section-pad">
       <div className="container-luxury v4-gallery-editorial">
         <V5Reveal className="mb-10">
-          <V5SectionTitle className="text-center">VISUAL STORIES</V5SectionTitle>
+          <V5SectionTitle className="text-center">Visual Stories</V5SectionTitle>
         </V5Reveal>
         {reduced ? (
           <div className="v5-gallery-flow">{galleryBlocks}</div>
@@ -421,7 +535,14 @@ export function V5Gallery() {
           onClick={() => setLightbox(null)}
         >
           <div className="relative h-[80vh] w-full max-w-5xl">
-            <Image src={lightbox} alt="" fill className="object-contain" sizes="90vw" />
+            <Image
+              src={lightbox}
+              alt=""
+              fill
+              quality={GALLERY_IMAGE_QUALITY}
+              className="object-contain"
+              sizes="90vw"
+            />
           </div>
         </div>
       )}
@@ -453,9 +574,11 @@ function V5GalleryBlock({
 
 function GalleryTile({
   src,
+  sizes,
   onOpen,
 }: {
   src: string;
+  sizes: string;
   onOpen: (src: string) => void;
 }) {
   return (
@@ -464,11 +587,13 @@ function GalleryTile({
       className="v4-gallery-tile group relative overflow-hidden"
       onClick={() => onOpen(src)}
     >
-      <Image
+      <DeferredImage
         src={src}
         alt=""
         fill
-        sizes="(max-width:768px) 100vw, 33vw"
+        quality={GALLERY_IMAGE_QUALITY}
+        sizes={sizes}
+        rootMargin={GALLERY_LAZY_MARGIN}
         className="object-cover transition-transform duration-700 group-hover:scale-[1.02]"
       />
     </button>
@@ -476,40 +601,48 @@ function GalleryTile({
 }
 
 export function V5Contact() {
-  const { open } = useContactForm();
-
   return (
     <section id="v5-contact" className="relative min-h-svh overflow-hidden">
-      <Image src={V5_CTA.image} alt="" fill sizes="100vw" className="object-cover" />
+      <DeferredImage src={V5_CTA.image} alt="" fill sizes="100vw" className="object-cover" />
       <div className="v4-contact-overlay absolute inset-0" />
-      <div className="relative z-10 flex min-h-svh items-center section-pad py-20">
-        <div className="container-luxury v4-contact-layout">
-          <V5Reveal className="v4-contact-intro">
-            <V5Label className="v5-type-eyebrow text-white">{V5_CTA.label}</V5Label>
-            <V5DisplayTitle
-              lines={[V5_CTA.title]}
-              className="mt-4 text-white"
-              shimmer
-              shimmerTone="light"
-            />
-            <p className="v4-chapter-sub mt-6 max-w-lg">{V5_CTA.subtitle}</p>
-            <V5Button className="mt-8" onClick={open}>
-              {V5_CTA.cta}
-            </V5Button>
-            <div className="v4-contact-channels mt-10">
-              <a href={CONTACTS.telegram} className="v4-contact-link" target="_blank" rel="noopener noreferrer">
-                Telegram
-              </a>
-              <a href={CONTACTS.whatsapp} className="v4-contact-link" target="_blank" rel="noopener noreferrer">
-                WhatsApp
-              </a>
-              <a href={CONTACTS.phoneHref} className="v4-contact-link">
-                {CONTACTS.phone}
-              </a>
+      <div className="relative z-10 flex min-h-svh items-center justify-center section-pad py-20 text-center">
+        <div className="container-luxury v5-contact-stack w-full">
+          <V5Reveal className="w-full">
+            <V5FullscreenText innerClassName="flex flex-col items-center">
+              <V5Label className="v5-type-eyebrow text-white">{V5_CTA.label}</V5Label>
+              <V5DisplayTitle
+                lines={[V5_CTA.title]}
+                className="mt-4 text-white"
+                shimmer
+                shimmerTone="light"
+              />
+              <p className="v4-chapter-sub v5-narrow-text mt-6">{V5_CTA.subtitle}</p>
+            </V5FullscreenText>
+
+            <div className="v5-contact-form relative mx-auto mt-10 w-full max-w-[520px]">
+              <div
+                className="v5-text-backdrop-blur pointer-events-none absolute left-1/2 top-1/2 z-0 -translate-x-1/2 -translate-y-1/2"
+                aria-hidden
+              />
+              <div className="relative z-[1]">
+                <V5InlineLeadForm />
+              </div>
             </div>
-          </V5Reveal>
-          <V5Reveal delay={0.1} className="v4-contact-form-wrap">
-            <V5InlineLeadForm />
+
+            <div className="mt-10">
+              <p className="v5-type-eyebrow text-white/70">{V5_CTA.channelsLabel}</p>
+              <div className="v4-contact-channels v5-contact-channels mt-4">
+                <a href={CONTACTS.telegram} className="v4-contact-link" target="_blank" rel="noopener noreferrer">
+                  Telegram
+                </a>
+                <a href={CONTACTS.whatsapp} className="v4-contact-link" target="_blank" rel="noopener noreferrer">
+                  WhatsApp
+                </a>
+                <a href={CONTACTS.phoneHref} className="v4-contact-link">
+                  {CONTACTS.phone}
+                </a>
+              </div>
+            </div>
           </V5Reveal>
         </div>
       </div>

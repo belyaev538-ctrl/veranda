@@ -15,6 +15,7 @@ import {
   headingDegFromPointer,
 } from "@/components/intro/compass-svg";
 import { useIsMobile } from "@/hooks/use-media";
+import { markHeroImageLoaded } from "@/lib/hero-image-cache";
 import {
   markIntroSeen,
   type IntroStorageVariant,
@@ -215,7 +216,9 @@ export function YachtIntroOverlay({
           fill
           priority
           sizes="100vw"
+          quality={82}
           className="object-cover object-center"
+          onLoadingComplete={() => markHeroImageLoaded(heroImage)}
         />
         <div className="absolute inset-0 bg-[#0d1322]/35" />
       </motion.div>

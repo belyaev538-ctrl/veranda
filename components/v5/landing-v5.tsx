@@ -1,25 +1,10 @@
 import { ContactFormProvider } from "@/components/contact-form-provider";
 import { IntroGate } from "@/components/intro/intro-gate";
+import { ContactFab } from "@/components/shared/contact-fab";
+import { V5Footer } from "@/components/v5/v5-sections";
 import { V5Header } from "@/components/v5/v5-header";
-import { V5Hero } from "@/components/v5/v5-hero";
-import {
-  V5Collections,
-  V5Contact,
-  V5Custom,
-  V5Faq,
-  V5Footer,
-  V5Gallery,
-  V5Materials,
-  V5Nda,
-  V5Production,
-  V5Statement,
-  V5Visualization,
-  V5VisualChapters,
-  V5Why,
-  V5YachtTourSection,
-} from "@/components/v5/v5-sections";
+import { V5PageContent } from "@/components/v5/v5-page-content";
 import { ScrollProgress } from "@/components/shared/scroll-progress";
-import { VersionSwitcherDock } from "@/components/shared/version-switcher";
 import { V5_IMAGES } from "@/lib/v5-content";
 
 export function LandingV5() {
@@ -29,26 +14,13 @@ export function LandingV5() {
         <div className="v4-theme v5-site">
           <V5Header />
           <main>
-            <V5Hero />
-            <V5Statement />
-            <V5VisualChapters />
-            <V5Production />
-            <V5YachtTourSection />
-            <V5Custom />
-            <V5Collections />
-            <V5Visualization />
-            <V5Materials />
-            <V5Nda />
-            <V5Gallery />
-            <V5Faq />
-            <V5Contact />
-            <V5Why />
+            <V5PageContent />
           </main>
           <V5Footer />
+          <ContactFab />
         </div>
       </IntroGate>
-      <ScrollProgress />
-      <VersionSwitcherDock current="5" />
+      <ScrollProgress tone="accent" />
     </ContactFormProvider>
   );
 }

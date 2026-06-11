@@ -108,7 +108,7 @@ export function Founder() {
             className="order-1 relative min-h-[400px] overflow-hidden rounded-luxury desktop:order-2 desktop:min-h-[min(85vh,720px)]"
           >
             <Image
-              src="/images/founder-julia.png"
+              src="/images/founder-julia.webp"
               alt={FOUNDER.photoAlt}
               fill
               sizes="(max-width: 1200px) 100vw, 50vw"

@@ -6,8 +6,8 @@ import { useIntro } from "@/components/intro/intro-context";
 import { cn } from "@/lib/cn";
 
 type ScrollProgressProps = {
-  /** Светлая тема для v1 (кремовый фон) */
-  tone?: "light" | "dark";
+  /** Светлая тема для v1 (кремовый фон); accent — голубой fill (v5) */
+  tone?: "light" | "dark" | "accent";
 };
 
 export function ScrollProgress({ tone = "dark" }: ScrollProgressProps) {
@@ -27,6 +27,7 @@ export function ScrollProgress({ tone = "dark" }: ScrollProgressProps) {
       className={cn(
         "luxury-scroll-progress",
         tone === "light" && "luxury-scroll-progress--light",
+        tone === "accent" && "luxury-scroll-progress--accent",
       )}
       aria-hidden
     >

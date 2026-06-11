@@ -12,16 +12,59 @@ const R_TICK_OUTER = 75;
 const R_TICK_INNER_MAJOR = 60.8;
 const R_TICK_INNER_MINOR = 67.2;
 
-const CROSS_OUTER = 44.8;
-const CROSS_INNER = 42;
+/** Насколько крест и стрелка выходят за внешний круг */
+const R_EXTEND = 30;
+const CROSS_OUTER = R_OUTER + R_EXTEND;
+const CROSS_INNER = CROSS_OUTER * (42 / 44.8);
 
-const R_LABEL = 88;
+/** Буквы снаружи внешнего кольца */
+const R_DIR = R_OUTER + 48;
+const VIEW_PAD = 52;
+const VIEW_SIZE = 200 + VIEW_PAD * 2;
 
-/** Стрелка симметрично относительно центра (100, 100) */
-const N_TIP = 38;
-const N_BASE = 54;
-const S_TIP = 162;
-const S_BASE = 146;
+/** Единая толщина линий стрелки N и крупных засечек */
+const STROKE_BOLD = 2.25;
+const STROKE_TICK_MINOR = 1;
+
+/** Стрелка — остриё за внешним кольцом */
+const N_TIP = CY - CROSS_OUTER;
+const N_HEAD = N_TIP + 18;
+const S_TIP = CY + CROSS_OUTER;
+const S_HEAD = S_TIP - 18;
+const ARROW_HEAD_W_N = 8;
+const ARROW_HEAD_W_S = 6.5;
+
+/** Простая стрелка: стержень + треугольный наконечник */
+function CompassNeedle({
+  tipY,
+  headY,
+  headWidth,
+  color,
+}: {
+  tipY: number;
+  headY: number;
+  headWidth: number;
+  color: string;
+}) {
+  const half = headWidth / 2;
+  return (
+    <g>
+      <line
+        x1={CX}
+        y1={CY}
+        x2={CX}
+        y2={headY}
+        stroke={color}
+        strokeWidth={STROKE_BOLD}
+        strokeLinecap="butt"
+      />
+      <polygon
+        points={`${CX},${tipY} ${CX - half},${headY} ${CX + half},${headY}`}
+        fill={color}
+      />
+    </g>
+  );
+}
 
 function buildTicks() {
   return Array.from({ length: TICK_COUNT }, (_, i) => {
@@ -37,6 +80,13 @@ function buildTicks() {
 }
 
 const TICKS = buildTicks();
+
+const DIRECTIONS = [
+  { label: "N", x: CX, y: CY - R_DIR },
+  { label: "E", x: CX + R_DIR, y: CY },
+  { label: "S", x: CX, y: CY + R_DIR },
+  { label: "W", x: CX - R_DIR, y: CY },
+] as const;
 
 export function headingDegFromPointer(
   clientX: number,
@@ -55,64 +105,39 @@ type CompassSvgProps = {
   ticksReady?: boolean;
 };
 
+function CompassDirections() {
+  return (
+    <>
+      {DIRECTIONS.map(({ label, x, y }) => (
+        <text
+          key={label}
+          x={x}
+          y={y}
+          textAnchor="middle"
+          dominantBaseline="middle"
+          className={
+            label === "N"
+              ? "intro-compass-dir intro-compass-dir--north"
+              : "intro-compass-dir"
+          }
+        >
+          {label}
+        </text>
+      ))}
+    </>
+  );
+}
+
 export function CompassSvg({ className, ticksReady = true }: CompassSvgProps) {
   return (
     <svg
-      viewBox="0 0 200 200"
+      viewBox={`${-VIEW_PAD} ${-VIEW_PAD} ${VIEW_SIZE} ${VIEW_SIZE}`}
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       className={className}
+      overflow="visible"
       aria-hidden
     >
-      <text
-        x={CX + R_LABEL}
-        y={CY + 4}
-        textAnchor="middle"
-        fill="rgba(255,255,255,0.85)"
-        fontSize={11}
-        fontFamily="var(--font-montserrat), sans-serif"
-        fontWeight={300}
-        letterSpacing="0.2em"
-      >
-        E
-      </text>
-      <text
-        x={CX}
-        y={CY - R_LABEL + 5}
-        textAnchor="middle"
-        fill="rgba(255,255,255,0.85)"
-        fontSize={11}
-        fontFamily="var(--font-montserrat), sans-serif"
-        fontWeight={300}
-        letterSpacing="0.2em"
-      >
-        N
-      </text>
-      <text
-        x={CX}
-        y={CY + R_LABEL + 5}
-        textAnchor="middle"
-        fill="rgba(255,255,255,0.85)"
-        fontSize={11}
-        fontFamily="var(--font-montserrat), sans-serif"
-        fontWeight={300}
-        letterSpacing="0.2em"
-      >
-        S
-      </text>
-      <text
-        x={CX - R_LABEL}
-        y={CY + 4}
-        textAnchor="middle"
-        fill="rgba(255,255,255,0.85)"
-        fontSize={11}
-        fontFamily="var(--font-montserrat), sans-serif"
-        fontWeight={300}
-        letterSpacing="0.2em"
-      >
-        W
-      </text>
-
       <circle
         cx={CX}
         cy={CY}
@@ -148,7 +173,7 @@ export function CompassSvg({ className, ticksReady = true }: CompassSvgProps) {
             x2={t.x2}
             y2={t.y2}
             stroke={t.major ? "rgba(255,255,255,0.85)" : "rgba(255,255,255,0.35)"}
-            strokeWidth={t.major ? 1.25 : 0.75}
+            strokeWidth={t.major ? STROKE_BOLD : STROKE_TICK_MINOR}
             strokeLinecap="round"
             initial={{ pathLength: 0, opacity: 0 }}
             animate={{
@@ -197,57 +222,18 @@ export function CompassSvg({ className, ticksReady = true }: CompassSvgProps) {
         strokeWidth={0.5}
       />
 
-      {/* Стрелка — строго по центру viewBox */}
-      <g strokeLinecap="round" strokeLinejoin="round">
-        <line
-          x1={CX}
-          y1={CY}
-          x2={CX}
-          y2={N_TIP + 4}
-          stroke="rgba(255,255,255,0.85)"
-          strokeWidth={1.5}
-        />
-        <line
-          x1={CX}
-          y1={N_TIP}
-          x2={CX - 8}
-          y2={N_BASE}
-          stroke="rgba(255,255,255,0.85)"
-          strokeWidth={1.25}
-        />
-        <line
-          x1={CX}
-          y1={N_TIP}
-          x2={CX + 8}
-          y2={N_BASE}
-          stroke="rgba(255,255,255,0.85)"
-          strokeWidth={1.25}
-        />
-        <line
-          x1={CX}
-          y1={CY}
-          x2={CX}
-          y2={S_TIP - 4}
-          stroke="rgba(255,255,255,0.18)"
-          strokeWidth={1.25}
-        />
-        <line
-          x1={CX}
-          y1={S_TIP}
-          x2={CX - 6}
-          y2={S_BASE}
-          stroke="rgba(255,255,255,0.18)"
-          strokeWidth={1}
-        />
-        <line
-          x1={CX}
-          y1={S_TIP}
-          x2={CX + 6}
-          y2={S_BASE}
-          stroke="rgba(255,255,255,0.18)"
-          strokeWidth={1}
-        />
-      </g>
+      <CompassNeedle
+        tipY={N_TIP}
+        headY={N_HEAD}
+        headWidth={ARROW_HEAD_W_N}
+        color="rgba(255,255,255,0.85)"
+      />
+      <CompassNeedle
+        tipY={S_TIP}
+        headY={S_HEAD}
+        headWidth={ARROW_HEAD_W_S}
+        color="rgba(255,255,255,0.18)"
+      />
 
       <circle cx={CX} cy={CY} r={3.2} fill="rgba(255,255,255,0.85)" />
       <circle
@@ -257,6 +243,8 @@ export function CompassSvg({ className, ticksReady = true }: CompassSvgProps) {
         stroke="rgba(255,255,255,0.18)"
         strokeWidth={0.75}
       />
+
+      <CompassDirections />
     </svg>
   );
 }

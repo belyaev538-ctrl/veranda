@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+import { DeferredImage } from "@/components/shared/deferred-image";
 import { V5Button } from "@/components/v5/v5-ui";
 
 export type RailCard = {
@@ -23,7 +23,14 @@ export function V5HorizontalRail({
     <div className="v4-rail v5-content-edge flex gap-4 overflow-x-auto pb-6 pr-5 scrollbar-none snap-x snap-mandatory">
       {cards.map((card) => (
         <article key={card.title} className="v4-rail-card group relative shrink-0 snap-start overflow-hidden">
-          <Image src={card.image} alt={card.titleRu ?? card.title} fill sizes="(max-width:768px) 78vw, 32vw" className="object-cover transition-transform duration-[1.4s] ease-out group-hover:scale-[1.04]" />
+          <DeferredImage
+            src={card.image}
+            alt={card.titleRu ?? card.title}
+            fill
+            sizes="(max-width:768px) 78vw, 32vw"
+            className="object-cover transition-transform duration-[1.4s] ease-out group-hover:scale-[1.04]"
+            rootMargin="240px 0px"
+          />
           <div className="v4-rail-card-overlay absolute inset-0" />
           {card.num && (
             <span className="v4-mono absolute left-5 top-5 text-white/50">{card.num}</span>

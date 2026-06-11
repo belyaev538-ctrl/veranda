@@ -3,6 +3,7 @@ const INTRO_KEYS = {
   v3: "verandaru-yacht-intro-v3-seen",
   v4: "verandaru-yacht-intro-v4-seen",
   v5: "verandaru-yacht-intro-v5-seen",
+  v6: "verandaru-yacht-intro-v6-seen",
 } as const;
 
 export type IntroStorageVariant = keyof typeof INTRO_KEYS;

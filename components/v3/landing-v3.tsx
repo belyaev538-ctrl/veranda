@@ -6,7 +6,6 @@ import { V3Journey } from "@/components/v3/v3-journey";
 import { V3Pillars } from "@/components/v3/v3-pillars";
 import { V3ScrollProgress } from "@/components/v3/v3-scroll-progress";
 import { V3Contact, V3Footer } from "@/components/v3/v3-sections";
-import { VersionSwitcherDock } from "@/components/shared/version-switcher";
 import { V3_IMAGES, V3_INTRO_COORDS } from "@/lib/v3-content";
 
 export function LandingV3() {
@@ -29,7 +28,6 @@ export function LandingV3() {
           <V3Footer />
         </div>
       </IntroGate>
-      <VersionSwitcherDock current="3" />
     </ContactFormProvider>
   );
 }

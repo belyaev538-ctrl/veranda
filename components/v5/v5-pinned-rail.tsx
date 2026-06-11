@@ -1,10 +1,11 @@
 "use client";
 
-import Image from "next/image";
+import { DeferredImage } from "@/components/shared/deferred-image";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import { LightSweep } from "@/components/motion/light-sweep";
 import { V5Button, V5Label, V5Reveal, V5SectionTitle } from "@/components/v5/v5-ui";
+import { cn } from "@/lib/cn";
 
 export type V5PinCard = {
   title: string;
@@ -84,7 +85,7 @@ export function V5PinnedRail({
     headerTitleLines.length > 0 || headerSubtitle ? (
       <>
         {headerTitleLines.length > 0 && (
-          <h2 className="v5-production-header v5-type-display-lg font-sans text-white">
+          <h2 className="v5-production-header v5-type-display-md font-sans text-white">
             {headerTitleLines.length === 1
               ? headerTitleLines[0]
               : headerTitleLines.map((line) => (
@@ -95,7 +96,14 @@ export function V5PinnedRail({
           </h2>
         )}
         {headerSubtitle && (
-          <p className="v4-body-light mx-auto mt-4 max-w-md">
+          <p
+            className={cn(
+              "v4-body-light mx-auto mt-4 text-balance",
+              variant === "production"
+                ? "v5-production-subtitle max-w-[min(720px,92vw)]"
+                : "max-w-md",
+            )}
+          >
             {typeof headerSubtitle === "string" ? (
               headerSubtitle
             ) : (
@@ -120,7 +128,16 @@ export function V5PinnedRail({
           {label}
         </V5SectionTitle>
         {labelSubtitle && (
-          <p className="v4-body-light mx-auto mt-4 max-w-lg">{labelSubtitle}</p>
+          <p
+            className={cn(
+              "v4-body-light mx-auto mt-4",
+              id === "v5-collections"
+                ? "v5-collections-subtitle max-w-[min(820px,94vw)]"
+                : "max-w-lg",
+            )}
+          >
+            {labelSubtitle}
+          </p>
         )}
       </div>
     </V5Reveal>
@@ -160,38 +177,81 @@ export function V5PinnedRail({
     <section
       ref={containerRef}
       id={id}
-      className="v4-pin-section v4-panel--dark"
+      className={cn(
+        "v4-pin-section v4-panel--dark relative",
+        variant === "production" && "lg:-mt-[100svh]",
+      )}
       style={{ height: scrollHeight }}
     >
-      <div className="sticky top-0 flex h-svh flex-col overflow-hidden">
+      <div
+        className={cn(
+          "sticky top-0 flex h-svh flex-col",
+          variant === "production"
+            ? "v5-production-sticky relative overflow-visible"
+            : "overflow-hidden",
+        )}
+      >
+        {variant === "production" && (
+          <div
+            className="v5-text-backdrop-blur v5-text-backdrop-blur--accent v5-production-backdrop pointer-events-none absolute left-1/2 top-1/2 z-0 -translate-x-1/2 -translate-y-1/2"
+            aria-hidden
+          />
+        )}
         {headerBlock && (
-          <div className="v5-production-intro container-luxury shrink-0 pt-16 pb-10 text-center desktop:pt-[120px] desktop:pb-[96px]">
+          <div className="v5-production-intro relative z-[1] container-luxury shrink-0 pt-16 pb-10 text-center desktop:pt-[120px] desktop:pb-[96px]">
             {headerBlock}
           </div>
         )}
         {labelBlock && headerTitleLines.length === 0 && (
-          <div className="container-luxury shrink-0 pt-10 pb-6">{labelBlock}</div>
+          <div
+            className={cn(
+              "relative z-[1] container-luxury shrink-0 pb-6",
+              id === "v5-collections" ? "pt-[90px]" : "pt-10",
+            )}
+          >
+            {labelBlock}
+          </div>
         )}
-        <motion.div
-          ref={trackRef}
-          className={
-            variant === "production"
-              ? "v4-pin-track v4-pin-track--production v5-content-edge flex h-full min-h-0 flex-1 items-end gap-5 pb-6 pr-5"
-              : "v4-pin-track v5-content-edge flex h-full min-h-0 flex-1 items-center gap-5 pb-6 pr-5"
-          }
-          style={{ x }}
-        >
-          {cards.map((card) => (
-            <V5PinCardView
-              key={card.title}
-              card={card}
-              variant={variant}
-              onCta={onCta}
-            />
-          ))}
-        </motion.div>
+        {variant === "production" ? (
+          <div className="relative z-[1] flex min-h-0 flex-1 flex-col overflow-hidden">
+            <motion.div
+              ref={trackRef}
+              className="v4-pin-track v4-pin-track--production v5-content-edge flex h-full min-h-0 flex-1 items-end gap-5 pb-6 pr-5"
+              style={{ x }}
+            >
+              {cards.map((card) => (
+                <V5PinCardView
+                  key={card.title}
+                  card={card}
+                  variant={variant}
+                  onCta={onCta}
+                />
+              ))}
+            </motion.div>
+          </div>
+        ) : (
+          <motion.div
+            ref={trackRef}
+            className="v4-pin-track v5-content-edge flex h-full min-h-0 flex-1 items-center gap-5 pb-6 pr-5"
+            style={{ x }}
+          >
+            {cards.map((card) => (
+              <V5PinCardView
+                key={card.title}
+                card={card}
+                variant={variant}
+                onCta={onCta}
+              />
+            ))}
+          </motion.div>
+        )}
         {ctaLabel && onCta && (
-          <div className="container-luxury shrink-0 pt-[25px] pb-[57px] text-center">
+          <div
+            className={cn(
+              "container-luxury shrink-0 pt-[25px] pb-[57px] text-center",
+              variant === "production" && "relative z-[1]",
+            )}
+          >
             <V5Button onClick={onCta}>{ctaLabel}</V5Button>
           </div>
         )}
@@ -218,13 +278,23 @@ function V5PinCardView({
 
   return (
     <article className={cardClass}>
-      <Image
-        src={card.image}
-        alt={card.title}
-        fill
-        sizes="(max-width:1024px) 78vw, 32vw"
-        className="object-cover transition-transform duration-[1.4s] ease-out group-hover:scale-[1.03]"
-      />
+      <div
+        className={
+          variant === "production"
+            ? "v4-production-card__media absolute inset-0 z-0 bg-[#020B1F]"
+            : "absolute inset-0 z-0"
+        }
+        style={variant === "production" ? { opacity: 0.5 } : undefined}
+      >
+        <DeferredImage
+          src={card.image}
+          alt={card.title}
+          fill
+          sizes="(max-width:1024px) 78vw, 32vw"
+          className="object-cover transition-transform duration-[1.4s] ease-out group-hover:scale-[1.03]"
+          rootMargin="240px 0px"
+        />
+      </div>
       <div className="v4-pin-card-overlay absolute inset-0" />
       <LightSweep className="v4-pin-card-sweep" playOnView />
       <div className="absolute bottom-0 left-0 right-0 p-6 tablet:p-8">

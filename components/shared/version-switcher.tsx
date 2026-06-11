@@ -3,7 +3,7 @@ import { cn } from "@/lib/cn";
 import type { SiteVariant } from "@/lib/site-variant";
 import { SITE_VARIANTS } from "@/lib/site-variant";
 
-const ORDER: SiteVariant[] = ["1", "2", "3", "4", "5"];
+const ORDER: SiteVariant[] = ["1", "2", "3", "4", "5", "6"];
 
 type VersionSwitcherProps = {
   current: SiteVariant;

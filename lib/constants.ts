@@ -55,7 +55,7 @@ export const FOUNDER = {
   email: "Julia_verandaru@mail.ru",
   photoAlt: "Юлия Баранова — основатель VERANDARU",
   videoUrl: "https://veranda.ru/files/about-company-julia.mp4",
-  videoPoster: "/images/founder-julia.png",
+  videoPoster: "/images/founder-julia.webp",
   videoCta: "О компании",
 } as const;
 

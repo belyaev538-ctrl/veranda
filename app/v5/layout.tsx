@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { V5_IMAGES } from "@/lib/v5-content";
 
 export const metadata: Metadata = {
   title: "VERANDARU — Yacht Tour Edition",
@@ -12,8 +13,16 @@ export default function V5Layout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="min-h-screen bg-[#020B1F] font-sans text-white antialiased">
-      {children}
-    </div>
+    <>
+      <link
+        rel="preload"
+        as="image"
+        href={V5_IMAGES.hero}
+        fetchPriority="high"
+      />
+      <div className="min-h-screen bg-[#020B1F] font-sans text-white antialiased">
+        {children}
+      </div>
+    </>
   );
 }
