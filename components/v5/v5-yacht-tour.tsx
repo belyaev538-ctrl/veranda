@@ -10,10 +10,13 @@ import type { V5YachtTourZone } from "@/lib/v5-content";
 import { V5_YACHT_TOUR } from "@/lib/v5-content";
 import { luxuryEase, viewportOnceDeep } from "@/lib/motion";
 import { cn } from "@/lib/cn";
+import { useV5MotionEnabled } from "@/hooks/use-v5-motion";
 
 function YachtTourScreen({ zone, index }: { zone: V5YachtTourZone; index: number }) {
   const ref = useRef<HTMLElement>(null);
   const reduced = useReducedMotion();
+  const motionOn = useV5MotionEnabled();
+  const animate = motionOn && !reduced;
   const isCover = zone.layout === "cover";
   const imageRight = zone.layout === "image-right";
 
@@ -75,11 +78,11 @@ function YachtTourScreen({ zone, index }: { zone: V5YachtTourZone; index: number
   const textBlock = (
     <motion.div
       className="v5-yacht-tour__copy"
-      initial={reduced ? false : { opacity: 0, y: 60 }}
-      whileInView={reduced ? undefined : { opacity: 1, y: 0 }}
+      initial={animate ? { opacity: 0, y: 60 } : false}
+      whileInView={animate ? { opacity: 1, y: 0 } : undefined}
       viewport={viewportOnceDeep}
       transition={{ duration: 1.1, ease: luxuryEase, delay: 0.12 }}
-      style={reduced ? undefined : { y: textY }}
+      style={animate ? { y: textY } : undefined}
     >
       {zoneContent}
     </motion.div>
@@ -91,11 +94,11 @@ function YachtTourScreen({ zone, index }: { zone: V5YachtTourZone; index: number
         "v5-yacht-tour__visual",
         isCover && "v5-yacht-tour__visual--cover",
       )}
-      initial={reduced ? false : { scale: 1.08 }}
-      whileInView={reduced ? undefined : { scale: 1 }}
+      initial={animate ? { scale: 1.08 } : false}
+      whileInView={animate ? { scale: 1 } : undefined}
       viewport={viewportOnceDeep}
       transition={{ duration: 1.35, ease: luxuryEase }}
-      style={reduced ? undefined : { y: imageY, scale: isCover ? imageScale : undefined }}
+      style={animate ? { y: imageY, scale: isCover ? imageScale : undefined } : undefined}
     >
       <DeferredImage
         src={zone.image}
@@ -105,7 +108,7 @@ function YachtTourScreen({ zone, index }: { zone: V5YachtTourZone; index: number
         className="object-cover"
       />
       {!isCover && <div className="v5-yacht-tour__visual-shade" aria-hidden />}
-      <LightSweep className="v5-yacht-tour__sweep" playOnView />
+      {animate && <LightSweep className="v5-yacht-tour__sweep" playOnView />}
     </motion.div>
   );
 
@@ -121,8 +124,8 @@ function YachtTourScreen({ zone, index }: { zone: V5YachtTourZone; index: number
         <div className="relative z-10 flex h-full w-full section-pad flex-col items-center justify-center text-center">
           <motion.div
             className="flex w-full flex-col items-center justify-center"
-            initial={reduced ? false : { opacity: 0, y: 48 }}
-            whileInView={reduced ? undefined : { opacity: 1, y: 0 }}
+            initial={animate ? { opacity: 0, y: 48 } : false}
+            whileInView={animate ? { opacity: 1, y: 0 } : undefined}
             viewport={viewportOnceDeep}
             transition={{ duration: 1.1, ease: luxuryEase, delay: 0.12 }}
           >
@@ -148,7 +151,7 @@ function YachtTourScreen({ zone, index }: { zone: V5YachtTourZone; index: number
         )}
       >
         <div
-          className="v5-text-backdrop-blur v5-text-backdrop-blur--accent pointer-events-none absolute left-1/2 top-1/2 z-[1] -translate-x-1/2 -translate-y-1/2"
+          className="v5-yacht-tour__backdrop v5-text-backdrop-blur v5-text-backdrop-blur--accent pointer-events-none absolute left-1/2 top-1/2 z-0 -translate-x-1/2 -translate-y-1/2"
           aria-hidden
         />
         {imageRight ? (

@@ -40,8 +40,9 @@ import {
   V5Reveal,
   V5SectionTitle,
 } from "@/components/v5/v5-ui";
-import { SOCIAL_PROOF_BRANDS } from "@/lib/brands";
+import { V5_PARTNER_BRANDS } from "@/lib/brands";
 import { CONTACTS } from "@/lib/constants";
+import { useV5MotionEnabled } from "@/hooks/use-v5-motion";
 import {
   clipReveal,
   fadeIn,
@@ -82,13 +83,9 @@ function V5PhilosophyScrollBody({ progress }: { progress: MotionValue<number> })
           <TextShimmer tone="light">{V5_PHILOSOPHY.title}</TextShimmer>
         </p>
       </ScrollCoverLine>
-      <ScrollCoverLine progress={progress} inStart={0.24} inEnd={0.36} className="mt-8">
-        <p className="v4-chapter-sub v5-narrow-text mx-auto">
-          <TextShimmer tone="light" className="inline">
-            {V5_PHILOSOPHY.subtitle}
-          </TextShimmer>
-        </p>
-      </ScrollCoverLine>
+      <p className="v4-chapter-sub v5-narrow-text mx-auto mt-8">
+        {V5_PHILOSOPHY.subtitle}
+      </p>
     </>
   );
 }
@@ -159,19 +156,19 @@ export function V5Philosophy() {
             {motionActive ? (
               <V5PhilosophyScrollBody progress={motionProgress} />
             ) : (
-              <V5Reveal>
-                <V5Label className="v5-type-eyebrow text-white">
-                  {V5_PHILOSOPHY.label}
-                </V5Label>
-                <p className="v5-type-display-md mt-8 text-white">
-                  <TextShimmer tone="light">{V5_PHILOSOPHY.title}</TextShimmer>
-                </p>
+              <>
+                <V5Reveal>
+                  <V5Label className="v5-type-eyebrow text-white">
+                    {V5_PHILOSOPHY.label}
+                  </V5Label>
+                  <p className="v5-type-display-md mt-8 text-white">
+                    <TextShimmer tone="light">{V5_PHILOSOPHY.title}</TextShimmer>
+                  </p>
+                </V5Reveal>
                 <p className="v4-chapter-sub v5-narrow-text mx-auto mt-8">
-                  <TextShimmer tone="light" className="inline">
-                    {V5_PHILOSOPHY.subtitle}
-                  </TextShimmer>
+                  {V5_PHILOSOPHY.subtitle}
                 </p>
-              </V5Reveal>
+              </>
             )}
           </div>
         </div>
@@ -342,13 +339,13 @@ export function V5Materials() {
             {V5_MATERIALS.label}
           </V5Label>
           <V5SectionTitle className="mt-4">{V5_MATERIALS.title}</V5SectionTitle>
-          <p className="v5-type-body mx-auto mt-4 max-w-lg text-[#1E1E1E]/65">
+          <p className="v5-type-body mx-auto mt-4 max-w-lg text-[#1E1E1E]">
             {V5_MATERIALS.subtitle}
           </p>
         </V5Reveal>
         <div className="v4-materials-grid">
           {V5_MATERIALS.items.map((m, i) => (
-            <V5Reveal key={m.name} delay={i * 0.04} className="v4-material-tile group">
+            <V5Reveal key={m.name} delay={i * 0.04} className="v4-material-tile group text-center">
               <div className="v4-material-tile__img relative overflow-hidden">
                 <DeferredImage
                   src={m.image}
@@ -360,7 +357,7 @@ export function V5Materials() {
                 />
               </div>
               <p className="v5-type-eyebrow mt-4 text-[#1E1E1E]">{m.name}</p>
-              <p className="v5-type-body mt-1 text-[#1E1E1E]/65">{m.text}</p>
+              <p className="v5-type-body mt-1 text-[#1E1E1E]">{m.text}</p>
             </V5Reveal>
           ))}
         </div>
@@ -392,56 +389,79 @@ export function V5Nda() {
 }
 
 const V5_EXPERIENCE_MARQUEE = [
-  ...SOCIAL_PROOF_BRANDS,
-  ...SOCIAL_PROOF_BRANDS,
+  ...V5_PARTNER_BRANDS,
+  ...V5_PARTNER_BRANDS,
 ] as const;
 
+function V5ExperienceBrandTile({
+  brand,
+}: {
+  brand: (typeof V5_PARTNER_BRANDS)[number];
+}) {
+  return (
+    <div
+      className="v5-experience-brand brand-logo-tile"
+      title={brand.name}
+    >
+      <Image
+        src={brand.logo}
+        alt={brand.name}
+        width={brand.width}
+        height={brand.height}
+        className="brand-logo-tile__img"
+      />
+    </div>
+  );
+}
+
 export function V5Experience() {
+  const motionOn = useV5MotionEnabled();
+  const marquee = (
+    <div className="v5-experience-marquee flex w-max animate-marquee-slow items-stretch gap-4 px-4 tablet:gap-5 tablet:px-8">
+      {V5_EXPERIENCE_MARQUEE.map((brand, i) => (
+        <V5ExperienceBrandTile key={`${brand.name}-${i}`} brand={brand} />
+      ))}
+    </div>
+  );
+
   return (
     <section
       id="v5-experience"
-      className="v5-experience v4-panel--dark flex min-h-svh flex-col justify-center overflow-hidden section-pad"
+      className="v5-experience v4-panel--dark flex flex-col justify-center overflow-hidden section-pad"
     >
       <div className="container-luxury text-center">
         <V5Reveal>
           <V5Label className="v5-type-eyebrow text-white">
             {V5_EXPERIENCE.label}
           </V5Label>
-          <V5SectionTitle className="mt-4 text-white">
+          <V5SectionTitle className="mt-2 text-white">
             {V5_EXPERIENCE.title}
           </V5SectionTitle>
-          <p className="v5-type-body mx-auto mt-6 max-w-2xl text-white/65">
+          <p className="v5-type-body mx-auto mt-3 max-w-2xl text-white/65">
             {V5_EXPERIENCE.body}
           </p>
         </V5Reveal>
       </div>
 
-      <motion.div
-        className="marquee-mask relative mt-12 shrink-0 tablet:mt-14"
-        initial="hidden"
-        whileInView="visible"
-        viewport={viewportOnce}
-        variants={fadeIn}
-        aria-label="Логотипы клиентов"
-      >
-        <div className="v5-experience-marquee flex w-max animate-marquee-slow items-stretch gap-4 px-4 tablet:gap-5 tablet:px-8">
-          {V5_EXPERIENCE_MARQUEE.map((brand, i) => (
-            <div
-              key={`${brand.name}-${i}`}
-              className="v5-experience-brand brand-logo-tile"
-              title={brand.name}
-            >
-              <Image
-                src={brand.logo}
-                alt={brand.name}
-                width={brand.width}
-                height={brand.height}
-                className="brand-logo-tile__img"
-              />
-            </div>
-          ))}
+      {motionOn ? (
+        <motion.div
+          className="marquee-mask relative mt-4 shrink-0 tablet:mt-5"
+          initial="hidden"
+          whileInView="visible"
+          viewport={viewportOnce}
+          variants={fadeIn}
+          aria-label="Логотипы клиентов"
+        >
+          {marquee}
+        </motion.div>
+      ) : (
+        <div
+          className="marquee-mask relative mt-4 shrink-0 tablet:mt-5"
+          aria-label="Логотипы клиентов"
+        >
+          {marquee}
         </div>
-      </motion.div>
+      )}
     </section>
   );
 }
@@ -523,7 +543,7 @@ const GALLERY_LAZY_MARGIN = "320px 0px";
 export function V5Gallery() {
   const { hero, row3, wide, pair, pair2 } = V5_GALLERY_LAYOUT;
   const [lightbox, setLightbox] = useState<string | null>(null);
-  const reduced = useReducedMotion();
+  const motionOn = useV5MotionEnabled();
 
   const galleryBlocks = (
     <>
@@ -600,12 +620,10 @@ export function V5Gallery() {
   return (
     <section id="v5-gallery" className="v4-panel v4-panel--dark section-pad">
       <div className="container-luxury v4-gallery-editorial">
-        <V5Reveal className="mb-10">
+        <V5Reveal className="mb-5">
           <V5SectionTitle className="text-center">Visual Stories</V5SectionTitle>
         </V5Reveal>
-        {reduced ? (
-          <div className="v5-gallery-flow">{galleryBlocks}</div>
-        ) : (
+        {motionOn ? (
           <motion.div
             className="v5-gallery-flow"
             variants={staggerLuxury}
@@ -615,6 +633,8 @@ export function V5Gallery() {
           >
             {galleryBlocks}
           </motion.div>
+        ) : (
+          <div className="v5-gallery-flow">{galleryBlocks}</div>
         )}
       </div>
       {lightbox && (
@@ -649,9 +669,9 @@ function V5GalleryBlock({
   className?: string;
   variants?: typeof clipReveal;
 }) {
-  const reduced = useReducedMotion();
+  const motionOn = useV5MotionEnabled();
 
-  if (reduced) {
+  if (!motionOn) {
     return <div className={className}>{children}</div>;
   }
 
@@ -709,7 +729,7 @@ export function V5Contact() {
               <p className="v4-chapter-sub v5-narrow-text mt-6">{V5_CTA.subtitle}</p>
             </V5FullscreenText>
 
-            <div className="v5-contact-form relative mx-auto mt-10 w-full max-w-[520px]">
+            <div className="v5-contact-form relative mx-auto mt-10 w-[calc(100%-50px)] max-w-[470px]">
               <div
                 className="v5-text-backdrop-blur pointer-events-none absolute left-1/2 top-1/2 z-0 -translate-x-1/2 -translate-y-1/2"
                 aria-hidden
@@ -746,11 +766,11 @@ export function V5Footer() {
   return (
     <footer className="v4-panel v4-panel--dark border-t border-white/10 py-14">
       <div className="container-luxury grid grid-cols-1 gap-10 tablet:grid-cols-3">
-        <div>
+        <div className="flex flex-col items-center tablet:items-start">
           <Logo light className="!h-5 desktop:!h-6" />
           <p className="v4-header-tag v5-type-caption mt-1">{V5_FOOTER_TAGLINE}</p>
         </div>
-        <nav className="flex flex-col gap-3">
+        <nav className="flex flex-col items-center gap-3 tablet:items-start">
           {V5_FOOTER_NAV.map((l) => (
             <a
               key={l.href}
@@ -761,7 +781,7 @@ export function V5Footer() {
             </a>
           ))}
         </nav>
-        <div className="flex flex-col gap-3 tablet:items-end">
+        <div className="flex flex-col items-center gap-3 tablet:items-end">
           <a href={CONTACTS.telegram} className="v4-footer-link" target="_blank" rel="noopener noreferrer">
             Telegram
           </a>
@@ -773,7 +793,7 @@ export function V5Footer() {
           </a>
         </div>
       </div>
-      <p className="v5-footer-copy container-luxury mt-12 border-t border-white/10 pt-8 text-white/40">
+      <p className="v5-footer-copy container-luxury mt-12 border-t border-white/10 pt-8 text-center text-white/40 tablet:text-left">
         © VERANDARU Yacht Edition
       </p>
     </footer>

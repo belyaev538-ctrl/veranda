@@ -1,6 +1,6 @@
-import { LandingPage } from "@/components/landing-page";
+import { redirect } from "next/navigation";
 
-/** Архив: Вариант 1 — /v6 */
-export default function V1ArchivePage() {
-  return <LandingPage variant="1" />;
+/** /v6 → основной лендинг (v6 теперь на /) */
+export default function V6RedirectPage() {
+  redirect("/");
 }

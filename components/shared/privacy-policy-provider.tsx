@@ -73,14 +73,23 @@ function PrivacyPolicyModal({
       if (e.key === "Escape") onClose();
     };
     document.addEventListener("keydown", onKeyDown);
-    return () => document.removeEventListener("keydown", onKeyDown);
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.removeEventListener("keydown", onKeyDown);
+      document.body.style.overflow = "";
+    };
   }, [open, onClose]);
 
   return (
     <AnimatePresence>
       {open && (
         <motion.div
-          className="fixed inset-0 z-[110] flex items-center justify-center p-4 tablet:p-6"
+          className={cn(
+            "fixed inset-0 z-[110] flex",
+            isYachtV6
+              ? "items-stretch justify-stretch p-0 tablet:items-center tablet:justify-center tablet:p-6"
+              : "items-center justify-center p-4 tablet:p-6",
+          )}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -105,20 +114,20 @@ function PrivacyPolicyModal({
             exit={{ opacity: 0, y: 16, scale: 0.98 }}
             transition={{ duration: 0.45, ease: luxuryEase }}
             className={cn(
-              "privacy-policy-modal contact-modal-panel relative z-[1] flex max-h-[min(92vh,820px)] w-full max-w-[640px] flex-col overflow-hidden rounded-luxury",
+              "privacy-policy-modal contact-modal-panel relative z-[1] flex w-full flex-col overflow-hidden",
               isYachtV6
-                ? "contact-modal-panel--yacht-v6 privacy-policy-modal--yacht-v6"
-                : "bg-[#FAF8F5] shadow-[0_24px_80px_rgba(5,18,39,0.28)]",
+                ? "contact-modal-panel--yacht-v6 privacy-policy-modal--yacht-v6 h-[100dvh] max-h-none max-w-none rounded-none tablet:h-auto tablet:max-h-[min(92vh,820px)] tablet:max-w-[640px] tablet:rounded-luxury"
+                : "max-h-[min(92vh,820px)] max-w-[640px] rounded-luxury bg-[#FAF8F5] shadow-[0_24px_80px_rgba(5,18,39,0.28)]",
             )}
             onClick={(e) => e.stopPropagation()}
           >
             <div
               className={cn(
-                "contact-modal-header flex items-start justify-between gap-4 px-6 py-5 tablet:px-8",
+                "contact-modal-header flex shrink-0 items-start justify-between gap-4 px-6 py-5 tablet:px-8",
                 isYachtV6 ? "border-b border-white/10" : "border-b border-border/70",
               )}
             >
-              <div>
+              <div className={cn(isYachtV6 && "min-w-0 flex-1")}>
                 <p
                   className={cn(
                     "contact-modal-eyebrow",
@@ -166,7 +175,7 @@ function PrivacyPolicyModal({
               </button>
             </div>
 
-            <div className="privacy-policy-modal__body overflow-y-auto px-6 py-6 tablet:px-8">
+            <div className="privacy-policy-modal__body min-h-0 flex-1 overflow-y-auto px-6 py-6 tablet:px-8">
               <div className="privacy-policy-content">
                 {PRIVACY_POLICY_SECTIONS.map((section) => (
                   <section key={section.title} className="privacy-policy-section">

@@ -4,6 +4,7 @@ import { motion, useReducedMotion } from "framer-motion";
 import { LightSweep } from "@/components/motion/light-sweep";
 import { luxuryEase } from "@/lib/motion";
 import { cn } from "@/lib/cn";
+import { useV5MotionEnabled } from "@/hooks/use-v5-motion";
 import type { ReactNode } from "react";
 
 type V5SectionEnterProps = {
@@ -24,9 +25,10 @@ export function V5SectionEnter({
   as = "section",
 }: V5SectionEnterProps) {
   const reduced = useReducedMotion();
+  const motionOn = useV5MotionEnabled();
   const Tag = motion[as];
 
-  if (reduced) {
+  if (reduced || !motionOn) {
     const Plain = as;
     return (
       <Plain id={id} className={className}>

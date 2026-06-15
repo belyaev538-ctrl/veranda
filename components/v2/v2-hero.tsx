@@ -14,6 +14,7 @@ import { HeroCompassCoords } from "@/components/hero/hero-compass-coords";
 import { CompassLoaderOverlay } from "@/components/intro/compass-loader-overlay";
 import { LightSweep } from "@/components/motion/light-sweep";
 import { useIntro } from "@/components/intro/intro-context";
+import { useIsMobile } from "@/hooks/use-media";
 import {
   V2_HERO_ENTRANCE,
   V2_HERO_LINES,
@@ -56,6 +57,8 @@ type V2HeroProps = {
   heroScrollHeight?: string;
   /** Компас по центру hero (v5) */
   heroCompassCenter?: boolean;
+  /** Статичный оффер на мобилке вместо scroll-смены строк */
+  heroMobileOffer?: string;
   onHeroLoaderDismissed?: () => void;
 };
 
@@ -77,9 +80,12 @@ export function V2Hero({
   scrollLinesFromStart = false,
   heroScrollHeight = "300vh",
   heroCompassCenter = false,
+  heroMobileOffer,
   onHeroLoaderDismissed,
 }: V2HeroProps) {
   const reducedMotion = useReducedMotion();
+  const isMobile = useIsMobile(767);
+  const useMobileStaticHero = isMobile && Boolean(heroMobileOffer);
   const { heroEnter, introWasPlayed, signalHeroEnter } = useIntro();
   const ref = useRef<HTMLElement>(null);
   const imgRef = useRef<HTMLImageElement>(null);
@@ -155,25 +161,98 @@ export function V2Hero({
 
   useEffect(() => {
     if (!heroEnter || !heroLoaderDismissed) return;
-    setKenBurns(true);
+    if (!isMobile) setKenBurns(true);
     if (scrollLinesFromStart) {
       setShowScrollLines(true);
       return;
     }
     const t = window.setTimeout(() => setShowScrollLines(true), 2200);
     return () => window.clearTimeout(t);
-  }, [heroEnter, heroLoaderDismissed, scrollLinesFromStart]);
+  }, [heroEnter, heroLoaderDismissed, scrollLinesFromStart, isMobile]);
 
   useMotionValueEvent(scrollYProgress, "change", (v) => {
     if (heroEnter && heroLoaderDismissed && v > 0.04) setShowScrollLines(true);
   });
+
+  const heroBottomVisible = heroEnter && heroLoaderDismissed;
+  const heroBottomClassName =
+    sectionId === "v5-hero"
+      ? "relative z-10 flex h-full flex-col justify-end pb-12 tablet:pb-12"
+      : "relative z-10 flex h-full flex-col justify-end pb-8 tablet:pb-10";
+
+  const heroBottomInner = (
+    <div className="container-luxury v2-hero-bottom w-full text-center">
+      <div className="v2-hero-lines relative min-h-[clamp(5rem,18vw,11rem)] w-full">
+        {useMobileStaticHero && heroBottomVisible && (
+          <h1 className="v2-hero-line relative text-balance">{heroMobileOffer}</h1>
+        )}
+
+        {!useMobileStaticHero &&
+          !isMobile &&
+          heroBottomVisible &&
+          !scrollLinesFromStart &&
+          !showScrollLines && (
+            <div className="absolute inset-x-0 bottom-0 flex flex-col items-center gap-1">
+              {V2_HERO_ENTRANCE.map((word, i) => (
+                <motion.h1
+                  key={word}
+                  className="v2-hero-line !relative !bottom-auto"
+                  initial={{ y: 40, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  transition={{
+                    delay: i * 0.15,
+                    duration: 0.85,
+                    ease: luxuryEase,
+                  }}
+                >
+                  {word}
+                </motion.h1>
+              ))}
+            </div>
+          )}
+
+        {!useMobileStaticHero &&
+          showScrollLines &&
+          heroLines.map((line, i) => (
+            <motion.h1
+              key={heroLineKey(line)}
+              className="v2-hero-line v2-hero-line--stack absolute inset-x-0 bottom-0"
+              style={{ opacity: opacities[i] }}
+            >
+              {heroLineParts(line).map((row) => (
+                <span key={row} className="block">
+                  {row}
+                </span>
+              ))}
+            </motion.h1>
+          ))}
+      </div>
+
+      <motion.p
+        className="v2-scroll-hint mt-6 tablet:mt-8"
+        style={{ opacity: useMobileStaticHero ? 1 : scrollHintOpacity }}
+      >
+        Листайте вниз
+      </motion.p>
+
+      <motion.div
+        className="mt-4 flex justify-center tablet:mt-5"
+        style={{ opacity: useMobileStaticHero ? 1 : scrollHintOpacity }}
+        aria-hidden
+      >
+        <span className="v2-scroll-marker" aria-hidden>
+          <span className="v2-scroll-marker__line" />
+        </span>
+      </motion.div>
+    </div>
+  );
 
   return (
     <section
       id={sectionId}
       ref={ref}
       className="relative"
-      style={{ height: heroScrollHeight }}
+      style={{ height: useMobileStaticHero ? "100svh" : heroScrollHeight }}
     >
       <div className="sticky top-0 h-svh min-h-[520px] overflow-hidden">
         <motion.div
@@ -209,7 +288,7 @@ export function V2Hero({
                 setHeroImageLoaded(true);
               }}
             />
-            {heroEndFlicker && (
+            {heroEndFlicker && !isMobile && (
               <motion.div
                 className="pointer-events-none absolute inset-0 z-[2]"
                 style={{ opacity: endFlickerOpacity }}
@@ -220,7 +299,7 @@ export function V2Hero({
             )}
           </motion.div>
         </motion.div>
-        {lightRays && heroLoaderDismissed && !reducedMotion && (
+        {lightRays && heroLoaderDismissed && !reducedMotion && !isMobile && (
           <motion.div
             className="pointer-events-none absolute inset-0 z-[4]"
             initial={{ opacity: 0 }}
@@ -246,6 +325,9 @@ export function V2Hero({
           </motion.div>
         )}
         <div className="v2-hero-overlay absolute inset-0 z-[3]" aria-hidden />
+        {sectionId === "v5-hero" && (
+          <div className="v2-hero-top-fade absolute inset-0 z-[3]" aria-hidden />
+        )}
 
         {heroCompassCenter && (
           <HeroCompassCoords className="v2-hero-coords--below-compass" />
@@ -273,83 +355,23 @@ export function V2Hero({
           />
         )}
 
-        <motion.div
-          className="relative z-10 flex h-full flex-col justify-end pb-8 tablet:pb-10"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: heroEnter && heroLoaderDismissed ? 1 : 0 }}
-          transition={{ duration: 1.2, ease: luxuryEase }}
-        >
-          <div className="container-luxury v2-hero-bottom w-full text-center">
-            <div className="relative min-h-[clamp(5rem,18vw,11rem)] w-full">
-              {heroEnter &&
-                heroLoaderDismissed &&
-                !scrollLinesFromStart &&
-                !showScrollLines && (
-                <div className="absolute inset-x-0 bottom-0 flex flex-col items-center gap-1">
-                  {V2_HERO_ENTRANCE.map((word, i) => (
-                    <motion.h1
-                      key={word}
-                      className="v2-hero-line !relative !bottom-auto"
-                      initial={{ y: 40, opacity: 0 }}
-                      animate={{ y: 0, opacity: 1 }}
-                      transition={{
-                        delay: i * 0.15,
-                        duration: 0.85,
-                        ease: luxuryEase,
-                      }}
-                    >
-                      {word}
-                    </motion.h1>
-                  ))}
-                </div>
-              )}
-
-              {showScrollLines &&
-                heroLines.map((line, i) => (
-                  <motion.h1
-                    key={heroLineKey(line)}
-                    className="v2-hero-line v2-hero-line--stack absolute inset-x-0 bottom-0"
-                    style={{ opacity: opacities[i] }}
-                  >
-                    {heroLineParts(line).map((row) => (
-                      <span key={row} className="block">
-                        {row}
-                      </span>
-                    ))}
-                  </motion.h1>
-                ))}
-            </div>
-
-            <motion.p
-              className="v2-scroll-hint mt-6 tablet:mt-8"
-              style={{ opacity: scrollHintOpacity }}
-            >
-              Листайте вниз
-            </motion.p>
-
-            <motion.div
-              className="mt-4 flex justify-center tablet:mt-5"
-              style={{ opacity: scrollHintOpacity }}
-              aria-hidden
-            >
-              <svg
-                className="v2-scroll-indicator"
-                viewBox="0 0 10 40"
-                fill="none"
-                aria-hidden
-              >
-                <path
-                  className="v2-scroll-indicator__path"
-                  d="M5 1v27M1.5 32L5 36.5L8.5 32"
-                  stroke="currentColor"
-                  strokeWidth="1"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </motion.div>
+        {isMobile ? (
+          <div
+            className={heroBottomClassName}
+            style={{ opacity: heroBottomVisible ? 1 : 0 }}
+          >
+            {heroBottomInner}
           </div>
-        </motion.div>
+        ) : (
+          <motion.div
+            className={heroBottomClassName}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: heroBottomVisible ? 1 : 0 }}
+            transition={{ duration: 1.2, ease: luxuryEase }}
+          >
+            {heroBottomInner}
+          </motion.div>
+        )}
       </div>
     </section>
   );

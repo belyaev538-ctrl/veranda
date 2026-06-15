@@ -132,7 +132,7 @@ export function V5InlineLeadForm({ className }: { className?: string }) {
         )}
       </label>
       {error && <p className="v4-inline-lead__error">{error}</p>}
-      <button type="submit" className="v4-btn mx-auto block w-full max-w-xs" disabled={submitting}>
+      <button type="submit" className="v4-btn block w-full" disabled={submitting}>
         {submitting ? "Отправка…" : "Отправить"}
       </button>
     </form>

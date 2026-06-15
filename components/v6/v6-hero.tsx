@@ -1,6 +1,6 @@
 import { V2Hero } from "@/components/v2/v2-hero";
 import { markIntroSeen } from "@/lib/intro-storage";
-import { V5_HERO_LINES, V5_IMAGES } from "@/lib/v5-content";
+import { V5_HERO_LINES, V5_HERO_MOBILE_OFFER, V5_IMAGES } from "@/lib/v5-content";
 
 export function V6Hero() {
   return (
@@ -16,6 +16,7 @@ export function V6Hero() {
       lightRaysColor="#7ec8ff"
       heroImageLoader
       heroCompassCenter
+      heroMobileOffer={V5_HERO_MOBILE_OFFER}
       onHeroLoaderDismissed={() => markIntroSeen("v6")}
     />
   );

@@ -937,6 +937,10 @@
   );
 }
 
+.v4-theme.v5-site #v5-hero .v2-hero-top-fade {
+  background: linear-gradient(to bottom, rgba(2, 11, 31, 0.88) 0%, transparent 50%);
+}
+
 .v2-eyebrow {
   font-family: var(--font-montserrat), sans-serif;
   font-size: 11px;
@@ -977,6 +981,31 @@
 .v4-theme #v4-hero .v2-hero-bottom,
 .v4-theme #v5-hero .v2-hero-bottom {
   transform: translateY(-80px);
+}
+
+@media (max-width: 767px) {
+  .v4-theme.v5-site #v5-hero .v2-hero-bottom {
+    transform: translateY(-30px);
+  }
+
+  .v4-theme.v5-site #v5-hero .v2-hero-lines {
+    min-height: 0;
+  }
+
+  .v4-theme.v5-site #v5-hero .v2-hero-line {
+    line-height: 1.22;
+  }
+
+  .v4-theme.v5-site #v5-hero .v2-hero-coords--below-compass {
+    top: calc(50% - 72px + 62px);
+    font-size: 13px;
+    gap: 0.35rem 0.85rem;
+  }
+
+  .v4-theme.v5-site #v5-hero .v2-scroll-hint,
+  .v4-theme.v5-site #v5-hero .v2-scroll-hint + div {
+    transform: none;
+  }
 }
 
 /* v5 hero — компас-лоадер по центру экрана */
@@ -1024,18 +1053,18 @@
   fill: #fff;
 }
 
-/* v5 hero — подсказка скролла белым, ниже */
+/* v5 hero — подсказка скролла, ниже */
 .v4-theme.v5-site #v5-hero .v2-scroll-hint {
-  color: #fff;
-  transform: translateY(20px);
+  color: var(--v5-copy-muted);
+  margin-top: 1.5rem;
 }
 
 .v4-theme.v5-site #v5-hero .v2-scroll-hint + div {
-  transform: translateY(20px);
+  margin-top: 1rem;
 }
 
-.v4-theme.v5-site #v5-hero .v2-scroll-indicator {
-  color: #fff;
+.v4-theme.v5-site #v5-hero .v2-scroll-marker__line {
+  background: rgba(255, 255, 255, 0.35);
 }
 
 /* v5 hero — лучи поверх overlay (слегка голубые, в тон кнопкам) */
@@ -1056,8 +1085,6 @@
 
 /* Statement — фиксированные 3 строки, без balance-переносов */
 .v4-theme.v5-site #v5-statement-visual .v5-statement-title {
-  font-size: clamp(1.75rem, 4.5vw, var(--v5-type-display-xl));
-  line-height: calc(1em - 5px);
   text-wrap: wrap;
 }
 
@@ -1127,16 +1154,30 @@
   font-family: var(--font-v4-sans), system-ui, sans-serif;
 }
 
-.v2-scroll-indicator {
-  display: block;
+.v2-scroll-marker {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
   width: 10px;
   height: 2.5rem;
-  color: rgba(255, 255, 255, 0.3);
+}
+
+.v2-scroll-marker__line {
+  display: block;
+  width: 1px;
+  height: 100%;
+  min-height: 2.5rem;
+  border-radius: 1px;
+  background: rgba(255, 255, 255, 0.35);
 }
 
 @media (min-width: 768px) {
-  .v2-scroll-indicator {
+  .v2-scroll-marker {
     height: 3rem;
+  }
+
+  .v2-scroll-marker__line {
+    min-height: 3rem;
   }
 }
 
@@ -1428,6 +1469,7 @@
     width: 320px;
     height: 200px;
   }
+}
 
 /* —— Variant 3 (копия v2, далее — бирюза) (Feadship-inspired) —— */
 .v3-theme {
@@ -1465,6 +1507,13 @@
 .v4-theme.v5-site .v3-header .v3-nav-link,
 .v4-theme.v5-site .v3-header .v3-menu-trigger {
   font-size: calc(var(--v5-type-caption) + 1px);
+}
+
+.v4-theme.v5-site .v3-header--scrolled {
+  background: rgba(2, 11, 31, 0.55);
+  backdrop-filter: blur(18px) saturate(1.35);
+  -webkit-backdrop-filter: blur(18px) saturate(1.35);
+  border-bottom: none;
 }
 
 .v3-nav-link {
@@ -1883,7 +1932,6 @@
     height: 200px;
   }
 }
-}
 
 /* —— Yacht intro (compass) —— */
 .intro-compass-wrap {
@@ -2058,8 +2106,13 @@
   --v5-type-subtitle: 1.125rem;
   --v5-type-body: 1rem;
   --v5-type-caption: 0.6875rem;
-  --v5-type-eyebrow: 1.25rem;
+  --v5-type-eyebrow: 0.875rem;
   --v5-type-display-num: 5rem;
+  --v5-lh-subtitle: 1.24;
+  --v5-lh-body: 1.28;
+  --v5-lh-subtitle-tight: 1.16;
+  --v5-lh-display: calc((1em - 5px) * 1.25);
+  --v5-copy-muted: #ccd7e6;
 }
 
 .v4-theme.v5-site .v5-type-display-xl,
@@ -2068,7 +2121,7 @@
 .v4-theme.v5-site .v5-chapter-title {
   font-size: clamp(2.25rem, 8vw, var(--v5-type-display-xl));
   font-weight: 300;
-  line-height: calc(1em - 5px);
+  line-height: var(--v5-lh-display);
   letter-spacing: -0.02em;
 }
 
@@ -2076,7 +2129,7 @@
 .v4-theme.v5-site .v4-display-title {
   font-size: clamp(2rem, 6vw, var(--v5-type-display-lg));
   font-weight: 300;
-  line-height: calc(1em - 5px);
+  line-height: var(--v5-lh-display);
   letter-spacing: -0.02em;
 }
 
@@ -2085,8 +2138,32 @@
 .v4-theme.v5-site #v5-custom .v5-type-display-md {
   font-size: clamp(1.75rem, 5vw, var(--v5-type-display-md));
   font-weight: 300;
-  line-height: calc(1em - 5px);
+  line-height: var(--v5-lh-display);
   letter-spacing: -0.01em;
+}
+
+@media (max-width: 767px) {
+  .v4-theme.v5-site #v5-hero .v2-hero-line,
+  .v4-theme.v5-site #v5-statement .v5-type-display-md,
+  .v4-theme.v5-site #v5-statement-visual .v5-statement-title,
+  .v4-theme.v5-site .v5-statement-title,
+  .v4-theme.v5-site .v5-chapter-title,
+  .v4-theme.v5-site .v5-production-header,
+  .v4-theme.v5-site #v5-collections .v5-type-display-md,
+  .v4-theme.v5-site #v5-gallery .v5-type-display-md,
+  .v4-theme.v5-site #v5-materials .v5-type-display-md,
+  .v4-theme.v5-site #v5-experience .v5-type-display-md,
+  .v4-theme.v5-site #v5-custom .v5-type-display-md,
+  .v4-theme.v5-site #v5-areas .v5-yacht-tour__title,
+  .v4-theme.v5-site #v5-viz .v4-display-title,
+  .v4-theme.v5-site #v5-nda .v4-display-title,
+  .v4-theme.v5-site #v5-faq .v4-display-title,
+  .v4-theme.v5-site #v5-contact .v4-display-title {
+    font-size: clamp(1.75rem, 5vw, var(--v5-type-display-md));
+    font-weight: 700;
+    line-height: var(--v5-lh-display);
+    letter-spacing: -0.01em;
+  }
 }
 
 .v4-theme.v5-site #v5-materials .v5-type-display-md,
@@ -2094,21 +2171,13 @@
 .v4-theme.v5-site #v5-collections .v5-type-display-md {
   font-size: clamp(1.75rem, 5vw, var(--v5-type-display-md));
   font-weight: 300;
-  line-height: calc(1em - 5px);
+  line-height: var(--v5-lh-display);
   letter-spacing: -0.01em;
   color: #fff;
 }
 
 .v4-theme.v5-site #v5-materials .v5-type-display-md {
   color: #1e1e1e;
-}
-
-.v4-theme.v5-site .v5-type-yacht-title,
-.v4-theme.v5-site .v5-yacht-tour__title {
-  font-size: clamp(2.25rem, 7vw, var(--v5-type-yacht-title));
-  font-weight: 300;
-  line-height: calc(1em - 5px);
-  letter-spacing: -0.02em;
 }
 
 .v4-theme.v5-site .v5-type-subtitle,
@@ -2118,7 +2187,7 @@
 .v4-theme.v5-site .v5-yacht-tour__subtitle {
   font-size: var(--v5-type-subtitle);
   font-weight: 300;
-  line-height: 1.55;
+  line-height: var(--v5-lh-subtitle);
   letter-spacing: 0;
   text-transform: none;
 }
@@ -2142,7 +2211,7 @@
 .v4-theme.v5-site #v5-materials .v5-type-body {
   font-size: var(--v5-type-body);
   font-weight: 400;
-  line-height: 1.6;
+  line-height: var(--v5-lh-body);
   letter-spacing: 0;
 }
 
@@ -2178,6 +2247,10 @@
   letter-spacing: 0.16em;
   text-transform: uppercase;
   line-height: 1.35;
+}
+
+.v4-theme.v5-site #v5-production .v4-production-card__title {
+  font-weight: 700;
 }
 
 /* Заголовки карточек collections + крупные лейблы (×2 caption) */
@@ -2371,7 +2444,7 @@
 
 .v4-theme.v5-site #v5-production .v5-production-subtitle {
   max-width: min(720px, 92vw);
-  line-height: 1.45;
+  line-height: var(--v5-lh-subtitle-tight);
 }
 
 /* Scroll-cover: sticky фон, следующая секция наезжает сверху */
@@ -2638,7 +2711,7 @@
   font-family: var(--font-v4-sans), sans-serif;
   font-weight: 300;
   font-size: clamp(0.95rem, 2vw, 1.125rem);
-  line-height: 1.55;
+  line-height: 1.24;
   color: rgba(255, 255, 255, 0.72);
 }
 
@@ -2803,7 +2876,7 @@
   font-family: var(--font-v4-sans), sans-serif;
   font-weight: 300;
   font-size: clamp(0.95rem, 1.8vw, 1.1rem);
-  line-height: 1.55;
+  line-height: 1.24;
   color: rgba(255, 255, 255, 0.78);
 }
 
@@ -2853,7 +2926,7 @@
   font-family: var(--font-v4-sans), sans-serif;
   font-size: clamp(0.8125rem, 1.6vw, 0.9375rem);
   font-weight: 300;
-  line-height: 1.55;
+  line-height: 1.24;
   color: rgba(255, 255, 255, 0.78);
   white-space: pre-line;
   max-width: 22rem;
@@ -2944,7 +3017,8 @@
   font-family: var(--font-montserrat), system-ui, sans-serif;
 }
 
-/* v5 — eyebrow-лейблы: 20px, Light, белый на тёмном фоне */
+/* v5 — eyebrow-лейблы: 14px, Light, белый на тёмном фоне */
+.v4-theme.v5-site .v4-label.v5-type-eyebrow,
 .v4-theme.v5-site .v5-type-eyebrow {
   font-size: var(--v5-type-eyebrow);
   font-weight: 300;
@@ -2956,6 +3030,36 @@
 
 .v4-theme.v5-site #v5-materials .v5-type-eyebrow {
   color: #1e1e1e;
+}
+
+.v4-theme.v5-site .v4-panel--milk .v5-type-body,
+.v4-theme.v5-site .v4-panel--milk .v4-chapter-sub,
+.v4-theme.v5-site .v4-panel--milk .v4-body-light {
+  color: #1e1e1e;
+}
+
+/* v5/v6 — вторичный текст: подзаголовки, подсказки, FAQ, описания зон */
+.v4-theme.v5-site .v2-scroll-hint,
+.v4-theme.v5-site .v4-chapter-sub,
+.v4-theme.v5-site .v4-body-light,
+.v4-theme.v5-site .v5-production-subtitle,
+.v4-theme.v5-site .v5-yacht-tour__solutions-label,
+.v4-theme.v5-site .v5-custom-body,
+.v4-theme.v5-site .v5-type-body,
+.v4-theme.v5-site #v5-faq .v4-faq-trigger {
+  color: var(--v5-copy-muted);
+}
+
+.v4-theme.v5-site .v4-chapter-sub .luxury-text-shimmer--on-dark,
+.v4-theme.v5-site .v4-body-light .luxury-text-shimmer--on-dark {
+  background-image: linear-gradient(
+    105deg,
+    var(--v5-copy-muted) 0%,
+    var(--v5-copy-muted) 38%,
+    #fff 50%,
+    var(--v5-copy-muted) 62%,
+    var(--v5-copy-muted) 100%
+  );
 }
 
 /* v5 — опыт / клиенты (после NDA) */
@@ -2978,8 +3082,67 @@
 }
 
 .v4-theme.v5-site #v5-experience .brand-logo-tile__img {
-  filter: brightness(0) invert(1);
-  opacity: 0.92;
+  filter: none;
+  opacity: 0.95;
+  max-height: 2.75rem;
+  max-width: min(40vw, 200px);
+}
+
+@media (min-width: 768px) {
+  .v4-theme.v5-site #v5-experience .brand-logo-tile__img {
+    max-height: 3rem;
+    max-width: 210px;
+  }
+}
+
+.v4-theme.v5-site #v5-made-sea .section-pad {
+  padding-top: 30px;
+  padding-bottom: 30px;
+}
+
+@media (max-width: 1023px) {
+  .v4-theme.v5-site #v5-production.section-pad {
+    padding-bottom: 0;
+  }
+}
+
+.v4-theme.v5-site #v5-experience.section-pad {
+  padding-top: 1.5rem;
+  padding-bottom: 1.5rem;
+}
+
+@media (min-width: 1200px) {
+  .v4-theme.v5-site #v5-experience.section-pad {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+  }
+}
+
+.v4-theme.v5-site #v5-gallery.section-pad,
+.v4-theme.v5-site #v5-faq.section-pad {
+  padding-top: 3rem;
+  padding-bottom: 3rem;
+}
+
+@media (min-width: 1200px) {
+  .v4-theme.v5-site #v5-gallery.section-pad,
+  .v4-theme.v5-site #v5-faq.section-pad {
+    padding-top: 4rem;
+    padding-bottom: 4rem;
+  }
+}
+
+.v4-theme.v5-site #v5-gallery .v4-gallery-editorial,
+.v4-theme.v5-site #v5-gallery .v5-gallery-flow,
+.v4-theme.v5-site #v5-gallery .v4-gallery-block--triple,
+.v4-theme.v5-site #v5-gallery .v4-gallery-block--pair {
+  gap: 0.5rem;
+}
+
+.v4-theme.v5-site #v5-faq .v5-faq-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
 }
 
 /* v5 custom — описание: шире narrow (720px), ~3–4 строки */
@@ -3108,21 +3271,19 @@
   border-top-color: rgba(255, 255, 255, 0.12);
 }
 
-.v4-theme.v5-site #v5-faq .v5-faq-layout {
-  display: flex;
-  flex-direction: column;
-  gap: 80px;
-}
-
 .v4-theme.v5-site #v5-faq .v4-faq-item {
   border-bottom-color: rgba(255, 255, 255, 0.1);
 }
 
 .v4-theme.v5-site #v5-faq .v4-faq-trigger {
   align-items: center;
-  color: #fff;
   font-size: calc(var(--v5-type-body) + 2px);
   line-height: 1.45;
+}
+
+.v4-theme.v5-site #v5-faq .v4-faq-trigger[aria-expanded="true"] {
+  color: #fff;
+  font-weight: 700;
 }
 
 .v4-theme.v5-site #v5-faq .v4-faq-answer {
@@ -3318,7 +3479,8 @@
 }
 
 .v4-theme.v5-site #v5-contact .v4-inline-lead {
-  max-width: 520px;
+  max-width: 470px;
+  width: 100%;
 }
 
 .v4-theme.v5-site #v5-contact .v4-inline-lead__grid {
@@ -3339,6 +3501,11 @@
   width: 1rem;
   height: 1rem;
   flex-shrink: 0;
+}
+
+.v4-theme.v5-site #v5-contact .v4-inline-lead .v4-btn {
+  width: 100%;
+  max-width: none;
 }
 
 .v4-theme.v5-site #v5-contact .v4-inline-lead__attach {
@@ -3531,6 +3698,55 @@
   overflow: hidden;
 }
 
+@media (max-width: 1023px) {
+  .v4-theme.v5-site .v5-yacht-tour__backdrop {
+    width: 288px;
+    height: 288px;
+    top: calc(50% - 50px);
+    left: 50%;
+    opacity: 0.35;
+    filter: blur(72px);
+    z-index: 0;
+  }
+
+  .v4-theme.v5-site .v5-yacht-tour__backdrop.v5-text-backdrop-blur--accent {
+    filter: blur(86px);
+  }
+
+  .v5-yacht-tour {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+  }
+
+  .v5-yacht-tour-screen:not(.v5-yacht-tour-screen--cover) {
+    min-height: auto;
+  }
+
+  .v5-yacht-tour-screen + .v5-yacht-tour-screen {
+    border-top: none;
+  }
+
+  .v5-yacht-tour__split {
+    min-height: auto;
+  }
+
+  .v5-yacht-tour__split--img-right .v5-yacht-tour__visual {
+    order: -1;
+  }
+
+  .v5-yacht-tour__visual {
+    position: relative;
+    z-index: 1;
+  }
+
+  .v5-yacht-tour__copy {
+    justify-content: flex-start;
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
+  }
+}
+
 @media (min-width: 1024px) {
   .v5-yacht-tour__split {
     grid-template-columns: 35% 65%;
@@ -3582,7 +3798,7 @@
   z-index: 2;
 }
 
-.v4-theme.v5-site .v5-yacht-tour__zone-label {
+.v4-theme.v5-site .v4-label.v5-yacht-tour__zone-label {
   display: inline-block;
   width: fit-content;
   padding: 4px 8px;
@@ -3591,6 +3807,7 @@
   letter-spacing: 0.12em;
   white-space: nowrap;
   background: #0090ff;
+  color: #fff;
 }
 
 @media (min-width: 1024px) {
@@ -3625,8 +3842,8 @@
 }
 
 .v5-yacht-tour__desc {
-  margin-top: 1.25rem;
-  color: rgba(255, 255, 255, 0.8);
+  margin-top: 1rem;
+  color: var(--v5-copy-muted);
 }
 
 .v4-theme.v5-site:not(.v6-site) .v5-yacht-tour__desc {
@@ -3640,11 +3857,11 @@
 }
 
 .v5-yacht-tour__solutions {
-  margin-top: 2rem;
+  margin-top: 1.6rem;
 }
 
 .v5-yacht-tour__solutions-label {
-  color: rgba(255, 255, 255, 0.45);
+  color: var(--v5-copy-muted);
 }
 
 .v4-theme.v5-site:not(.v6-site) .v5-yacht-tour__solutions-label {
@@ -3652,7 +3869,7 @@
 }
 
 .v5-yacht-tour__solutions ul {
-  margin: 1rem 0 0;
+  margin: 0.8rem 0 0;
   padding: 0;
   list-style: none;
 }
@@ -3660,7 +3877,7 @@
 .v5-yacht-tour__solutions li {
   position: relative;
   padding-left: 1rem;
-  margin-top: 0.5rem;
+  margin-top: 0.4rem;
   color: rgba(255, 255, 255, 0.72);
 }
 
@@ -3894,7 +4111,6 @@
   padding: 0.5rem;
   border-radius: 999px;
   background: rgba(2, 11, 31, 0.42);
-  border: 1px solid rgba(255, 255, 255, 0.14);
   box-shadow:
     0 8px 32px rgba(2, 11, 31, 0.45),
     inset 0 1px 0 rgba(255, 255, 255, 0.08);
@@ -3918,26 +4134,43 @@
   border-radius: 50%;
   color: #fff;
   background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.14);
   padding: 0;
   cursor: pointer;
   appearance: none;
   transition:
     background 0.3s ease,
-    border-color 0.3s ease,
     transform 0.3s ease,
     color 0.3s ease;
 }
 
 .v4-theme.v5-site .v5-contact-fab__btn:hover {
   background: var(--v4-accent);
-  border-color: var(--v4-accent);
   transform: translateY(-1px);
 }
 
 .v4-theme.v5-site .v5-contact-fab__btn:focus-visible {
   outline: 2px solid var(--v4-accent);
   outline-offset: 2px;
+}
+
+@media (max-width: 767px) {
+  .v4-theme.v5-site .v5-contact-fab--collapsed {
+    padding: 0;
+    gap: 0;
+    border-radius: 50%;
+    background: rgba(2, 11, 31, 0.55);
+    opacity: 0.92;
+  }
+
+  .v4-theme.v5-site .v5-contact-fab--expanded {
+    opacity: 1;
+    padding: 0.5rem;
+    gap: 0.5rem;
+  }
+
+  .v4-theme.v5-site .v5-contact-fab__toggle {
+    flex-shrink: 0;
+  }
 }
 
 .v4-theme.v5-site .v3-menu-contact-bar {
@@ -3989,7 +4222,6 @@
 
 .v4-theme.v5-site .v5-menu-contact-phone:hover .v5-contact-fab__btn {
   background: var(--v4-accent);
-  border-color: var(--v4-accent);
   transform: translateY(-1px);
 }
 
@@ -3998,11 +4230,49 @@
   pointer-events: none;
 }
 
+/* v6 меню — мобилка: тот же YachtNavMenu, контакт-бар в две строки на узких экранах */
+@media (max-width: 639px) {
+  .v4-theme.v5-site .v3-menu .v3-menu-nav.container-luxury {
+    justify-content: flex-start;
+    padding-top: 1.75rem;
+    padding-bottom: 1.75rem;
+  }
+
+  .v4-theme.v5-site .v3-menu .container-luxury.border-t {
+    padding-top: 1.25rem;
+    padding-bottom: 1.25rem;
+  }
+
+  .v4-theme.v5-site .v3-menu-contact-bar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+  }
+
+  .v4-theme.v5-site .v3-menu-contact-bar .v4-btn--sm {
+    width: 100%;
+    max-width: none;
+  }
+
+  .v4-theme.v5-site .v5-contact-fab--menu {
+    margin-left: 0;
+    width: 100%;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .v4-theme.v5-site .v5-menu-contact-phone__number {
+    font-size: 18px;
+  }
+}
+
 /* v6 — тёмная модальная форма (Cormorant + Inter, как #v5-contact) */
 .contact-modal-panel--yacht-v6 {
   --v4-accent: #0090ff;
   --v5-type-caption: 0.6875rem;
   --v5-type-body: 1rem;
+  --v5-lh-display: calc((1em - 5px) * 1.25);
   border-radius: 0;
   background: #020b1f;
   border: 1px solid rgba(255, 255, 255, 0.14);
@@ -4012,13 +4282,38 @@
   color: #fff;
 }
 
+.contact-modal-panel--yacht-v6 .contact-modal-title {
+  margin: 0;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
 .contact-modal-panel--yacht-v6 .contact-modal-subtitle--v6-lead {
   margin: 0;
   font-family: var(--font-v4-serif), Georgia, "Times New Roman", serif;
-  font-size: calc(var(--v5-type-body) * 2.6);
-  font-weight: 300;
-  line-height: 1.35;
+  font-size: clamp(1.75rem, 5vw, 3.875rem);
+  font-weight: 700;
+  line-height: var(--v5-lh-display);
   letter-spacing: -0.01em;
+}
+
+@media (max-width: 767px) {
+  .contact-modal-panel--yacht-v6 {
+    min-height: 100dvh;
+    max-height: none;
+    border: none;
+    box-shadow: none;
+  }
+
+  .contact-modal-panel--yacht-v6 .contact-modal-header {
+    padding-top: max(1.25rem, env(safe-area-inset-top));
+  }
+
+  .contact-modal-panel--yacht-v6 .contact-modal-body--yacht-v6 {
+    flex: 1;
+    min-height: 0;
+    padding-bottom: max(1.5rem, env(safe-area-inset-bottom));
+  }
 }
 
 .contact-modal-panel--yacht-v6 .contact-modal-close {
@@ -4062,6 +4357,7 @@
 }
 
 .contact-modal-panel--yacht-v6 .contact-field-input::placeholder {
+  font-size: 14px;
   color: rgba(255, 255, 255, 0.4);
 }
 
@@ -4085,12 +4381,12 @@
 }
 
 .contact-modal-panel--yacht-v6 .contact-channel-option__label {
-  font-size: calc(var(--v5-type-body) * 1.3);
+  font-size: 14px;
   line-height: 1.35;
   color: #fff;
 }
 
-.contact-modal-panel--yacht-v6 .contact-modal-body--yacht-v6 label > span {
+.contact-modal-panel--yacht-v6 .contact-modal-body--yacht-v6 .contact-consent-checkbox + span {
   font-size: calc(11px * 1.3);
   line-height: 1.5;
   color: rgba(255, 255, 255, 0.72);
@@ -4098,7 +4394,32 @@
 
 .contact-modal-panel--yacht-v6 .contact-channel-checkbox,
 .contact-modal-panel--yacht-v6 .contact-consent-checkbox {
-  accent-color: var(--v4-accent);
+  appearance: none;
+  -webkit-appearance: none;
+  width: 1rem;
+  height: 1rem;
+  margin: 0;
+  flex-shrink: 0;
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  border-radius: 2px;
+  background: transparent;
+  cursor: pointer;
+}
+
+.contact-modal-panel--yacht-v6 .contact-channel-checkbox:checked,
+.contact-modal-panel--yacht-v6 .contact-consent-checkbox:checked {
+  border-color: var(--v4-accent);
+  background-color: transparent;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' fill='none'%3E%3Cpath d='M2.5 6.2 4.8 8.5 9.5 3.5' stroke='%230090ff' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 0.75rem 0.75rem;
+}
+
+.contact-modal-panel--yacht-v6 .contact-channel-checkbox:focus-visible,
+.contact-modal-panel--yacht-v6 .contact-consent-checkbox:focus-visible {
+  outline: none;
+  border-color: var(--v4-accent);
 }
 
 .contact-modal-panel--yacht-v6 .contact-modal-error {
@@ -4108,10 +4429,18 @@
   color: #e8a0a0;
 }
 
+.contact-modal-form--yacht-v6 {
+  width: min(470px, calc(100% - 50px));
+  max-width: 470px;
+  margin-inline: auto;
+}
+
 .contact-modal-panel--yacht-v6 .contact-modal-submit {
-  display: inline-flex;
+  display: flex;
   align-items: center;
   justify-content: center;
+  width: 100%;
+  max-width: none;
   margin-inline: auto;
   box-sizing: border-box;
   min-height: 46px;
@@ -4154,6 +4483,15 @@
 /* Privacy policy modal — длинный текст, тот же тон что contact-modal v6 */
 .privacy-policy-modal__body {
   scrollbar-gutter: stable;
+  -webkit-overflow-scrolling: touch;
+}
+
+@media (max-width: 767px) {
+  .privacy-policy-modal--yacht-v6 .privacy-policy-modal__body {
+    flex: 1;
+    min-height: 0;
+    padding-bottom: max(1.5rem, env(safe-area-inset-bottom));
+  }
 }
 
 .privacy-policy-content {

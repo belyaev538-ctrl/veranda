@@ -8,11 +8,12 @@ import {
   useReducedMotion,
   useSpring,
 } from "framer-motion";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import {
   CompassSvg,
   headingDegFromPointer,
 } from "@/components/intro/compass-svg";
+import { useIsMobile } from "@/hooks/use-media";
 import { useLoaderProgress } from "@/hooks/use-loader-progress";
 import { cn } from "@/lib/cn";
 
@@ -50,6 +51,8 @@ export function CompassLoaderOverlay({
   onReady,
 }: CompassLoaderOverlayProps) {
   const reducedMotion = useReducedMotion();
+  const isMobile = useIsMobile(767);
+  const staticCompass = isMobile && persistOnComplete;
   const [ticksReady, setTicksReady] = useState(false);
   const [exiting, setExiting] = useState(false);
   const compassWrapRef = useRef<HTMLDivElement>(null);
@@ -78,11 +81,19 @@ export function CompassLoaderOverlay({
     [heading],
   );
 
+  useLayoutEffect(() => {
+    if (!staticCompass) return;
+    setTicksReady(true);
+    void compassControls.set({ opacity: 1, scale: 1 });
+  }, [staticCompass, compassControls]);
+
   useEffect(() => {
     if (reducedMotion) {
       setTicksReady(true);
       return;
     }
+
+    if (staticCompass) return;
 
     void compassControls.start({
       opacity: 1,
@@ -92,7 +103,7 @@ export function CompassLoaderOverlay({
 
     const t = window.setTimeout(() => setTicksReady(true), 150);
     return () => window.clearTimeout(t);
-  }, [reducedMotion, compassControls]);
+  }, [reducedMotion, staticCompass, compassControls]);
 
   const gentleExit = !revealHeroOnExit;
 
@@ -153,7 +164,7 @@ export function CompassLoaderOverlay({
   ]);
 
   useEffect(() => {
-    if (reducedMotion || exiting || !ticksReady) return;
+    if (reducedMotion || staticCompass || exiting || !ticksReady) return;
 
     const onPointerMove = (e: PointerEvent) => {
       pointTo(e.clientX, e.clientY);
@@ -161,7 +172,7 @@ export function CompassLoaderOverlay({
 
     window.addEventListener("pointermove", onPointerMove, { passive: true });
     return () => window.removeEventListener("pointermove", onPointerMove);
-  }, [reducedMotion, exiting, ticksReady, pointTo]);
+  }, [reducedMotion, staticCompass, exiting, ticksReady, pointTo]);
 
   return (
     <motion.div
@@ -219,14 +230,14 @@ export function CompassLoaderOverlay({
         <motion.div
           ref={compassWrapRef}
           className="intro-compass-wrap"
-          style={exiting ? undefined : { rotate: headingSpring }}
+          style={exiting || staticCompass ? undefined : { rotate: headingSpring }}
           animate={compassControls}
           initial={{
-            opacity: reducedMotion ? 1 : 0,
-            scale: reducedMotion ? 1 : 0.8,
+            opacity: reducedMotion || staticCompass ? 1 : 0,
+            scale: reducedMotion || staticCompass ? 1 : 0.8,
           }}
         >
-          <CompassSvg ticksReady={ticksReady} />
+          <CompassSvg ticksReady={ticksReady} staticTicks={staticCompass} />
         </motion.div>
       </div>
 

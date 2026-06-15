@@ -7,7 +7,7 @@ export function V3Header() {
       heroHref="#v3-pillars"
       contactHref="#v3-contact"
       menuItems={V3_MENU}
-      otherVariant={{ label: "Вариант 1", href: "/v6" }}
+      otherVariant={{ label: "Вариант 1", href: "/v1" }}
     />
   );
 }

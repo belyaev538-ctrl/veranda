@@ -5,6 +5,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { ContactChannelLinks } from "@/components/shared/contact-channel-links";
 import { useContactForm } from "@/components/contact-form-provider";
 import { luxuryEase } from "@/lib/motion";
+import { useIsMobile } from "@/hooks/use-media";
 
 export type YachtNavMenuItem = {
   numeral: string;
@@ -28,6 +29,7 @@ export function YachtNavMenu({
   menuContactBar = false,
 }: YachtNavMenuProps) {
   const { open: openForm } = useContactForm();
+  const isMobile = useIsMobile(767);
 
   return (
     <AnimatePresence>
@@ -52,20 +54,32 @@ export function YachtNavMenu({
           </div>
 
           <nav className="v3-menu-nav container-luxury flex min-h-0 flex-1 flex-col justify-center gap-1.5 overflow-y-auto py-8 tablet:gap-2 tablet:py-12">
-            {items.map((item, i) => (
-              <motion.a
-                key={`${item.numeral}-${item.href}`}
-                href={item.href}
-                onClick={onClose}
-                className="v3-menu-item group"
-                initial={{ opacity: 0, x: -24 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.08 + i * 0.06, duration: 0.6, ease: luxuryEase }}
-              >
-                <span className="v3-menu-numeral">{item.numeral}</span>
-                <span className="v3-menu-title">{item.label}</span>
-              </motion.a>
-            ))}
+            {items.map((item, i) =>
+              isMobile ? (
+                <a
+                  key={`${item.numeral}-${item.href}`}
+                  href={item.href}
+                  onClick={onClose}
+                  className="v3-menu-item group"
+                >
+                  <span className="v3-menu-numeral">{item.numeral}</span>
+                  <span className="v3-menu-title">{item.label}</span>
+                </a>
+              ) : (
+                <motion.a
+                  key={`${item.numeral}-${item.href}`}
+                  href={item.href}
+                  onClick={onClose}
+                  className="v3-menu-item group"
+                  initial={{ opacity: 0, x: -24 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.08 + i * 0.06, duration: 0.6, ease: luxuryEase }}
+                >
+                  <span className="v3-menu-numeral">{item.numeral}</span>
+                  <span className="v3-menu-title">{item.label}</span>
+                </motion.a>
+              ),
+            )}
           </nav>
 
           <div className="container-luxury border-t border-white/10 py-8">

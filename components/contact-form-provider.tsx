@@ -199,7 +199,12 @@ function ContactFormModal({
     <AnimatePresence>
       {open && (
         <motion.div
-          className="fixed inset-0 z-[100] flex items-center justify-center p-4 tablet:p-6"
+          className={cn(
+            "fixed inset-0 z-[100] flex",
+            isYachtV6
+              ? "items-stretch justify-stretch p-0 tablet:items-center tablet:justify-center tablet:p-6"
+              : "items-center justify-center p-4 tablet:p-6",
+          )}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -224,17 +229,18 @@ function ContactFormModal({
             exit={{ opacity: 0, y: 16, scale: 0.98 }}
             transition={{ duration: 0.45, ease: luxuryEase }}
             className={cn(
-              "contact-modal-panel relative z-[1] flex max-h-[min(92vh,820px)] w-full max-w-[520px] flex-col overflow-hidden",
-              isYachtV6 ? "rounded-none" : "rounded-luxury",
+              "contact-modal-panel relative z-[1] flex w-full flex-col overflow-hidden",
+              isYachtV6 && "contact-modal-panel--yacht-v6",
               isYachtV6
-                ? "contact-modal-panel--yacht-v6"
-                : "bg-[#FAF8F5] shadow-[0_24px_80px_rgba(5,18,39,0.28)]",
+                ? "h-[100dvh] max-h-none max-w-none rounded-none tablet:h-auto tablet:max-h-[min(92vh,820px)] tablet:max-w-[520px]"
+                : "max-h-[min(92vh,820px)] max-w-[520px] rounded-luxury",
+              !isYachtV6 && "bg-[#FAF8F5] shadow-[0_24px_80px_rgba(5,18,39,0.28)]",
             )}
             onClick={(e) => e.stopPropagation()}
           >
             <div
               className={cn(
-                "contact-modal-header flex items-start justify-between gap-4 px-6 py-5 tablet:px-8",
+                "contact-modal-header flex shrink-0 items-start justify-between gap-4 px-6 py-5 tablet:px-8",
                 isYachtV6 ? "border-b border-white/10" : "border-b border-border/70",
               )}
             >
@@ -244,7 +250,14 @@ function ContactFormModal({
                     VERANDARU
                   </p>
                 )}
-                {!isYachtV6 && (
+                {isYachtV6 ? (
+                  <h2
+                    id={`${formId}-title`}
+                    className="contact-modal-title v5-type-display-md text-white"
+                  >
+                    Форма заявки
+                  </h2>
+                ) : (
                   <h2
                     id={`${formId}-title`}
                     className="contact-modal-title mt-2 font-display text-2xl font-semibold tracking-tight text-ink"
@@ -252,17 +265,11 @@ function ContactFormModal({
                     {copy.title}
                   </h2>
                 )}
-                <p
-                  id={isYachtV6 ? `${formId}-title` : undefined}
-                  className={cn(
-                    "contact-modal-subtitle leading-relaxed",
-                    isYachtV6
-                      ? "contact-modal-subtitle--v6-lead text-white"
-                      : "mt-2 font-sans text-sm text-muted",
-                  )}
-                >
-                  {formSubtitle}
-                </p>
+                {!isYachtV6 && (
+                  <p className="contact-modal-subtitle mt-2 font-sans text-sm leading-relaxed text-muted">
+                    {formSubtitle}
+                  </p>
+                )}
               </div>
               <button
                 type="button"
@@ -278,6 +285,14 @@ function ContactFormModal({
                 <CloseIcon />
               </button>
             </div>
+
+            {isYachtV6 && (
+              <div className="contact-modal-lead shrink-0 px-6 py-4 text-center tablet:px-8 tablet:py-5">
+                <p className="contact-modal-subtitle contact-modal-subtitle--v6-lead v4-display-title text-white">
+                  {formSubtitle}
+                </p>
+              </div>
+            )}
 
             <div
               className={cn(
@@ -319,7 +334,13 @@ function ContactFormModal({
                   </button>
                 </div>
               ) : (
-                <form onSubmit={handleSubmit} className="flex flex-col gap-6">
+                <form
+                  onSubmit={handleSubmit}
+                  className={cn(
+                    "flex flex-col gap-6",
+                    isYachtV6 && "contact-modal-form--yacht-v6",
+                  )}
+                >
                   <div className="grid gap-5">
                     <label className="contact-field">
                       <span className={fieldLabelClass}>Имя</span>
@@ -424,7 +445,7 @@ function ContactFormModal({
                       <span
                         className={cn(
                           "font-normal",
-                          isYachtV6 ? "text-white/40" : "text-muted",
+                          isYachtV6 ? "text-white" : "text-muted",
                         )}
                       >
                         {copy.commentOptional}

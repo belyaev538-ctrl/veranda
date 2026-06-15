@@ -147,14 +147,19 @@ export function V5PinnedRail({
     return (
       <section id={id} className="v4-panel v4-panel--dark section-pad">
         {headerBlock && (
-          <div className="container-luxury mb-8 pt-[80px] pb-[80px] text-center">
+          <div className="container-luxury mb-8 pt-[30px] pb-[30px] text-center">
             {headerBlock}
           </div>
         )}
         {labelBlock && (
           <div className="container-luxury mb-8">{labelBlock}</div>
         )}
-        <div className="v4-rail v5-content-edge flex gap-4 overflow-x-auto pb-4 pr-5 scrollbar-none snap-x snap-mandatory">
+        <div
+          className={cn(
+            "v4-rail v5-content-edge flex gap-4 overflow-x-auto pr-5 scrollbar-none snap-x snap-mandatory",
+            id === "v5-production" ? "pb-0" : "pb-4",
+          )}
+        >
           {cards.map((card) => (
             <V5PinCardView
               key={card.title}
@@ -165,7 +170,14 @@ export function V5PinnedRail({
           ))}
         </div>
         {ctaLabel && onCta && (
-          <div className="container-luxury mt-10 pt-[25px] pb-[25px] text-center">
+          <div
+            className={cn(
+              "container-luxury text-center",
+              id === "v5-production"
+                ? "mt-[50px] pb-[80px]"
+                : "mt-10 pt-[25px] pb-[25px]",
+            )}
+          >
             <V5Button onClick={() => onCta?.()}>{ctaLabel}</V5Button>
           </div>
         )}

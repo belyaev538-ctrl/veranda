@@ -3,6 +3,7 @@
 import { motion, useReducedMotion, type Variants } from "framer-motion";
 import { TextShimmer } from "@/components/motion/text-shimmer";
 import { luxuryEase, v4Reveal, viewportOnceDeep } from "@/lib/motion";
+import { useV5MotionEnabled } from "@/hooks/use-v5-motion";
 import { cn } from "@/lib/cn";
 import type { ReactNode } from "react";
 
@@ -51,8 +52,9 @@ export function V5Reveal({
   delay?: number;
 }) {
   const reduced = useReducedMotion();
+  const motionOn = useV5MotionEnabled();
 
-  if (reduced) {
+  if (reduced || !motionOn) {
     return <div className={className}>{children}</div>;
   }
 

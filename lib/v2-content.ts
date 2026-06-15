@@ -64,6 +64,6 @@ export const V2_FOOTER_LINKS = {
   work: [
     { label: "Проекты", href: "#v2-concepts" },
     { label: "Процесс", href: "#v2-pillars" },
-    { label: "Вариант 1", href: "/v6" },
+    { label: "Вариант 1", href: "/v1" },
   ],
 } as const;

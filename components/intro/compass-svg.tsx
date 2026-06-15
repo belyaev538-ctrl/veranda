@@ -103,6 +103,8 @@ export function headingDegFromPointer(
 type CompassSvgProps = {
   className?: string;
   ticksReady?: boolean;
+  /** Без framer-анимации прорисовки (мобилка hero) */
+  staticTicks?: boolean;
 };
 
 function CompassDirections() {
@@ -128,7 +130,13 @@ function CompassDirections() {
   );
 }
 
-export function CompassSvg({ className, ticksReady = true }: CompassSvgProps) {
+export function CompassSvg({
+  className,
+  ticksReady = true,
+  staticTicks = false,
+}: CompassSvgProps) {
+  const showTicks = staticTicks || ticksReady;
+
   return (
     <svg
       viewBox={`${-VIEW_PAD} ${-VIEW_PAD} ${VIEW_SIZE} ${VIEW_SIZE}`}
@@ -145,16 +153,26 @@ export function CompassSvg({ className, ticksReady = true }: CompassSvgProps) {
         stroke="rgba(255,255,255,0.18)"
         strokeWidth={1}
       />
-      <motion.circle
-        cx={CX}
-        cy={CY}
-        r={R_OUTER}
-        stroke="rgba(255,255,255,0.85)"
-        strokeWidth={1.25}
-        initial={{ pathLength: 0, opacity: 0.4 }}
-        animate={{ pathLength: ticksReady ? 1 : 0, opacity: ticksReady ? 1 : 0.4 }}
-        transition={{ duration: 1.5, ease: [0.22, 1, 0.36, 1] }}
-      />
+      {staticTicks ? (
+        <circle
+          cx={CX}
+          cy={CY}
+          r={R_OUTER}
+          stroke="rgba(255,255,255,0.85)"
+          strokeWidth={1.25}
+        />
+      ) : (
+        <motion.circle
+          cx={CX}
+          cy={CY}
+          r={R_OUTER}
+          stroke="rgba(255,255,255,0.85)"
+          strokeWidth={1.25}
+          initial={{ pathLength: 0, opacity: 0.4 }}
+          animate={{ pathLength: ticksReady ? 1 : 0, opacity: ticksReady ? 1 : 0.4 }}
+          transition={{ duration: 1.5, ease: [0.22, 1, 0.36, 1] }}
+        />
+      )}
 
       <circle
         cx={CX}
@@ -165,28 +183,41 @@ export function CompassSvg({ className, ticksReady = true }: CompassSvgProps) {
       />
 
       <g>
-        {TICKS.map((t) => (
-          <motion.line
-            key={t.key}
-            x1={t.x1}
-            y1={t.y1}
-            x2={t.x2}
-            y2={t.y2}
-            stroke={t.major ? "rgba(255,255,255,0.85)" : "rgba(255,255,255,0.35)"}
-            strokeWidth={t.major ? STROKE_BOLD : STROKE_TICK_MINOR}
-            strokeLinecap="round"
-            initial={{ pathLength: 0, opacity: 0 }}
-            animate={{
-              pathLength: ticksReady ? 1 : 0,
-              opacity: ticksReady ? 1 : 0,
-            }}
-            transition={{
-              duration: 1.5,
-              delay: t.key * 0.008,
-              ease: [0.22, 1, 0.36, 1],
-            }}
-          />
-        ))}
+        {TICKS.map((t) =>
+          staticTicks ? (
+            <line
+              key={t.key}
+              x1={t.x1}
+              y1={t.y1}
+              x2={t.x2}
+              y2={t.y2}
+              stroke={t.major ? "rgba(255,255,255,0.85)" : "rgba(255,255,255,0.35)"}
+              strokeWidth={t.major ? STROKE_BOLD : STROKE_TICK_MINOR}
+              strokeLinecap="round"
+            />
+          ) : (
+            <motion.line
+              key={t.key}
+              x1={t.x1}
+              y1={t.y1}
+              x2={t.x2}
+              y2={t.y2}
+              stroke={t.major ? "rgba(255,255,255,0.85)" : "rgba(255,255,255,0.35)"}
+              strokeWidth={t.major ? STROKE_BOLD : STROKE_TICK_MINOR}
+              strokeLinecap="round"
+              initial={{ pathLength: 0, opacity: 0 }}
+              animate={{
+                pathLength: showTicks ? 1 : 0,
+                opacity: showTicks ? 1 : 0,
+              }}
+              transition={{
+                duration: 1.5,
+                delay: t.key * 0.008,
+                ease: [0.22, 1, 0.36, 1],
+              }}
+            />
+          ),
+        )}
       </g>
 
       <line

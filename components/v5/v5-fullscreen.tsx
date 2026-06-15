@@ -23,6 +23,7 @@ import { LightSweep } from "@/components/motion/light-sweep";
 import { TextShimmer } from "@/components/motion/text-shimmer";
 import { v4LineReveal, v4Stagger, viewportOnceDeep } from "@/lib/motion";
 import { V5FullscreenText } from "@/components/v5/v5-ui";
+import { useV5MotionEnabled } from "@/hooks/use-v5-motion";
 import { useV5ScrollCover } from "@/components/v5/use-v5-scroll-cover";
 import {
   V5_SCROLL_COVER_EXIT,
@@ -281,6 +282,8 @@ export function V5FullscreenChapter({
   textBackdrop = false,
 }: V5FullscreenChapterProps) {
   const reduced = useReducedMotion();
+  const motionOn = useV5MotionEnabled();
+  const staticEntrance = reduced || !motionOn;
   const wrapShell = (child: ReactNode) => (
     <V5FullscreenText innerClassName="flex flex-col items-center">{child}</V5FullscreenText>
   );
@@ -291,15 +294,15 @@ export function V5FullscreenChapter({
     <>
       <motion.p
         className="v4-label v5-type-eyebrow text-white"
-        variants={reduced ? undefined : v4LineReveal}
+        variants={staticEntrance ? undefined : v4LineReveal}
       >
         {label}
       </motion.p>
       <motion.h2
         className="v5-chapter-title v5-type-display-xl mt-4 w-full text-center text-white"
-        variants={reduced ? undefined : v4LineReveal}
+        variants={staticEntrance ? undefined : v4LineReveal}
       >
-        {!reduced ? (
+        {!staticEntrance ? (
           <TextShimmer as="span" tone="light" className="block w-full">
             {titleContent}
           </TextShimmer>
@@ -309,9 +312,9 @@ export function V5FullscreenChapter({
       </motion.h2>
       <motion.p
         className="v4-chapter-sub v5-narrow-text mt-6"
-        variants={reduced ? undefined : v4LineReveal}
+        variants={staticEntrance ? undefined : v4LineReveal}
       >
-        {reduced ? (
+        {staticEntrance ? (
           subtitle
         ) : (
           <TextShimmer tone="light" className="inline">
@@ -322,7 +325,7 @@ export function V5FullscreenChapter({
     </>
   );
 
-  const content = reduced ? (
+  const content = staticEntrance ? (
     wrapShell(body)
   ) : (
     <motion.div
@@ -454,6 +457,8 @@ export function V5FullscreenStatement({
   textBackdrop = false,
 }: V5FullscreenStatementProps) {
   const reduced = useReducedMotion();
+  const motionOn = useV5MotionEnabled();
+  const staticEntrance = reduced || !motionOn;
   const scrollCover = useScrollCoverMotion();
   const wrapShell = (child: ReactNode) => (
     <V5FullscreenText innerClassName="flex flex-col items-center">{child}</V5FullscreenText>
@@ -473,12 +478,12 @@ export function V5FullscreenStatement({
       label={label}
       titleLines={titleLines}
       subtitle={subtitle}
-      reduced={!!reduced}
+      reduced={staticEntrance}
     />
   );
 
   const content =
-    useScrollText || reduced ? (
+    useScrollText || staticEntrance ? (
       wrapShell(body)
     ) : (
       <motion.div
