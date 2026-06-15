@@ -262,7 +262,7 @@ export function V5Custom() {
               <TextShimmer tone="light">{V5_CUSTOM.title}</TextShimmer>
             </h2>
             <p className="v4-body-light v5-custom-body mt-5">{V5_CUSTOM.body}</p>
-            <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
+            <div className="v5-custom-actions mt-8 flex flex-wrap items-center justify-center gap-4">
               <V5Button onClick={open}>{V5_CUSTOM.cta}</V5Button>
               <V5Button onClick={openCatalog}>{V5_CUSTOM.catalogCta}</V5Button>
             </div>

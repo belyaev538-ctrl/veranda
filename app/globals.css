@@ -3160,6 +3160,12 @@
   margin-inline: auto;
 }
 
+/* v5 custom — CTA-кнопки одной ширины (по длинной «Запросить каталог») */
+.v4-theme.v5-site #v5-custom .v5-custom-actions .v4-btn {
+  min-width: 13rem;
+  justify-content: center;
+}
+
 /* Custom projects — 70%+ visual */
 .v4-custom__visual {
   width: 72%;
