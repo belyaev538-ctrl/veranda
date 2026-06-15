@@ -2257,17 +2257,21 @@
   line-height: 1.35;
 }
 
-.v4-theme.v5-site #v5-production .v4-production-card__title {
-  font-weight: 700;
-}
-
-/* Заголовки карточек collections + крупные лейблы (×2 caption) */
-.v4-theme.v5-site .v5-type-card-title,
-.v4-theme.v5-site #v5-collections .v4-pin-card-title {
+.v4-theme.v5-site .v5-type-card-title {
   font-size: calc(var(--v5-type-caption) * 2);
   font-weight: 600;
   letter-spacing: 0.16em;
   line-height: 1.25;
+  text-transform: uppercase;
+  color: #fff;
+}
+
+.v4-theme.v5-site #v5-production .v4-production-card__title,
+.v4-theme.v5-site #v5-collections .v4-pin-card-title {
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  line-height: 1.35;
   text-transform: uppercase;
   color: #fff;
 }
@@ -2936,7 +2940,6 @@
   font-weight: 300;
   line-height: 1.24;
   color: rgba(255, 255, 255, 0.78);
-  white-space: pre-line;
   max-width: 22rem;
 }
 
@@ -3918,6 +3921,31 @@
   text-align: left;
 }
 
+@media (max-width: 767px) {
+  .v4-theme.v5-site #v5-areas .v5-yacht-tour__copy {
+    align-items: center;
+    text-align: center;
+  }
+
+  .v4-theme.v5-site #v5-areas .v5-yacht-tour__zone-label {
+    margin-inline: auto;
+  }
+
+  .v4-theme.v5-site #v5-areas .v5-yacht-tour__solutions {
+    width: 100%;
+    text-align: center;
+  }
+
+  .v4-theme.v5-site #v5-areas .v5-yacht-tour__solutions li {
+    padding-left: 0;
+    text-align: center;
+  }
+
+  .v4-theme.v5-site #v5-areas .v5-yacht-tour__solutions li::before {
+    content: none;
+  }
+}
+
 .v5-yacht-tour-screen + .v5-yacht-tour-screen {
   border-top: 1px solid rgba(255, 255, 255, 0.06);
 }
@@ -4298,7 +4326,10 @@
 
 .contact-modal-panel--yacht-v6 .contact-modal-title {
   margin: 0;
-  font-weight: 700;
+  font-family: var(--font-v4-serif), Georgia, "Times New Roman", serif;
+  font-size: clamp(1.25rem, 3.5vw, 1.5rem);
+  font-weight: 300;
+  line-height: var(--v5-lh-display);
   letter-spacing: -0.01em;
 }
 
@@ -4331,7 +4362,7 @@
 }
 
 .contact-modal-panel--yacht-v6 .contact-modal-close {
-  color: rgba(255, 255, 255, 0.3);
+  color: rgba(255, 255, 255, 0.4);
 }
 
 .contact-modal-panel--yacht-v6 .contact-modal-close:hover {
@@ -4492,6 +4523,42 @@
   background: transparent;
   color: #fff;
   border-color: var(--v4-accent);
+}
+
+.contact-modal-panel--yacht-v6 .contact-modal-body--yacht-v6-success {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 0;
+}
+
+.contact-modal-panel--yacht-v6 .contact-modal-success--yacht-v6 {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 0 3rem;
+}
+
+.contact-modal-panel--yacht-v6 .contact-modal-success-title--yacht-v6 {
+  margin: 0;
+  font-family: var(--font-v4-serif), Georgia, "Times New Roman", serif;
+  font-size: clamp(1.75rem, 5vw, 2.5rem);
+  font-weight: 300;
+  line-height: var(--v5-lh-display);
+  letter-spacing: -0.01em;
+}
+
+.contact-modal-panel--yacht-v6 .contact-modal-success-body--yacht-v6 {
+  margin: 1rem auto 0;
+  max-width: 22rem;
+  font-family: var(--font-v4-serif), Georgia, "Times New Roman", serif;
+  font-size: calc(var(--v5-type-body) * 1.15);
+  font-weight: 300;
+  line-height: 1.45;
+  letter-spacing: -0.01em;
 }
 
 /* Privacy policy modal — длинный текст, тот же тон что contact-modal v6 */

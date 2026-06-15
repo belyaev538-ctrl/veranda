@@ -17,8 +17,8 @@ export const CONTACT_FORM_COPY = {
     commentPlaceholder: "Модель яхты, зона на борту, пожелания",
     submit: "Отправить заявку",
     submitting: "Отправляем…",
-    successTitle: "Заявка отправлена",
-    successBody: "Мы свяжемся с вами в ближайшее время удобным способом.",
+    successTitle: "Ваша заявка отправлена",
+    successBody: "Свяжемся с вами в ближайшее время.",
   },
   catalog: {
     title: "Запросить каталог",

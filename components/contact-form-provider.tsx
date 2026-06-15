@@ -148,6 +148,13 @@ function ContactFormModal({
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+
+    const phoneCheck = validateRuPhone(phone);
+    if (!phoneCheck.valid) {
+      setError(phoneCheck.error ?? "Некорректный номер телефона.");
+      return;
+    }
+
     if (!privacyAccepted) {
       setError("Подтвердите согласие с политикой конфиденциальности.");
       return;
@@ -162,12 +169,6 @@ function ContactFormModal({
     }
     if (telegramSelected && !telegramHandle.trim()) {
       setError("Укажите никнейм или ссылку в Telegram.");
-      return;
-    }
-
-    const phoneCheck = validateRuPhone(phone);
-    if (!phoneCheck.valid) {
-      setError(phoneCheck.error ?? "Некорректный номер телефона.");
       return;
     }
 
@@ -240,8 +241,8 @@ function ContactFormModal({
           >
             <div
               className={cn(
-                "contact-modal-header flex shrink-0 items-start justify-between gap-4 px-6 py-5 tablet:px-8",
-                isYachtV6 ? "border-b border-white/10" : "border-b border-border/70",
+                "contact-modal-header flex shrink-0 justify-between gap-4 px-6 py-5 tablet:px-8",
+                isYachtV6 ? "items-center border-b border-white/10" : "items-start border-b border-border/70",
               )}
             >
               <div className={cn(isYachtV6 && "min-w-0 flex-1")}>
@@ -253,7 +254,7 @@ function ContactFormModal({
                 {isYachtV6 ? (
                   <h2
                     id={`${formId}-title`}
-                    className="contact-modal-title v5-type-display-md text-white"
+                    className="contact-modal-title contact-modal-title--v6 text-white"
                   >
                     Форма заявки
                   </h2>
@@ -278,7 +279,7 @@ function ContactFormModal({
                 className={cn(
                   "contact-modal-close flex h-10 w-10 shrink-0 items-center justify-center rounded-full transition-colors",
                   isYachtV6
-                    ? "border border-white/14 bg-white/10 text-white/30 hover:border-white/25"
+                    ? "border border-white/14 bg-white/10 text-white/40 hover:border-white/25"
                     : "border border-ink/10 bg-white text-ink/70 hover:border-ink/20 hover:text-ink",
                 )}
               >
@@ -286,7 +287,7 @@ function ContactFormModal({
               </button>
             </div>
 
-            {isYachtV6 && (
+            {isYachtV6 && !submitted && (
               <div className="contact-modal-lead shrink-0 px-6 py-4 text-center tablet:px-8 tablet:py-5">
                 <p className="contact-modal-subtitle contact-modal-subtitle--v6-lead v4-display-title text-white">
                   {formSubtitle}
@@ -298,26 +299,32 @@ function ContactFormModal({
               className={cn(
                 "contact-modal-body overflow-y-auto px-6 py-6 tablet:px-8",
                 isYachtV6 && "contact-modal-body--yacht-v6",
+                isYachtV6 && submitted && "contact-modal-body--yacht-v6-success",
               )}
             >
               {submitted ? (
-                <div className="py-8 text-center">
+                <div
+                  className={cn(
+                    "py-8 text-center",
+                    isYachtV6 && "contact-modal-success contact-modal-success--yacht-v6",
+                  )}
+                >
                   <p
                     className={cn(
-                      "contact-modal-success-title text-xl font-semibold tracking-tight",
+                      "contact-modal-success-title",
                       isYachtV6
-                        ? "v5-type-display-md text-white"
-                        : "font-display text-ink",
+                        ? "contact-modal-success-title--yacht-v6 text-white"
+                        : "text-xl font-semibold tracking-tight font-display text-ink",
                     )}
                   >
                     {copy.successTitle}
                   </p>
                   <p
                     className={cn(
-                      "mt-3 text-sm leading-relaxed",
+                      "contact-modal-success-body",
                       isYachtV6
-                        ? "v5-type-body text-white/65"
-                        : "font-sans text-muted",
+                        ? "contact-modal-success-body--yacht-v6 text-white/65"
+                        : "mt-3 text-sm leading-relaxed font-sans text-muted",
                     )}
                   >
                     {copy.successBody}
@@ -347,7 +354,6 @@ function ContactFormModal({
                       <input
                         type="text"
                         name="name"
-                        required
                         autoComplete="name"
                         value={name}
                         onChange={(e) => setName(e.target.value)}
@@ -356,12 +362,23 @@ function ContactFormModal({
                       />
                     </label>
                     <label className="contact-field">
-                      <span className={fieldLabelClass}>Телефон</span>
+                      <span className={fieldLabelClass}>
+                        Телефон{" "}
+                        <span
+                          className={cn(
+                            "font-normal normal-case tracking-normal",
+                            isYachtV6 ? "text-white/55" : "text-muted",
+                          )}
+                        >
+                          (обязательно)
+                        </span>
+                      </span>
                       <PhoneInput
                         name="phone"
                         value={phone}
                         onChange={setPhone}
                         className="contact-field-input"
+                        required
                       />
                     </label>
                   </div>
