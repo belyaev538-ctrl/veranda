@@ -2142,6 +2142,14 @@
   letter-spacing: -0.01em;
 }
 
+.v4-theme.v5-site .v5-type-yacht-title,
+.v4-theme.v5-site .v5-yacht-tour__title {
+  font-size: clamp(2.25rem, 7vw, var(--v5-type-yacht-title));
+  font-weight: 300;
+  line-height: var(--v5-lh-display);
+  letter-spacing: -0.02em;
+}
+
 @media (max-width: 767px) {
   .v4-theme.v5-site #v5-hero .v2-hero-line,
   .v4-theme.v5-site #v5-statement .v5-type-display-md,
