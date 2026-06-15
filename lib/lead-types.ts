@@ -12,6 +12,8 @@ export type LeadPayload = {
   telegramHandle?: string;
   comment?: string;
   yacht?: string;
+  /** Тип заявки: обсуждение проекта или запрос каталога */
+  requestType?: "project" | "catalog";
   /** Страница, с которой отправили (pathname) */
   page?: string;
 };

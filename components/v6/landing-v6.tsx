@@ -9,7 +9,7 @@ import { V5_IMAGES } from "@/lib/v5-content";
 
 export function LandingV6() {
   return (
-    <ContactFormProvider siteVariant="5">
+    <ContactFormProvider siteVariant="6" modalTheme="yacht-v6">
       <IntroGate heroImage={V5_IMAGES.hero} introVariant="v6">
         <div className="v4-theme v5-site v6-site">
           <V5Header />

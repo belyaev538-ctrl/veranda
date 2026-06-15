@@ -1462,6 +1462,11 @@
   color: #fff;
 }
 
+.v4-theme.v5-site .v3-header .v3-nav-link,
+.v4-theme.v5-site .v3-header .v3-menu-trigger {
+  font-size: calc(var(--v5-type-caption) + 1px);
+}
+
 .v3-nav-link {
   font-family: var(--font-montserrat), sans-serif;
   font-size: 11px;
@@ -1639,11 +1644,37 @@
   font-size: clamp(2rem, 6vw, 3.5rem);
   font-weight: 300;
   color: #fff;
-  transition: opacity 0.3s ease;
+  transition:
+    color 0.3s ease,
+    opacity 0.3s ease;
 }
 
 .v3-menu-item:hover .v3-menu-title {
   opacity: 0.75;
+}
+
+.v4-theme.v5-site .v3-menu-item:hover .v3-menu-title {
+  color: var(--v4-accent);
+  opacity: 1;
+}
+
+.v4-theme.v5-site .v3-menu-title {
+  font-size: 22px;
+  line-height: 1.3;
+  letter-spacing: 0.02em;
+}
+
+.v4-theme.v5-site .v3-menu-item {
+  padding: 0.45rem 0;
+}
+
+.v4-theme.v5-site .v3-menu .v3-menu-nav.container-luxury {
+  padding-left: max(1.25rem, calc(var(--v5-content-inset) - 30px));
+  padding-right: max(1.25rem, calc(var(--v5-content-inset) - 30px));
+}
+
+.v4-theme.v5-site.v6-site .v3-menu-title {
+  font-family: var(--font-v4-sans), system-ui, sans-serif;
 }
 
 .v3-intro-lead {
@@ -3353,6 +3384,21 @@
   color: rgba(255, 255, 255, 0.65);
 }
 
+.v4-theme.v5-site #v5-contact .v5-contact-channels-label {
+  color: #fff;
+}
+
+.v4-theme.v5-site #v5-contact .v5-contact-channels .v4-contact-link {
+  font-size: var(--v5-type-eyebrow);
+  font-weight: 300;
+  letter-spacing: 0.18em;
+  color: #fff;
+}
+
+.v4-theme.v5-site #v5-contact .v5-contact-channels .v4-contact-link:hover {
+  color: var(--v4-accent);
+}
+
 .v4-inline-lead {
   display: flex;
   flex-direction: column;
@@ -3835,7 +3881,7 @@
   }
 }
 
-/* v5 — виджет связи (Telegram / WhatsApp / телефон) */
+/* v5 — виджет связи (заявка / Telegram / WhatsApp / телефон) */
 .v4-theme.v5-site .v5-contact-fab {
   position: fixed;
   right: max(1rem, env(safe-area-inset-right, 0px));
@@ -3873,6 +3919,9 @@
   color: #fff;
   background: rgba(255, 255, 255, 0.1);
   border: 1px solid rgba(255, 255, 255, 0.14);
+  padding: 0;
+  cursor: pointer;
+  appearance: none;
   transition:
     background 0.3s ease,
     border-color 0.3s ease,
@@ -3889,6 +3938,266 @@
 .v4-theme.v5-site .v5-contact-fab__btn:focus-visible {
   outline: 2px solid var(--v4-accent);
   outline-offset: 2px;
+}
+
+.v4-theme.v5-site .v3-menu-contact-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: nowrap;
+}
+
+.v4-theme.v5-site .v5-contact-fab--menu {
+  position: static;
+  flex-direction: row;
+  align-items: center;
+  margin-left: auto;
+  opacity: 1;
+  padding: 0;
+  gap: 0;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border-radius: 0;
+}
+
+.v4-theme.v5-site .v5-contact-fab--menu .v5-menu-contact-phone {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.625rem;
+  margin-left: 0.5rem;
+  text-decoration: none;
+  color: #fff;
+  transition: color 0.3s ease;
+}
+
+.v4-theme.v5-site .v5-menu-contact-phone__number {
+  font-family: var(--font-v4-sans), system-ui, sans-serif;
+  font-size: 22px;
+  font-weight: 300;
+  line-height: 1.3;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
+.v4-theme.v5-site .v5-menu-contact-phone:hover {
+  color: var(--v4-accent);
+}
+
+.v4-theme.v5-site .v5-menu-contact-phone:hover .v5-contact-fab__btn {
+  background: var(--v4-accent);
+  border-color: var(--v4-accent);
+  transform: translateY(-1px);
+}
+
+.v4-theme.v5-site .v5-contact-fab--menu .v5-contact-fab__btn--phone {
+  margin-left: 0;
+  pointer-events: none;
+}
+
+/* v6 — тёмная модальная форма (Cormorant + Inter, как #v5-contact) */
+.contact-modal-panel--yacht-v6 {
+  --v4-accent: #0090ff;
+  --v5-type-caption: 0.6875rem;
+  --v5-type-body: 1rem;
+  border-radius: 0;
+  background: #020b1f;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow:
+    0 24px 80px rgba(2, 11, 31, 0.72),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  color: #fff;
+}
+
+.contact-modal-panel--yacht-v6 .contact-modal-subtitle--v6-lead {
+  margin: 0;
+  font-family: var(--font-v4-serif), Georgia, "Times New Roman", serif;
+  font-size: calc(var(--v5-type-body) * 2.6);
+  font-weight: 300;
+  line-height: 1.35;
+  letter-spacing: -0.01em;
+}
+
+.contact-modal-panel--yacht-v6 .contact-modal-close {
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.contact-modal-panel--yacht-v6 .contact-modal-close:hover {
+  color: rgba(255, 255, 255, 0.55);
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+.contact-modal-panel--yacht-v6 .contact-modal-body--yacht-v6,
+.contact-modal-panel--yacht-v6 .contact-modal-body--yacht-v6 .contact-field-label,
+.contact-modal-panel--yacht-v6 .contact-modal-body--yacht-v6 .contact-field-input,
+.contact-modal-panel--yacht-v6 .contact-modal-body--yacht-v6 .contact-channel-option__label,
+.contact-modal-panel--yacht-v6 .contact-modal-body--yacht-v6 .contact-modal-error,
+.contact-modal-panel--yacht-v6 .contact-modal-body--yacht-v6 .contact-consent-checkbox + span {
+  font-family: var(--font-v4-serif), Georgia, "Times New Roman", serif;
+  font-weight: 300;
+  letter-spacing: -0.01em;
+}
+
+.contact-modal-panel--yacht-v6 .contact-field-label,
+.contact-modal-panel--yacht-v6 legend.contact-field-label {
+  font-size: calc(var(--v5-type-caption) * 1.3);
+  font-weight: 300;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #fff;
+}
+
+.contact-modal-panel--yacht-v6 .contact-field-input {
+  border: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 0;
+  background: transparent;
+  padding: 0.5rem 0;
+  font-size: calc(var(--v5-type-body) * 1.3);
+  line-height: 1.35;
+  color: #fff;
+}
+
+.contact-modal-panel--yacht-v6 .contact-field-input::placeholder {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.contact-modal-panel--yacht-v6 .contact-field-input:focus {
+  border-bottom-color: var(--v4-accent);
+  box-shadow: none;
+  outline: none;
+}
+
+.contact-modal-panel--yacht-v6 .contact-channel-option {
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  padding: 0.25rem 0;
+  gap: 0.75rem;
+}
+
+.contact-modal-panel--yacht-v6 .contact-channel-option--active {
+  border: none;
+  background: transparent;
+}
+
+.contact-modal-panel--yacht-v6 .contact-channel-option__label {
+  font-size: calc(var(--v5-type-body) * 1.3);
+  line-height: 1.35;
+  color: #fff;
+}
+
+.contact-modal-panel--yacht-v6 .contact-modal-body--yacht-v6 label > span {
+  font-size: calc(11px * 1.3);
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.contact-modal-panel--yacht-v6 .contact-channel-checkbox,
+.contact-modal-panel--yacht-v6 .contact-consent-checkbox {
+  accent-color: var(--v4-accent);
+}
+
+.contact-modal-panel--yacht-v6 .contact-modal-error {
+  border-radius: 8px;
+  border: 1px solid rgba(232, 160, 160, 0.28);
+  background: rgba(232, 160, 160, 0.1);
+  color: #e8a0a0;
+}
+
+.contact-modal-panel--yacht-v6 .contact-modal-submit {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-inline: auto;
+  box-sizing: border-box;
+  min-height: 46px;
+  padding: 0 1.75rem;
+  font-family: var(--font-v4-sans), system-ui, sans-serif;
+  font-size: var(--v5-type-caption);
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #fff;
+  background: transparent;
+  border: 1px solid var(--v4-accent);
+  border-radius: 999px;
+  transition:
+    background 0.35s ease,
+    color 0.35s ease,
+    border-color 0.35s ease,
+    transform 0.35s ease;
+}
+
+.contact-modal-panel--yacht-v6 .contact-modal-submit:hover:not(:disabled) {
+  background: var(--v4-accent);
+  border-color: var(--v4-accent);
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+.contact-modal-panel--yacht-v6 .contact-modal-submit:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.contact-modal-panel--yacht-v6 .contact-modal-submit:disabled:hover {
+  background: transparent;
+  color: #fff;
+  border-color: var(--v4-accent);
+}
+
+/* Privacy policy modal — длинный текст, тот же тон что contact-modal v6 */
+.privacy-policy-modal__body {
+  scrollbar-gutter: stable;
+}
+
+.privacy-policy-content {
+  padding-bottom: 0.5rem;
+}
+
+.privacy-policy-section + .privacy-policy-section {
+  margin-top: 1.25rem;
+}
+
+.privacy-policy-section__title {
+  margin: 0 0 0.5rem;
+  font-family: var(--font-v4-serif), Georgia, "Times New Roman", serif;
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 1.35;
+  letter-spacing: 0.01em;
+}
+
+.privacy-policy-section__p {
+  margin: 0 0 0.65rem;
+  font-family: var(--font-v4-sans), system-ui, sans-serif;
+  font-size: 12px;
+  line-height: 1.65;
+}
+
+.privacy-policy-section__p:last-child {
+  margin-bottom: 0;
+}
+
+.privacy-policy-modal--yacht-v6 .privacy-policy-section__title {
+  color: #fff;
+}
+
+.privacy-policy-modal--yacht-v6 .privacy-policy-section__p {
+  color: rgba(255, 255, 255, 0.62);
+}
+
+.privacy-policy-modal:not(.privacy-policy-modal--yacht-v6) .privacy-policy-section__title {
+  color: var(--ink, #051227);
+}
+
+.privacy-policy-modal:not(.privacy-policy-modal--yacht-v6) .privacy-policy-section__p {
+  color: rgba(5, 18, 39, 0.72);
 }
 
 /* —— Variant 6: v5 layout + v4 typography (Cormorant + Inter) —— */

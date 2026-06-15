@@ -521,15 +521,24 @@ export const V5_CTA = {
 
 export const V5_NAV_MENU = [
   { numeral: "I", label: "Философия", href: "#v5-statement" },
-  { numeral: "II", label: "Пространства", href: "#v5-areas" },
-  { numeral: "III", label: "Коллекции", href: "#v5-collections" },
-  { numeral: "IV", label: "Контакт", href: "#v5-contact" },
+  { numeral: "II", label: "Производство", href: "#v5-production" },
+  { numeral: "III", label: "Пространства", href: "#v5-areas" },
+  { numeral: "IV", label: "На заказ", href: "#v5-custom" },
+  { numeral: "V", label: "Коллекции", href: "#v5-collections" },
+  { numeral: "VI", label: "Визуализация", href: "#v5-viz" },
+  { numeral: "VII", label: "Материалы", href: "#v5-materials" },
+  { numeral: "VIII", label: "Частные проекты", href: "#v5-nda" },
+  { numeral: "IX", label: "Галерея", href: "#v5-gallery" },
+  { numeral: "X", label: "Клиенты", href: "#v5-experience" },
+  { numeral: "XI", label: "FAQ", href: "#v5-faq" },
+  { numeral: "XII", label: "Контакт", href: "#v5-contact" },
 ] as const;
 
 export const V5_FOOTER_NAV = [
-  { label: "Yacht Spaces", href: "#v5-areas" },
-  { label: "Collections", href: "#v5-collections" },
-  { label: "Materials", href: "#v5-materials" },
-  { label: "Private Projects", href: "#v5-nda" },
-  { label: "Contact", href: "#v5-contact" },
+  { label: "Философия", href: "#v5-statement" },
+  { label: "Пространства", href: "#v5-areas" },
+  { label: "Коллекции", href: "#v5-collections" },
+  { label: "Материалы", href: "#v5-materials" },
+  { label: "Галерея", href: "#v5-gallery" },
+  { label: "Контакт", href: "#v5-contact" },
 ] as const;

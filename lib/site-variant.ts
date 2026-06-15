@@ -6,7 +6,7 @@ export const SITE_VARIANTS: Record<
 > = {
   "1": {
     label: "Вариант 1",
-    path: "/",
+    path: "/v6",
     branch: "variant-1",
   },
   "2": {
@@ -31,7 +31,7 @@ export const SITE_VARIANTS: Record<
   },
   "6": {
     label: "Вариант 6",
-    path: "/v6",
+    path: "/",
     branch: "variant-6",
   },
 };

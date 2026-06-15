@@ -40,6 +40,10 @@ function parseBody(body: unknown): LeadPayload | null {
     comment: trim(b.comment, 2000) || undefined,
     yacht: trim(b.yacht, 200) || undefined,
     page: trim(b.page, 300) || undefined,
+    requestType:
+      b.requestType === "catalog" || b.requestType === "project"
+        ? b.requestType
+        : undefined,
   };
 }
 

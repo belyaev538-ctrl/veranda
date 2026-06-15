@@ -66,6 +66,6 @@ export const V3_FOOTER_LINKS = {
   work: [
     { label: "Проекты", href: "#v3-concepts" },
     { label: "Процесс", href: "#v3-pillars" },
-    { label: "Вариант 1", href: "/" },
+    { label: "Вариант 1", href: "/v6" },
   ],
 } as const;

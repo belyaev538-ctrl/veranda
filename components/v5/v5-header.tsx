@@ -7,7 +7,7 @@ export function V5Header() {
       heroHref="#v5-hero"
       contactHref="#v5-contact"
       menuItems={V5_NAV_MENU}
-      otherVariant={{ label: "Вариант 3", href: "/v3" }}
+      menuContactBar
     />
   );
 }

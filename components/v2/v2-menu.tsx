@@ -65,7 +65,7 @@ export function V2Menu({ open, onClose }: V2MenuProps) {
               Обсудить проект
             </button>
             <Link
-              href="/"
+              href="/v6"
               onClick={onClose}
               className="v2-nav-link mt-6 inline-block"
             >

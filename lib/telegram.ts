@@ -31,8 +31,11 @@ function formatSubmittedAt(date = new Date()): string {
 }
 
 function formatLeadMessage(lead: LeadPayload): string {
+  const isCatalog = lead.requestType === "catalog";
   const lines = [
-    "<b>🛥 Новая заявка VERANDARU</b>",
+    isCatalog
+      ? "<b>📖 Запрос каталога VERANDARU</b>"
+      : "<b>🛥 Новая заявка VERANDARU</b>",
     `<b>Дата и время:</b> ${formatSubmittedAt()} (МСК)`,
     `<b>Источник:</b> ${escapeTelegram(getSourceLabel(lead))}`,
     ...(lead.page

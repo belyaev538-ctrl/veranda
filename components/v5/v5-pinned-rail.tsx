@@ -26,7 +26,7 @@ type V5PinnedRailProps = {
   headerSubtitle?: string | readonly string[];
   cards: readonly V5PinCard[];
   variant?: "spaces" | "gallery" | "production";
-  onCta?: () => void;
+  onCta?: (card?: V5PinCard) => void;
   ctaLabel?: string;
 };
 
@@ -166,7 +166,7 @@ export function V5PinnedRail({
         </div>
         {ctaLabel && onCta && (
           <div className="container-luxury mt-10 pt-[25px] pb-[25px] text-center">
-            <V5Button onClick={onCta}>{ctaLabel}</V5Button>
+            <V5Button onClick={() => onCta?.()}>{ctaLabel}</V5Button>
           </div>
         )}
       </section>
@@ -252,7 +252,7 @@ export function V5PinnedRail({
               variant === "production" && "relative z-[1]",
             )}
           >
-            <V5Button onClick={onCta}>{ctaLabel}</V5Button>
+            <V5Button onClick={() => onCta?.()}>{ctaLabel}</V5Button>
           </div>
         )}
       </div>
@@ -267,7 +267,7 @@ function V5PinCardView({
 }: {
   card: V5PinCard;
   variant: "spaces" | "gallery" | "production";
-  onCta?: () => void;
+  onCta?: (card?: V5PinCard) => void;
 }) {
   const cardClass =
     variant === "gallery"
@@ -315,7 +315,7 @@ function V5PinCardView({
           </>
         )}
         {card.cta && onCta && (
-          <V5Button className="v4-btn--sm mt-5" onClick={onCta}>
+          <V5Button className="v4-btn--sm mt-5" onClick={() => onCta(card)}>
             {card.cta}
           </V5Button>
         )}

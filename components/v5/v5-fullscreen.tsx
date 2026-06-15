@@ -24,6 +24,13 @@ import { TextShimmer } from "@/components/motion/text-shimmer";
 import { v4LineReveal, v4Stagger, viewportOnceDeep } from "@/lib/motion";
 import { V5FullscreenText } from "@/components/v5/v5-ui";
 import { useV5ScrollCover } from "@/components/v5/use-v5-scroll-cover";
+import {
+  V5_SCROLL_COVER_EXIT,
+  V5_SCROLL_COVER_FADE,
+  V5_SCROLL_COVER_OVERLAP,
+  V5_SCROLL_COVER_PIN,
+  V5_SCROLL_COVER_SPRING,
+} from "@/lib/v5-scroll-cover";
 import { cn } from "@/lib/cn";
 
 type ScrollCoverMotionContextValue = {
@@ -39,14 +46,14 @@ function useScrollCoverMotion() {
   return useContext(ScrollCoverMotionContext);
 }
 
-function ScrollCoverLine({
+export function ScrollCoverLine({
   progress,
   children,
   className,
   inStart,
   inEnd,
-  outStart = 0.58,
-  outEnd = 0.86,
+  outStart = V5_SCROLL_COVER_EXIT.outStart,
+  outEnd = V5_SCROLL_COVER_EXIT.outEnd,
 }: {
   progress: MotionValue<number>;
   children: ReactNode;
@@ -170,16 +177,19 @@ function V5ScrollCoverShell({
     target: ref,
     offset: ["start start", "end end"],
   });
-  const smoothProgress = useSpring(scrollYProgress, {
-    stiffness: 72,
-    damping: 24,
-    mass: 0.75,
-    restDelta: 0.0005,
-  });
+  const smoothProgress = useSpring(scrollYProgress, V5_SCROLL_COVER_SPRING);
   const motionProgress = reduced || !scrollCoverOn ? scrollYProgress : smoothProgress;
 
-  const textOpacity = useTransform(motionProgress, [0, 0.52, 0.78], [1, 1, 0]);
-  const textY = useTransform(motionProgress, [0, 0.52, 0.78], [0, 0, -56]);
+  const textOpacity = useTransform(
+    motionProgress,
+    [0, V5_SCROLL_COVER_FADE.holdEnd, V5_SCROLL_COVER_FADE.fadeEnd],
+    [1, 1, 0],
+  );
+  const textY = useTransform(
+    motionProgress,
+    [0, V5_SCROLL_COVER_FADE.holdEnd, V5_SCROLL_COVER_FADE.fadeEnd],
+    [0, 0, -56],
+  );
 
   const contentWrap = (content: ReactNode) => (
     <div
@@ -212,8 +222,8 @@ function V5ScrollCoverShell({
       id={id}
       className={cn(
         "v4-fullscreen v5-scroll-cover relative bg-[#020B1F]",
-        runway && "v5-scroll-cover-pin h-svh min-h-[520px] lg:h-[200vh] lg:min-h-[1040px]",
-        overlap && "lg:-mt-[100svh]",
+        runway && cn("v5-scroll-cover-pin h-svh min-h-[520px]", V5_SCROLL_COVER_PIN),
+        overlap && V5_SCROLL_COVER_OVERLAP,
       )}
       style={{ zIndex: stackZIndex }}
     >

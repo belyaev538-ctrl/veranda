@@ -1,16 +1,32 @@
 "use client";
 
-import { motion, useReducedMotion } from "framer-motion";
+import {
+  motion,
+  useReducedMotion,
+  useScroll,
+  useSpring,
+  useTransform,
+  type MotionValue,
+} from "framer-motion";
 import Image from "next/image";
 import { DeferredImage } from "@/components/shared/deferred-image";
-import { useState, type ReactNode } from "react";
+import { useRef, useState, type ReactNode } from "react";
 import { cn } from "@/lib/cn";
 import { useContactForm } from "@/components/contact-form-provider";
 import { Logo } from "@/components/logo";
 import {
+  ScrollCoverLine,
   V5FullscreenChapter,
   V5FullscreenStatement,
 } from "@/components/v5/v5-fullscreen";
+import { useV5ScrollCover } from "@/components/v5/use-v5-scroll-cover";
+import {
+  V5_SCROLL_COVER_EXIT,
+  V5_SCROLL_COVER_FADE,
+  V5_SCROLL_COVER_OVERLAP,
+  V5_SCROLL_COVER_PIN,
+  V5_SCROLL_COVER_SPRING,
+} from "@/lib/v5-scroll-cover";
 import { V5InlineLeadForm } from "@/components/v5/v5-inline-lead";
 import { V5PinnedRail, type V5PinCard } from "@/components/v5/v5-pinned-rail";
 import { V5YachtTour } from "@/components/v5/v5-yacht-tour";
@@ -55,40 +71,108 @@ import {
   V5_WHY,
 } from "@/lib/v5-content";
 
+function V5PhilosophyScrollBody({ progress }: { progress: MotionValue<number> }) {
+  return (
+    <>
+      <ScrollCoverLine progress={progress} inStart={0.04} inEnd={0.12}>
+        <V5Label className="v5-type-eyebrow text-white">{V5_PHILOSOPHY.label}</V5Label>
+      </ScrollCoverLine>
+      <ScrollCoverLine progress={progress} inStart={0.1} inEnd={0.22} className="mt-8">
+        <p className="v5-type-display-md text-white">
+          <TextShimmer tone="light">{V5_PHILOSOPHY.title}</TextShimmer>
+        </p>
+      </ScrollCoverLine>
+      <ScrollCoverLine progress={progress} inStart={0.24} inEnd={0.36} className="mt-8">
+        <p className="v4-chapter-sub v5-narrow-text mx-auto">
+          <TextShimmer tone="light" className="inline">
+            {V5_PHILOSOPHY.subtitle}
+          </TextShimmer>
+        </p>
+      </ScrollCoverLine>
+    </>
+  );
+}
+
 export function V5Philosophy() {
+  const ref = useRef<HTMLElement>(null);
+  const reduced = useReducedMotion();
+  const scrollCoverOn = useV5ScrollCover();
+
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start start", "end end"],
+  });
+  const smoothProgress = useSpring(scrollYProgress, V5_SCROLL_COVER_SPRING);
+  const motionActive = scrollCoverOn && !reduced;
+  const motionProgress = motionActive ? smoothProgress : scrollYProgress;
+
+  const imageScale = useTransform(motionProgress, [0, 1], [1, 1.05]);
+  const imageY = useTransform(motionProgress, [0, 1], [0, -28]);
+  const dimOverlay = useTransform(motionProgress, [0.48, 0.88], [0, 0.4]);
+  const backdropOpacity = useTransform(motionProgress, [0.55, 0.88], [0.55, 0.2]);
+
   return (
     <section
+      ref={ref}
       id="v5-statement"
-      className="v5-philosophy-pin relative min-h-svh bg-[#020B1F] lg:-mt-[100svh] lg:h-[200vh] lg:min-h-[1040px]"
+      className={cn(
+        "v5-philosophy-pin relative min-h-svh bg-[#020B1F]",
+        V5_SCROLL_COVER_OVERLAP,
+        V5_SCROLL_COVER_PIN,
+      )}
     >
       <div className="sticky top-0 h-svh min-h-[520px] overflow-hidden">
-        <DeferredImage
-          src={V5_PHILOSOPHY.image}
-          alt=""
-          fill
-          sizes="100vw"
-          className="object-cover"
-        />
-        <div className="v4-fullscreen-overlay absolute inset-0" />
-        <div className="relative z-10 flex min-h-svh items-center section-pad text-center">
-          <div
-            className="v5-text-backdrop-blur pointer-events-none absolute left-1/2 top-1/2 z-0 -translate-x-1/2 -translate-y-1/2"
+        <motion.div
+          className="absolute inset-0 will-change-transform"
+          style={motionActive ? { scale: imageScale, y: imageY } : undefined}
+        >
+          <DeferredImage
+            src={V5_PHILOSOPHY.image}
+            alt=""
+            fill
+            sizes="100vw"
+            className="object-cover"
+          />
+        </motion.div>
+        <div className="v4-fullscreen-overlay absolute inset-0 z-[1]" />
+        {motionActive ? (
+          <motion.div
+            className="pointer-events-none absolute inset-0 z-[2] bg-[#020B1F]"
+            style={{ opacity: dimOverlay }}
             aria-hidden
           />
+        ) : null}
+        <div className="relative z-10 flex min-h-svh items-center section-pad text-center">
+          {motionActive ? (
+            <motion.div
+              className="v5-text-backdrop-blur pointer-events-none absolute left-1/2 top-1/2 z-0 -translate-x-1/2 -translate-y-1/2"
+              style={{ opacity: backdropOpacity }}
+              aria-hidden
+            />
+          ) : (
+            <div
+              className="v5-text-backdrop-blur pointer-events-none absolute left-1/2 top-1/2 z-0 -translate-x-1/2 -translate-y-1/2"
+              aria-hidden
+            />
+          )}
           <div className="container-luxury relative z-[1] mx-auto max-w-3xl">
-            <V5Reveal>
-              <V5Label className="v5-type-eyebrow text-white">
-                {V5_PHILOSOPHY.label}
-              </V5Label>
-              <p className="v5-type-display-md mt-8 text-white">
-                <TextShimmer tone="light">{V5_PHILOSOPHY.title}</TextShimmer>
-              </p>
-              <p className="v4-chapter-sub v5-narrow-text mx-auto mt-8">
-                <TextShimmer tone="light" className="inline">
-                  {V5_PHILOSOPHY.subtitle}
-                </TextShimmer>
-              </p>
-            </V5Reveal>
+            {motionActive ? (
+              <V5PhilosophyScrollBody progress={motionProgress} />
+            ) : (
+              <V5Reveal>
+                <V5Label className="v5-type-eyebrow text-white">
+                  {V5_PHILOSOPHY.label}
+                </V5Label>
+                <p className="v5-type-display-md mt-8 text-white">
+                  <TextShimmer tone="light">{V5_PHILOSOPHY.title}</TextShimmer>
+                </p>
+                <p className="v4-chapter-sub v5-narrow-text mx-auto mt-8">
+                  <TextShimmer tone="light" className="inline">
+                    {V5_PHILOSOPHY.subtitle}
+                  </TextShimmer>
+                </p>
+              </V5Reveal>
+            )}
           </div>
         </div>
       </div>
@@ -148,7 +232,7 @@ export function V5Production() {
       headerSubtitle={V5_PRODUCTION.subtitle}
       cards={V5_PRODUCTION_CARDS}
       variant="production"
-      onCta={open}
+      onCta={() => open()}
       ctaLabel={V5_PRODUCTION.cta}
     />
   );
@@ -160,6 +244,7 @@ export function V5YachtTourSection() {
 
 export function V5Custom() {
   const { open } = useContactForm();
+  const openCatalog = () => open({ intent: "catalog" });
   return (
     <section id="v5-custom" className="v4-custom relative min-h-svh overflow-hidden">
       <div className="v4-custom__visual absolute inset-0">
@@ -182,7 +267,7 @@ export function V5Custom() {
             <p className="v4-body-light v5-custom-body mt-5">{V5_CUSTOM.body}</p>
             <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
               <V5Button onClick={open}>{V5_CUSTOM.cta}</V5Button>
-              <V5Button onClick={open}>{V5_CUSTOM.catalogCta}</V5Button>
+              <V5Button onClick={openCatalog}>{V5_CUSTOM.catalogCta}</V5Button>
             </div>
           </V5FullscreenText>
         </V5Reveal>
@@ -238,7 +323,12 @@ export function V5Collections() {
       labelSubtitle={V5_COLLECTIONS.subtitle}
       cards={cards}
       variant="gallery"
-      onCta={open}
+      onCta={(card) =>
+        open({
+          intent: "catalog",
+          catalogCollection: card?.title,
+        })
+      }
     />
   );
 }
@@ -630,7 +720,9 @@ export function V5Contact() {
             </div>
 
             <div className="mt-10">
-              <p className="v5-type-eyebrow text-white/70">{V5_CTA.channelsLabel}</p>
+              <p className="v5-contact-channels-label v5-type-eyebrow text-white">
+                {V5_CTA.channelsLabel}
+              </p>
               <div className="v4-contact-channels v5-contact-channels mt-4">
                 <a href={CONTACTS.telegram} className="v4-contact-link" target="_blank" rel="noopener noreferrer">
                   Telegram

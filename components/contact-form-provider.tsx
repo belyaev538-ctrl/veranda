@@ -9,22 +9,26 @@ import {
   useId,
   useState,
   type FormEvent,
+  type MouseEvent as ReactMouseEvent,
   type ReactNode,
 } from "react";
-import {
-  CONTACT_CHANNELS,
-  LEGAL,
-  type ContactChannelId,
-} from "@/lib/constants";
+import { CONTACT_CHANNELS, type ContactChannelId } from "@/lib/constants";
+import { PrivacyPolicyLink } from "@/components/shared/privacy-policy-provider";
 import { luxuryEase } from "@/lib/motion";
 import { PhoneInput } from "@/components/phone-input";
 import { submitLead } from "@/lib/submit-lead";
 import { validateRuPhone } from "@/lib/phone";
 import type { SiteVariant } from "@/lib/site-variant";
+import {
+  CONTACT_FORM_COPY,
+  getCatalogFormSubtitle,
+  type ContactFormOpenOptions,
+} from "@/lib/contact-form-presets";
 import { cn } from "@/lib/cn";
+import { PrivacyPolicyProvider } from "@/components/shared/privacy-policy-provider";
 
 type ContactFormContextValue = {
-  open: () => void;
+  open: (options?: ContactFormOpenOptions | ReactMouseEvent<HTMLElement>) => void;
   close: () => void;
   isOpen: boolean;
 };
@@ -68,11 +72,23 @@ function ContactFormModal({
   open,
   onClose,
   siteVariant,
+  modalTheme,
+  openOptions,
 }: {
   open: boolean;
   onClose: () => void;
   siteVariant: SiteVariant;
+  modalTheme: ContactModalTheme;
+  openOptions: ContactFormOpenOptions;
 }) {
+  const isYachtV6 = modalTheme === "yacht-v6";
+  const fieldLabelClass = cn("contact-field-label", isYachtV6 && "text-white");
+  const intent = openOptions.intent ?? "project";
+  const isCatalog = intent === "catalog";
+  const copy = CONTACT_FORM_COPY[intent];
+  const formSubtitle = isCatalog
+    ? getCatalogFormSubtitle(openOptions.catalogCollection)
+    : copy.subtitle;
   const formId = useId();
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
@@ -102,6 +118,13 @@ function ContactFormModal({
     };
   }, [open]);
 
+  useEffect(() => {
+    if (!open) return;
+    if (isCatalog && openOptions.catalogCollection) {
+      setComment(openOptions.catalogCollection);
+    }
+  }, [open, isCatalog, openOptions.catalogCollection]);
+
   const toggleChannel = (id: ContactChannelId) => {
     setChannels((prev) =>
       prev.includes(id) ? prev.filter((c) => c !== id) : [...prev, id],
@@ -130,7 +153,11 @@ function ContactFormModal({
       return;
     }
     if (channels.length === 0) {
-      setError("Выберите хотя бы один удобный канал для связи.");
+      setError(
+        isCatalog
+          ? "Выберите, куда отправить каталог."
+          : "Выберите хотя бы один удобный канал для связи.",
+      );
       return;
     }
     if (telegramSelected && !telegramHandle.trim()) {
@@ -155,6 +182,7 @@ function ContactFormModal({
       channels,
       telegramHandle: telegramSelected ? telegramHandle.trim() : undefined,
       comment: comment.trim() || undefined,
+      requestType: intent,
     });
 
     setSubmitting(false);
@@ -183,7 +211,10 @@ function ContactFormModal({
           <button
             type="button"
             aria-label="Закрыть"
-            className="absolute inset-0 bg-[#051227]/55 backdrop-blur-md"
+            className={cn(
+              "absolute inset-0 backdrop-blur-md",
+              isYachtV6 ? "bg-[#020B1F]/72" : "bg-[#051227]/55",
+            )}
             onClick={resetAndClose}
           />
 
@@ -192,47 +223,97 @@ function ContactFormModal({
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 16, scale: 0.98 }}
             transition={{ duration: 0.45, ease: luxuryEase }}
-            className="contact-modal-panel relative z-[1] flex max-h-[min(92vh,820px)] w-full max-w-[520px] flex-col overflow-hidden rounded-luxury bg-[#FAF8F5] shadow-[0_24px_80px_rgba(5,18,39,0.28)]"
+            className={cn(
+              "contact-modal-panel relative z-[1] flex max-h-[min(92vh,820px)] w-full max-w-[520px] flex-col overflow-hidden",
+              isYachtV6 ? "rounded-none" : "rounded-luxury",
+              isYachtV6
+                ? "contact-modal-panel--yacht-v6"
+                : "bg-[#FAF8F5] shadow-[0_24px_80px_rgba(5,18,39,0.28)]",
+            )}
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="flex items-start justify-between gap-4 border-b border-border/70 px-6 py-5 tablet:px-8">
-              <div>
-                <p className="font-sans text-[10px] font-medium tracking-[0.2em] text-green">
-                  VERANDARU
-                </p>
-                <h2
-                  id={`${formId}-title`}
-                  className="mt-2 font-display text-2xl font-semibold tracking-tight text-ink"
+            <div
+              className={cn(
+                "contact-modal-header flex items-start justify-between gap-4 px-6 py-5 tablet:px-8",
+                isYachtV6 ? "border-b border-white/10" : "border-b border-border/70",
+              )}
+            >
+              <div className={cn(isYachtV6 && "min-w-0 flex-1")}>
+                {!isYachtV6 && (
+                  <p className="contact-modal-eyebrow font-sans text-[10px] font-medium tracking-[0.2em] text-green">
+                    VERANDARU
+                  </p>
+                )}
+                {!isYachtV6 && (
+                  <h2
+                    id={`${formId}-title`}
+                    className="contact-modal-title mt-2 font-display text-2xl font-semibold tracking-tight text-ink"
+                  >
+                    {copy.title}
+                  </h2>
+                )}
+                <p
+                  id={isYachtV6 ? `${formId}-title` : undefined}
+                  className={cn(
+                    "contact-modal-subtitle leading-relaxed",
+                    isYachtV6
+                      ? "contact-modal-subtitle--v6-lead text-white"
+                      : "mt-2 font-sans text-sm text-muted",
+                  )}
                 >
-                  Обсудить проект яхты
-                </h2>
-                <p className="mt-2 font-sans text-sm leading-relaxed text-muted">
-                  Оставьте контакты — перезвоним или напишем в выбранном мессенджере.
+                  {formSubtitle}
                 </p>
               </div>
               <button
                 type="button"
                 aria-label="Закрыть форму"
                 onClick={resetAndClose}
-                className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-ink/10 bg-white text-ink/70 transition-colors hover:border-ink/20 hover:text-ink"
+                className={cn(
+                  "contact-modal-close flex h-10 w-10 shrink-0 items-center justify-center rounded-full transition-colors",
+                  isYachtV6
+                    ? "border border-white/14 bg-white/10 text-white/30 hover:border-white/25"
+                    : "border border-ink/10 bg-white text-ink/70 hover:border-ink/20 hover:text-ink",
+                )}
               >
                 <CloseIcon />
               </button>
             </div>
 
-            <div className="overflow-y-auto px-6 py-6 tablet:px-8">
+            <div
+              className={cn(
+                "contact-modal-body overflow-y-auto px-6 py-6 tablet:px-8",
+                isYachtV6 && "contact-modal-body--yacht-v6",
+              )}
+            >
               {submitted ? (
                 <div className="py-8 text-center">
-                  <p className="font-display text-xl font-semibold text-ink">
-                    Заявка отправлена
+                  <p
+                    className={cn(
+                      "contact-modal-success-title text-xl font-semibold tracking-tight",
+                      isYachtV6
+                        ? "v5-type-display-md text-white"
+                        : "font-display text-ink",
+                    )}
+                  >
+                    {copy.successTitle}
                   </p>
-                  <p className="mt-3 font-sans text-sm leading-relaxed text-muted">
-                    Мы свяжемся с вами в ближайшее время удобным способом.
+                  <p
+                    className={cn(
+                      "mt-3 text-sm leading-relaxed",
+                      isYachtV6
+                        ? "v5-type-body text-white/65"
+                        : "font-sans text-muted",
+                    )}
+                  >
+                    {copy.successBody}
                   </p>
                   <button
                     type="button"
                     onClick={resetAndClose}
-                    className="btn-primary mt-8 px-10"
+                    className={cn(
+                      "mt-8",
+                      isYachtV6 ? "v4-btn contact-modal-submit" : "btn-primary px-10",
+                    )}
                   >
                     Закрыть
                   </button>
@@ -241,7 +322,7 @@ function ContactFormModal({
                 <form onSubmit={handleSubmit} className="flex flex-col gap-6">
                   <div className="grid gap-5">
                     <label className="contact-field">
-                      <span className="contact-field-label">Имя</span>
+                      <span className={fieldLabelClass}>Имя</span>
                       <input
                         type="text"
                         name="name"
@@ -254,7 +335,7 @@ function ContactFormModal({
                       />
                     </label>
                     <label className="contact-field">
-                      <span className="contact-field-label">Телефон</span>
+                      <span className={fieldLabelClass}>Телефон</span>
                       <PhoneInput
                         name="phone"
                         value={phone}
@@ -265,8 +346,8 @@ function ContactFormModal({
                   </div>
 
                   <fieldset className="border-0 p-0">
-                    <legend className="contact-field-label mb-3">
-                      Удобный канал для связи
+                    <legend className={cn(fieldLabelClass, "mb-3")}>
+                      {copy.channelsLegend}
                     </legend>
                     <div className="flex flex-col gap-2">
                       {CONTACT_CHANNELS.map((channel) => {
@@ -285,12 +366,23 @@ function ContactFormModal({
                                 checked={checked}
                                 onChange={() => toggleChannel(channel.id)}
                               />
-                              <span className="font-sans text-sm font-medium text-ink">
+                              <span
+                                className={cn(
+                                  isYachtV6
+                                    ? "contact-channel-option__label"
+                                    : "text-sm font-medium font-sans text-ink",
+                                )}
+                              >
                                 {channel.label}
                               </span>
                             </label>
                             {checked && channel.phoneHint && (
-                              <p className="mt-2 pl-9 font-sans text-xs leading-relaxed text-muted">
+                              <p
+                                className={cn(
+                                  "mt-2 pl-9 text-xs leading-relaxed",
+                                  isYachtV6 ? "font-sans text-white/50" : "font-sans text-muted",
+                                )}
+                              >
                                 {channel.phoneHint}
                               </p>
                             )}
@@ -310,7 +402,7 @@ function ContactFormModal({
                         transition={{ duration: 0.3, ease: luxuryEase }}
                         className="contact-field overflow-hidden"
                       >
-                        <span className="contact-field-label">
+                        <span className={fieldLabelClass}>
                           Никнейм в Telegram
                         </span>
                         <input
@@ -327,22 +419,34 @@ function ContactFormModal({
                   </AnimatePresence>
 
                   <label className="contact-field">
-                    <span className="contact-field-label">
-                      Комментарий{" "}
-                      <span className="font-normal text-muted">(необязательно)</span>
+                    <span className={fieldLabelClass}>
+                      {copy.commentLabel}{" "}
+                      <span
+                        className={cn(
+                          "font-normal",
+                          isYachtV6 ? "text-white/40" : "text-muted",
+                        )}
+                      >
+                        {copy.commentOptional}
+                      </span>
                     </span>
                     <textarea
                       name="comment"
                       rows={3}
                       value={comment}
                       onChange={(e) => setComment(e.target.value)}
-                      placeholder="Модель яхты, зона на борту, пожелания"
+                      placeholder={copy.commentPlaceholder}
                       className="contact-field-input resize-none"
                     />
                   </label>
 
                   {error && (
-                    <p className="rounded-brand bg-red-50 px-3 py-2 font-sans text-xs text-red-800">
+                    <p
+                      className={cn(
+                        "contact-modal-error px-3 py-2 text-xs",
+                        isYachtV6 ? "font-sans" : "rounded-brand bg-red-50 font-sans text-red-800",
+                      )}
+                    >
                       {error}
                     </p>
                   )}
@@ -358,26 +462,36 @@ function ContactFormModal({
                       }}
                       className="contact-consent-checkbox mt-0.5"
                     />
-                    <span className="font-sans text-[11px] leading-relaxed text-muted">
+                    <span
+                      className={cn(
+                        "text-[11px] leading-relaxed",
+                        isYachtV6 ? "font-sans text-white/55" : "font-sans text-muted",
+                      )}
+                    >
                       Отправляя заявку, я соглашаюсь с{" "}
-                      <a
-                        href={LEGAL.privacyPolicyUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-ink/80 underline decoration-ink/25 underline-offset-2 transition-colors hover:text-green"
-                      >
-                        политикой конфиденциальности
-                      </a>
+                      <PrivacyPolicyLink
+                        className={cn(
+                          "underline underline-offset-2 transition-colors",
+                          isYachtV6
+                            ? "text-white/80 decoration-white/25 hover:text-[var(--v4-accent)]"
+                            : "text-ink/80 decoration-ink/25 hover:text-green",
+                        )}
+                      />
                       .
                     </span>
                   </label>
 
                   <button
                     type="submit"
-                    className="btn-primary w-full disabled:cursor-not-allowed disabled:opacity-60"
+                    className={cn(
+                      "disabled:cursor-not-allowed disabled:opacity-60",
+                      isYachtV6
+                        ? "v4-btn contact-modal-submit"
+                        : "btn-primary w-full",
+                    )}
                     disabled={submitting}
                   >
-                    {submitting ? "Отправляем…" : "Отправить заявку"}
+                    {submitting ? copy.submitting : copy.submit}
                   </button>
                 </form>
               )}
@@ -389,28 +503,56 @@ function ContactFormModal({
   );
 }
 
+export type ContactModalTheme = "light" | "yacht-v6";
+export type { ContactFormOpenOptions } from "@/lib/contact-form-presets";
+
 export function ContactFormProvider({
   children,
   siteVariant = "1",
+  modalTheme = "light",
 }: {
   children: ReactNode;
   siteVariant?: SiteVariant;
+  modalTheme?: ContactModalTheme;
 }) {
   const [isOpen, setIsOpen] = useState(false);
+  const [openOptions, setOpenOptions] = useState<ContactFormOpenOptions>({
+    intent: "project",
+  });
 
-  const open = useCallback(() => setIsOpen(true), []);
+  const open = useCallback(
+    (options?: ContactFormOpenOptions | ReactMouseEvent<HTMLElement>) => {
+      const resolved: ContactFormOpenOptions =
+        options && typeof options === "object" && "nativeEvent" in options
+          ? { intent: "project" }
+          : {
+              intent: (options as ContactFormOpenOptions | undefined)?.intent ?? "project",
+              catalogCollection: (options as ContactFormOpenOptions | undefined)
+                ?.catalogCollection,
+            };
+      setOpenOptions(resolved);
+      setIsOpen(true);
+    },
+    [],
+  );
   const close = useCallback(() => setIsOpen(false), []);
 
+  const privacyTheme = modalTheme === "yacht-v6" ? "yacht-v6" : "light";
+
   return (
-    <SiteVariantContext.Provider value={siteVariant}>
-      <ContactFormContext.Provider value={{ open, close, isOpen }}>
-        {children}
-        <ContactFormModal
-          open={isOpen}
-          onClose={close}
-          siteVariant={siteVariant}
-        />
-      </ContactFormContext.Provider>
-    </SiteVariantContext.Provider>
+    <PrivacyPolicyProvider theme={privacyTheme}>
+      <SiteVariantContext.Provider value={siteVariant}>
+        <ContactFormContext.Provider value={{ open, close, isOpen }}>
+          {children}
+          <ContactFormModal
+            open={isOpen}
+            onClose={close}
+            siteVariant={siteVariant}
+            modalTheme={modalTheme}
+            openOptions={openOptions}
+          />
+        </ContactFormContext.Provider>
+      </SiteVariantContext.Provider>
+    </PrivacyPolicyProvider>
   );
 }

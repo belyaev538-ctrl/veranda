@@ -13,6 +13,7 @@ type YachtNavHeaderProps = {
   contactHref: string;
   menuItems: readonly YachtNavMenuItem[];
   otherVariant?: { label: string; href: string };
+  menuContactBar?: boolean;
 };
 
 /** Шапка v3: Меню — логотип — Контакты */
@@ -21,6 +22,7 @@ export function YachtNavHeader({
   contactHref,
   menuItems,
   otherVariant,
+  menuContactBar,
 }: YachtNavHeaderProps) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -81,6 +83,7 @@ export function YachtNavHeader({
         onClose={() => setMenuOpen(false)}
         items={menuItems}
         otherVariant={otherVariant}
+        menuContactBar={menuContactBar}
       />
     </>
   );

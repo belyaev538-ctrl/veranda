@@ -1,6 +1,6 @@
-import { LandingV6 } from "@/components/v6/landing-v6";
+import { LandingPage } from "@/components/landing-page";
 
-/** VERANDARU Yacht Edition — /v6 (v5 layout + v4 fonts) */
-export default function V6Page() {
-  return <LandingV6 />;
+/** Архив: Вариант 1 — /v6 */
+export default function V1ArchivePage() {
+  return <LandingPage variant="1" />;
 }
