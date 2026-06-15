@@ -1653,8 +1653,7 @@
   background: currentColor;
 }
 
-.v3-menu-label,
-.v3-menu-close {
+.v3-menu-label {
   font-family: var(--font-montserrat), sans-serif;
   font-size: 11px;
   font-weight: 300;
@@ -1663,8 +1662,25 @@
   color: rgba(255, 255, 255, 0.7);
 }
 
+.v3-menu-close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.4);
+  transition:
+    color 0.35s ease,
+    border-color 0.35s ease;
+}
+
 .v3-menu-close:hover {
-  color: #fff;
+  color: rgba(255, 255, 255, 0.55);
+  border-color: rgba(255, 255, 255, 0.25);
 }
 
 .v3-menu-item {
@@ -2229,7 +2245,6 @@
 .v4-theme.v5-site .v3-nav-link,
 .v4-theme.v5-site .v3-menu-trigger,
 .v4-theme.v5-site .v3-menu-label,
-.v4-theme.v5-site .v3-menu-close,
 .v4-theme.v5-site .v3-menu-numeral,
 .v4-theme.v5-site .v2-scroll-hint,
 .v4-theme.v5-site .v4-inline-lead__label,
@@ -3823,7 +3838,7 @@
   line-height: 1.2;
   letter-spacing: 0.12em;
   white-space: nowrap;
-  background: #0090ff;
+  background: rgba(0, 144, 255, 0.5);
   color: #fff;
 }
 
@@ -4340,6 +4355,7 @@
   font-weight: 700;
   line-height: var(--v5-lh-display);
   letter-spacing: -0.01em;
+  white-space: pre-line;
 }
 
 @media (max-width: 767px) {
@@ -4363,6 +4379,7 @@
 
 .contact-modal-panel--yacht-v6 .contact-modal-close {
   color: rgba(255, 255, 255, 0.4);
+  border-color: transparent;
 }
 
 .contact-modal-panel--yacht-v6 .contact-modal-close:hover {
@@ -4711,7 +4728,6 @@
   .v3-menu-trigger,
   .v3-menu-trigger__label,
   .v3-menu-label,
-  .v3-menu-close,
   .v3-menu-numeral,
   .v4-contact-link,
   .v4-inline-lead__label,

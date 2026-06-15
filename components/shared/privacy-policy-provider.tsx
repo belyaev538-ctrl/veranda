@@ -167,7 +167,7 @@ function PrivacyPolicyModal({
                 className={cn(
                   "contact-modal-close flex h-10 w-10 shrink-0 items-center justify-center rounded-full transition-colors",
                   isYachtV6
-                    ? "border border-white/14 bg-white/10 text-white/80 hover:border-white/25 hover:text-white"
+                    ? "border border-transparent bg-white/10 text-white/80 hover:border-white/25 hover:text-white"
                     : "border border-ink/10 bg-white text-ink/70 hover:border-ink/20 hover:text-ink",
                 )}
               >

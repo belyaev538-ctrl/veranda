@@ -279,7 +279,7 @@ function ContactFormModal({
                 className={cn(
                   "contact-modal-close flex h-10 w-10 shrink-0 items-center justify-center rounded-full transition-colors",
                   isYachtV6
-                    ? "border border-white/14 bg-white/10 text-white/40 hover:border-white/25"
+                    ? "border border-transparent bg-white/10 text-white/40 hover:border-white/25"
                     : "border border-ink/10 bg-white text-ink/70 hover:border-ink/20 hover:text-ink",
                 )}
               >
@@ -489,7 +489,7 @@ function ContactFormModal({
                     </p>
                   )}
 
-                  <label className="flex cursor-pointer items-start gap-3">
+                  <label className="flex cursor-pointer items-center gap-3">
                     <input
                       type="checkbox"
                       required
@@ -498,7 +498,7 @@ function ContactFormModal({
                         setPrivacyAccepted(e.target.checked);
                         setError(null);
                       }}
-                      className="contact-consent-checkbox mt-0.5"
+                      className="contact-consent-checkbox"
                     />
                     <span
                       className={cn(
