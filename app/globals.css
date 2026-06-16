@@ -1063,6 +1063,11 @@
   margin-top: 1rem;
 }
 
+.v4-theme.v5-site #v5-hero .v2-scroll-marker {
+  width: auto;
+  height: auto;
+}
+
 .v4-theme.v5-site #v5-hero .v2-scroll-marker__line {
   background: rgba(255, 255, 255, 0.35);
 }
@@ -1162,6 +1167,13 @@
   height: 2.5rem;
 }
 
+.v2-scroll-marker__arrow {
+  display: block;
+  width: 16px;
+  height: 3.75rem;
+  flex-shrink: 0;
+}
+
 .v2-scroll-marker__line {
   display: block;
   width: 1px;
@@ -1174,6 +1186,10 @@
 @media (min-width: 768px) {
   .v2-scroll-marker {
     height: 3rem;
+  }
+
+  .v2-scroll-marker__arrow {
+    height: 3.75rem;
   }
 
   .v2-scroll-marker__line {
@@ -2509,6 +2525,15 @@
   z-index: 1;
 }
 
+.v4-theme.v5-site #v5-statement .v4-fullscreen-overlay {
+  background: linear-gradient(
+    to bottom,
+    rgba(2, 11, 31, 0.12) 0%,
+    rgba(2, 11, 31, 0.08) 45%,
+    rgba(2, 11, 31, 0.48) 100%
+  );
+}
+
 .v4-theme.v5-site #v5-statement-visual {
   position: relative;
   z-index: 6;
@@ -3073,6 +3098,10 @@
 
 .v4-theme.v5-site #v5-materials .v5-type-eyebrow {
   color: #1e1e1e;
+}
+
+.v4-theme.v5-site #v5-materials .v4-material-tile .v5-type-eyebrow {
+  font-weight: 700;
 }
 
 .v4-theme.v5-site .v4-panel--milk .v5-type-body,

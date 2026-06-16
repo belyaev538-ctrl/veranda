@@ -105,7 +105,7 @@ export function V5Philosophy() {
 
   const imageScale = useTransform(motionProgress, [0, 1], [1, 1.05]);
   const imageY = useTransform(motionProgress, [0, 1], [0, -28]);
-  const dimOverlay = useTransform(motionProgress, [0.48, 0.88], [0, 0.4]);
+  const dimOverlay = useTransform(motionProgress, [0.48, 0.88], [0, 0.22]);
   const backdropOpacity = useTransform(motionProgress, [0.55, 0.88], [0.55, 0.2]);
 
   return (
@@ -127,6 +127,7 @@ export function V5Philosophy() {
             src={V5_PHILOSOPHY.image}
             alt=""
             fill
+            priority
             sizes="100vw"
             className="object-cover"
           />

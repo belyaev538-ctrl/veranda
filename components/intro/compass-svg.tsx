@@ -35,31 +35,37 @@ const ARROW_HEAD_W_N = 8;
 const ARROW_HEAD_W_S = 6.5;
 
 /** Простая стрелка: стержень + треугольный наконечник */
-function CompassNeedle({
+export function CompassNeedle({
   tipY,
   headY,
   headWidth,
   color,
+  cx = CX,
+  cy = CY,
+  strokeWidth = STROKE_BOLD,
 }: {
   tipY: number;
   headY: number;
   headWidth: number;
   color: string;
+  cx?: number;
+  cy?: number;
+  strokeWidth?: number;
 }) {
   const half = headWidth / 2;
   return (
     <g>
       <line
-        x1={CX}
-        y1={CY}
-        x2={CX}
+        x1={cx}
+        y1={cy}
+        x2={cx}
         y2={headY}
         stroke={color}
-        strokeWidth={STROKE_BOLD}
+        strokeWidth={strokeWidth}
         strokeLinecap="butt"
       />
       <polygon
-        points={`${CX},${tipY} ${CX - half},${headY} ${CX + half},${headY}`}
+        points={`${cx},${tipY} ${cx - half},${headY} ${cx + half},${headY}`}
         fill={color}
       />
     </g>

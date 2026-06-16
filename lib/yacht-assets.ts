@@ -12,7 +12,7 @@ export const YACHT_HERO_V5 = "/images/hero-v5.png";
 export const YACHT_STATEMENT_V5 = "/images/statement-visual.png";
 
 /** Молочная/философия панель #v5-statement */
-export const YACHT_PHILOSOPHY_V5 = "/images/philosophy.png";
+export const YACHT_PHILOSOPHY_V5 = "/images/philosophy-statement.png";
 
 /** Visual chapter Made for the Sea #v5-made-sea */
 export const YACHT_MADE_SEA_V5 = "/images/made-sea.png";
@@ -24,7 +24,7 @@ export const YACHT_OUTDOOR_LIVING_V5 = "/images/outdoor-living.png";
 export const YACHT_DETAIL_V5 = "/images/detail.png";
 
 /** Yacht zone Foredeck — коллекция Лагун */
-export const YACHT_LAGOON_FOREDECK = "/images/lagoon-foredeck.webp";
+export const YACHT_LAGOON_FOREDECK = "/images/zone-foredeck.png";
 
 /** Yacht zone Aft Deck — коллекция Лагун */
 export const YACHT_LAGOON_AFT_DECK = "/images/lagoon-aft-deck.webp";
@@ -69,8 +69,8 @@ export const YACHT_CONTACT_V5 = "/images/contact.png";
 /** Gallery #v5-gallery */
 export const YACHT_GALLERY_BRIZ_06 = "/images/gallery-briz-06.webp";
 export const YACHT_GALLERY_BRIZ_03 = "/images/gallery-briz-03.webp";
-export const YACHT_GALLERY_BRIZ_01 = "/images/gallery-briz-01.webp";
-export const YACHT_GALLERY_GRID_01 = "/images/gallery-grid-01.webp";
+export const YACHT_GALLERY_BRIZ_01 = "/images/gallery-briz-01.png";
+export const YACHT_GALLERY_GRID_01 = "/images/gallery-grid-01.png";
 export const YACHT_GALLERY_GRID_10 = "/images/gallery-grid-10.webp";
 export const YACHT_GALLERY_JARDIN_01 = "/images/gallery-jardin-01.webp";
 export const YACHT_GALLERY_JARDIN_09 = "/images/gallery-jardin-09.webp";
@@ -105,7 +105,7 @@ export const YACHT_ZONE_SUNDECK = "/images/zone-sundeck.png";
 export const YACHT_LAGOON_DINING = "/images/lagoon-dining.webp";
 
 /** Yacht zone Private Lounge — коллекция Лагун */
-export const YACHT_LAGOON_LOUNGE = "/images/lagoon-lounge.webp";
+export const YACHT_LAGOON_LOUNGE = "/images/zone-lounge.png";
 
 /** Пул для расстановки по секциям (дубли при нехватке) */
 export const YACHT_POOL = [

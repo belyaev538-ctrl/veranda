@@ -17,6 +17,8 @@ export function V6Hero() {
       heroImageLoader
       heroCompassCenter
       heroMobileOffer={V5_HERO_MOBILE_OFFER}
+      showScrollHintLabel={false}
+      scrollMarker="arrow"
       onHeroLoaderDismissed={() => markIntroSeen("v6")}
     />
   );

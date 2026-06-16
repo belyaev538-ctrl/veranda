@@ -12,6 +12,7 @@ import { useEffect, useRef, useState } from "react";
 import { useReducedMotion } from "framer-motion";
 import { HeroCompassCoords } from "@/components/hero/hero-compass-coords";
 import { CompassLoaderOverlay } from "@/components/intro/compass-loader-overlay";
+import { CompassNeedle } from "@/components/intro/compass-svg";
 import { LightSweep } from "@/components/motion/light-sweep";
 import { useIntro } from "@/components/intro/intro-context";
 import { useIsMobile } from "@/hooks/use-media";
@@ -22,6 +23,7 @@ import {
 } from "@/lib/v2-content";
 import { isHeroImageLoaded, markHeroImageLoaded } from "@/lib/hero-image-cache";
 import { luxuryEase } from "@/lib/motion";
+import { cn } from "@/lib/cn";
 
 const HERO_COMPASS_MIN_MS = 2400;
 
@@ -59,6 +61,10 @@ type V2HeroProps = {
   heroCompassCenter?: boolean;
   /** Статичный оффер на мобилке вместо scroll-смены строк */
   heroMobileOffer?: string;
+  /** Подпись «Листайте вниз» под заголовком */
+  showScrollHintLabel?: boolean;
+  /** Маркер скролла: линия или стрелка как на компасе */
+  scrollMarker?: "line" | "arrow";
   onHeroLoaderDismissed?: () => void;
 };
 
@@ -81,6 +87,8 @@ export function V2Hero({
   heroScrollHeight = "300vh",
   heroCompassCenter = false,
   heroMobileOffer,
+  showScrollHintLabel = true,
+  scrollMarker = "line",
   onHeroLoaderDismissed,
 }: V2HeroProps) {
   const reducedMotion = useReducedMotion();
@@ -228,20 +236,43 @@ export function V2Hero({
           ))}
       </div>
 
-      <motion.p
-        className="v2-scroll-hint mt-6 tablet:mt-8"
-        style={{ opacity: useMobileStaticHero ? 1 : scrollHintOpacity }}
-      >
-        Листайте вниз
-      </motion.p>
+      {showScrollHintLabel && (
+        <motion.p
+          className="v2-scroll-hint mt-6 tablet:mt-8"
+          style={{ opacity: useMobileStaticHero ? 1 : scrollHintOpacity }}
+        >
+          Листайте вниз
+        </motion.p>
+      )}
 
       <motion.div
-        className="mt-4 flex justify-center tablet:mt-5"
+        className={cn(
+          "flex justify-center",
+          showScrollHintLabel ? "mt-4 tablet:mt-5" : "mt-6 tablet:mt-8",
+        )}
         style={{ opacity: useMobileStaticHero ? 1 : scrollHintOpacity }}
         aria-hidden
       >
         <span className="v2-scroll-marker" aria-hidden>
-          <span className="v2-scroll-marker__line" />
+          {scrollMarker === "arrow" ? (
+            <svg
+              viewBox="0 0 24 112"
+              className="v2-scroll-marker__arrow"
+              aria-hidden
+            >
+              <CompassNeedle
+                cx={12}
+                cy={8}
+                tipY={104}
+                headY={86}
+                headWidth={5.2}
+                strokeWidth={1.4625}
+                color="rgba(255,255,255,0.85)"
+              />
+            </svg>
+          ) : (
+            <span className="v2-scroll-marker__line" />
+          )}
         </span>
       </motion.div>
     </div>
