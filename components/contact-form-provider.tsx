@@ -203,7 +203,7 @@ function ContactFormModal({
           className={cn(
             "fixed inset-0 z-[100] flex",
             isYachtV6
-              ? "items-stretch justify-stretch p-0 tablet:items-center tablet:justify-center tablet:p-6"
+              ? "overflow-hidden items-stretch justify-stretch p-0 tablet:items-center tablet:justify-center tablet:p-6"
               : "items-center justify-center p-4 tablet:p-6",
           )}
           initial={{ opacity: 0 }}
@@ -233,7 +233,7 @@ function ContactFormModal({
               "contact-modal-panel relative z-[1] flex w-full flex-col overflow-hidden",
               isYachtV6 && "contact-modal-panel--yacht-v6",
               isYachtV6
-                ? "h-[100dvh] max-h-none max-w-none rounded-none tablet:h-auto tablet:max-h-[min(92vh,820px)] tablet:max-w-[520px]"
+                ? "h-[100dvh] max-h-[100dvh] max-w-none rounded-none tablet:h-auto tablet:max-h-[min(100dvh,820px)] tablet:max-w-[520px]"
                 : "max-h-[min(92vh,820px)] max-w-[520px] rounded-luxury",
               !isYachtV6 && "bg-[#FAF8F5] shadow-[0_24px_80px_rgba(5,18,39,0.28)]",
             )}
@@ -288,7 +288,7 @@ function ContactFormModal({
             </div>
 
             {isYachtV6 && !submitted && (
-              <div className="contact-modal-lead shrink-0 px-6 py-4 text-center tablet:px-8 tablet:py-5">
+              <div className="contact-modal-lead shrink-0 px-6 py-3 text-center tablet:px-8 tablet:py-4">
                 <p className="contact-modal-subtitle contact-modal-subtitle--v6-lead v4-display-title text-white">
                   {formSubtitle}
                 </p>
@@ -297,8 +297,10 @@ function ContactFormModal({
 
             <div
               className={cn(
-                "contact-modal-body overflow-y-auto px-6 py-6 tablet:px-8",
-                isYachtV6 && "contact-modal-body--yacht-v6",
+                "contact-modal-body px-6 tablet:px-8",
+                isYachtV6
+                  ? "contact-modal-body--yacht-v6 overflow-hidden py-4 tablet:py-5"
+                  : "overflow-y-auto py-6",
                 isYachtV6 && submitted && "contact-modal-body--yacht-v6-success",
               )}
             >
@@ -344,8 +346,10 @@ function ContactFormModal({
                 <form
                   onSubmit={handleSubmit}
                   className={cn(
-                    "flex flex-col gap-6",
-                    isYachtV6 && "contact-modal-form--yacht-v6",
+                    "flex flex-col",
+                    isYachtV6
+                      ? "contact-modal-form--yacht-v6 gap-4"
+                      : "gap-6",
                   )}
                 >
                   <div className="grid gap-5">

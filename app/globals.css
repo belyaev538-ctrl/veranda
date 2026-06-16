@@ -2158,6 +2158,23 @@
   letter-spacing: -0.01em;
 }
 
+@media (min-width: 768px) {
+  .v4-theme.v5-site :is(
+    #v5-hero .v2-hero-line,
+    #v5-statement .v5-type-display-md,
+    #v5-statement-visual .v5-statement-title,
+    #v5-crafted .v5-chapter-title,
+    #v5-premium-materials .v5-chapter-title,
+    #v5-outdoor-living .v5-chapter-title,
+    #v5-detail .v5-chapter-title,
+    #v5-made-sea .v5-chapter-title,
+    #v5-custom .v5-type-display-md,
+    #v5-viz .v4-display-title
+  ) {
+    line-height: calc(var(--v5-lh-display) - 10px);
+  }
+}
+
 .v4-theme.v5-site .v5-type-yacht-title,
 .v4-theme.v5-site .v5-yacht-tour__title {
   font-size: clamp(2.25rem, 7vw, var(--v5-type-yacht-title));
@@ -4351,7 +4368,7 @@
 .contact-modal-panel--yacht-v6 .contact-modal-subtitle--v6-lead {
   margin: 0;
   font-family: var(--font-v4-serif), Georgia, "Times New Roman", serif;
-  font-size: clamp(1.75rem, 5vw, 3.875rem);
+  font-size: 22px;
   font-weight: 700;
   line-height: var(--v5-lh-display);
   letter-spacing: -0.01em;
@@ -4373,8 +4390,14 @@
   .contact-modal-panel--yacht-v6 .contact-modal-body--yacht-v6 {
     flex: 1;
     min-height: 0;
+    overflow: hidden;
     padding-bottom: max(1.5rem, env(safe-area-inset-bottom));
   }
+}
+
+.contact-modal-panel--yacht-v6 .contact-modal-body--yacht-v6 {
+  overflow: hidden;
+  overscroll-behavior: none;
 }
 
 .contact-modal-panel--yacht-v6 .contact-modal-close {
