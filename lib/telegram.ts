@@ -7,6 +7,18 @@ const CHANNEL_LABELS = Object.fromEntries(
   CONTACT_CHANNELS.map((c) => [c.id, c.label]),
 ) as Record<string, string>;
 
+export function getTelegramChatIds(): string[] {
+  const fromList = process.env.TELEGRAM_CHAT_IDS?.trim();
+  if (fromList) {
+    return fromList.split(/[,;\s]+/).map((id) => id.trim()).filter(Boolean);
+  }
+
+  const single = process.env.TELEGRAM_CHAT_ID?.trim();
+  if (!single) return [];
+
+  return single.split(/[,;\s]+/).map((id) => id.trim()).filter(Boolean);
+}
+
 function getSourceLabel(lead: LeadPayload): string {
   if (lead.variant) {
     return getVariantLeadSource(lead.variant, lead.source);
@@ -39,7 +51,7 @@ export function formatLeadMessage(lead: LeadPayload): string {
     isCatalog
       ? "<b>📖 Запрос каталога VERANDARU</b>"
       : isYachtSite
-        ? "<b>🛥 Новая заявка yacht.veranda.ru</b>"
+        ? "<b>🛥 Новая заявка ЛАУНЖ</b>"
         : "<b>🛥 Новая заявка VERANDARU</b>",
     `<b>Дата и время:</b> ${formatSubmittedAt()} (МСК)`,
     `<b>Источник:</b> ${escapeTelegram(getSourceLabel(lead))}`,
@@ -71,23 +83,23 @@ export function formatLeadMessage(lead: LeadPayload): string {
   return lines.join("\n");
 }
 
-/** Прямая отправка в Telegram Bot API (без прокси на relay-хосте). */
-export async function sendLeadToTelegramDirect(
-  lead: LeadPayload,
+type TelegramFetch = (
+  input: string,
+  init?: RequestInit,
+) => Promise<Response>;
+
+async function sendTelegramMessage(
+  token: string,
+  chatId: string,
+  text: string,
+  fetchImpl: TelegramFetch,
 ): Promise<void> {
-  const token = process.env.TELEGRAM_BOT_TOKEN;
-  const chatId = process.env.TELEGRAM_CHAT_ID;
-
-  if (!token || !chatId) {
-    throw new Error("Telegram is not configured");
-  }
-
-  const res = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+  const res = await fetchImpl(`https://api.telegram.org/bot${token}/sendMessage`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
       chat_id: chatId,
-      text: formatLeadMessage(lead),
+      text,
       parse_mode: "HTML",
       disable_web_page_preview: true,
     }),
@@ -97,6 +109,67 @@ export async function sendLeadToTelegramDirect(
 
   if (!res.ok || !data.ok) {
     throw new Error(data.description ?? "Telegram API error");
+  }
+}
+
+/** Отправка в один указанный чат (для relay с override). */
+export async function sendLeadToTelegramDirectToChat(
+  lead: LeadPayload,
+  chatId: string,
+): Promise<void> {
+  const token = process.env.TELEGRAM_BOT_TOKEN;
+
+  if (!token || !chatId) {
+    throw new Error("Telegram is not configured");
+  }
+
+  await sendTelegramMessage(token, chatId, formatLeadMessage(lead), fetch);
+}
+
+/** Прямая отправка в Telegram Bot API (без прокси на relay-хосте). */
+export async function sendLeadToTelegramDirect(
+  lead: LeadPayload,
+): Promise<void> {
+  const token = process.env.TELEGRAM_BOT_TOKEN;
+  const chatIds = getTelegramChatIds();
+
+  if (!token || !chatIds.length) {
+    throw new Error("Telegram is not configured");
+  }
+
+  const text = formatLeadMessage(lead);
+
+  for (const chatId of chatIds) {
+    await sendTelegramMessage(token, chatId, text, fetch);
+  }
+}
+
+
+async function postToRelay(
+  lead: LeadPayload,
+  relayUrl: string,
+  relaySecret: string,
+  chatId?: string,
+): Promise<void> {
+  const headers: Record<string, string> = {
+    "Content-Type": "application/json",
+    Authorization: `Bearer ${relaySecret}`,
+  };
+
+  if (chatId) {
+    headers["X-Telegram-Chat-Id"] = chatId;
+  }
+
+  const res = await fetch(relayUrl, {
+    method: "POST",
+    headers,
+    body: JSON.stringify(lead),
+  });
+
+  const data = (await res.json()) as { ok?: boolean; error?: string };
+
+  if (!res.ok || !data.ok) {
+    throw new Error(data.error ?? "Telegram relay error");
   }
 }
 
@@ -108,19 +181,11 @@ async function sendLeadViaRelay(lead: LeadPayload): Promise<void> {
     throw new Error("Telegram relay is not configured");
   }
 
-  const res = await fetch(relayUrl, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${relaySecret}`,
-    },
-    body: JSON.stringify(lead),
-  });
+  await postToRelay(lead, relayUrl, relaySecret);
 
-  const data = (await res.json()) as { ok?: boolean; error?: string };
-
-  if (!res.ok || !data.ok) {
-    throw new Error(data.error ?? "Telegram relay error");
+  const relayUrl2 = process.env.TELEGRAM_RELAY_URL_2?.trim();
+  if (relayUrl2) {
+    await postToRelay(lead, relayUrl2, relaySecret);
   }
 }
 
@@ -130,27 +195,16 @@ export async function sendLeadToTelegram(lead: LeadPayload): Promise<void> {
   }
 
   const token = process.env.TELEGRAM_BOT_TOKEN;
-  const chatId = process.env.TELEGRAM_CHAT_ID;
+  const chatIds = getTelegramChatIds();
 
-  if (!token || !chatId) {
+  if (!token || !chatIds.length) {
     throw new Error("Telegram is not configured");
   }
 
-  const res = await httpFetch(`https://api.telegram.org/bot${token}/sendMessage`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      chat_id: chatId,
-      text: formatLeadMessage(lead),
-      parse_mode: "HTML",
-      disable_web_page_preview: true,
-    }),
-  });
+  const text = formatLeadMessage(lead);
 
-  const data = (await res.json()) as { ok: boolean; description?: string };
-
-  if (!res.ok || !data.ok) {
-    throw new Error(data.description ?? "Telegram API error");
+  for (const chatId of chatIds) {
+    await sendTelegramMessage(token, chatId, text, httpFetch);
   }
 }
 

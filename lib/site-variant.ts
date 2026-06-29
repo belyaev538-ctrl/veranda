@@ -30,7 +30,7 @@ export const SITE_VARIANTS: Record<
     branch: "variant-5",
   },
   "6": {
-    label: "Вариант 6",
+    label: "ЛАУНЖ",
     path: "/",
     branch: "variant-6",
   },

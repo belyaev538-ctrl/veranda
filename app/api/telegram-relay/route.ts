@@ -3,6 +3,7 @@ import type { LeadPayload } from "@/lib/lead-types";
 import {
   isTelegramRelayAuthorized,
   sendLeadToTelegramDirect,
+  sendLeadToTelegramDirectToChat,
 } from "@/lib/telegram";
 
 function parseRelayLead(body: unknown): LeadPayload | null {
@@ -37,7 +38,12 @@ export async function POST(request: Request) {
       );
     }
 
-    await sendLeadToTelegramDirect(lead);
+    const overrideChatId = request.headers.get("x-telegram-chat-id")?.trim();
+    if (overrideChatId) {
+      await sendLeadToTelegramDirectToChat(lead, overrideChatId);
+    } else {
+      await sendLeadToTelegramDirect(lead);
+    }
 
     return NextResponse.json({ ok: true });
   } catch (err) {
