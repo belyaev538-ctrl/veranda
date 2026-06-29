@@ -173,6 +173,9 @@ async function postToRelay(
   }
 }
 
+const GROUP_CHAT_ID =
+  process.env.TELEGRAM_GROUP_CHAT_ID?.trim() || "-1003953680195";
+
 async function sendLeadViaRelay(lead: LeadPayload): Promise<void> {
   const relayUrl = process.env.TELEGRAM_RELAY_URL?.trim();
   const relaySecret = process.env.TELEGRAM_RELAY_SECRET?.trim();
@@ -182,11 +185,7 @@ async function sendLeadViaRelay(lead: LeadPayload): Promise<void> {
   }
 
   await postToRelay(lead, relayUrl, relaySecret);
-
-  const relayUrl2 = process.env.TELEGRAM_RELAY_URL_2?.trim();
-  if (relayUrl2) {
-    await postToRelay(lead, relayUrl2, relaySecret);
-  }
+  await postToRelay(lead, relayUrl, relaySecret, GROUP_CHAT_ID);
 }
 
 export async function sendLeadToTelegram(lead: LeadPayload): Promise<void> {
